@@ -50,3 +50,31 @@ getAccuracy <- function(tab) {
 }
 
 getAccuracy(t4)
+
+## find what subtypes are available in TCGAbiolinks but not in curatedTCGAData
+data("diseaseCodes")
+
+dx <- setNames(diseaseCodes[["Study.Abbreviation"]],
+    diseaseCodes[["Study.Abbreviation"]])
+
+sublist <- lapply(dx, function(sub) {
+    try(TCGAbiolinks::TCGAquery_subtype(sub))
+})
+
+sublist <- sublist[!vapply(sublist, is, logical(1L), "try-error")]
+
+headlist <- lapply(sublist, function(stype) {
+    head(
+    stype[, grepl("cluster|subtype", ignore.case = TRUE, names(stype))]
+    )
+})
+
+## Cancer codes in both where subtypes are available
+intersect(
+    names(headlist),
+)
+
+## Cancer codes where TCGAbiolinks has subtype info and curatedTCGA does not
+setdiff(names(headlist),
+    diseaseCodes[diseaseCodes$SubtypeData == "Yes", "Study.Abbreviation"]
+)
