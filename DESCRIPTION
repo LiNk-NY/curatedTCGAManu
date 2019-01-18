@@ -1,0 +1,15 @@
+Package: curatedTCGAManu
+Title: Presents example analyses using curatedTCGAData, MultiAssayExperiment,
+  and TCGAutils
+Version: 0.0.1
+Authors@R: 
+    person(given = "Marcel", family = "Ramos", role = c("aut", "cre"),
+        email = "marcel.ramos@roswellpark.org")
+Description: Shows a step by step tutorial for running analyses using the
+  MultiAssayExperiment data structure
+License: Artistic-2.0
+Imports:
+  curatedTCGAData,
+  MultiAssayExperiment,
+  TCGAbiolinks,
+  TCGAutils

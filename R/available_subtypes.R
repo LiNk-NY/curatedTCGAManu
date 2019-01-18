@@ -30,6 +30,6 @@ subtypesAvail <- ifelse(hitMat, "X", "")
 
 subtypesAvail
 
-write.csv(subtypesAvail, "Available_Subtypes_BY_CA.csv")
+write.csv(subtypesAvail, "data/Available_Subtypes_BY_CA.csv")
 
 
