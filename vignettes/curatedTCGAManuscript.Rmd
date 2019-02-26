@@ -30,7 +30,7 @@ library(TCGAutils)
 ```{r}
 suppressMessages({
     acc <- curatedTCGAData::curatedTCGAData("ACC",
-        assays = c("miRNASeqGene", "RPPAArray", "Mutation", "RNASeq2GeneNorm",
+        assays = c("miRNASeqGene", "Mutation", "RNASeq2GeneNorm",
             "CNVSNP", "GISTIC_ThresholdedByGene", "RPPAArray"),
         dry.run = FALSE)
 })
@@ -38,25 +38,6 @@ mut <- assay(acc[["ACC_Mutation-20160128"]], i = "Variant_Classification")
 mut <- ifelse(is.na(mut) | mut == "Silent", 0, 1)
 # acc[["ACC_Mutation-20160128"]] <- mut
 ```
-
-## What types of samples are in the data?
-
-```{r}
-sampleTables(acc)
-```
-
-```{r}
-(simpa <- simplifyTCGA(acc))
-```
-
-```{r}
-head(sampleTypes)
-```
-
-```{r}
-upsetSamples(acc)
-```
-
 
 ```{r}
 library(survival)
@@ -69,14 +50,19 @@ accsurv <- acc[, complete.cases(acc$days_to_death, acc$vital_status), ]
 ```
 
 ```{r}
-library(survminer)
-fit <- survfit(Surv(days_to_death, vital_status) ~ pathology_N_stage, data = colData(accsurv))
+suppressPackageStartupMessages({
+    library(survminer)
+})
+fit <- survfit(Surv(days_to_death, vital_status) ~ pathology_N_stage,
+    data = colData(accsurv))
 ggsurvplot(fit, data = colData(accsurv), risk.table = TRUE)
 ```
 
 ```{r}
-wideacc <- wideFormat(acc["EZH2", , ],
-    colDataCols = c("vital_status", "days_to_death", "pathology_N_stage"))
+profvis::profvis({
+    wideacc <- wideFormat(accsurv["EZH2", , ],
+        colDataCols = c("vital_status", "days_to_death", "pathology_N_stage"))
+})
 wideacc$y <- Surv(wideacc$days_to_death, wideacc$vital_status)
 head(wideacc)
 ```
