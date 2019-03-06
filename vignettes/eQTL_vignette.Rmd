@@ -14,6 +14,7 @@ suppressPackageStartupMessages({
     library(MultiAssayExperiment)
     library(curatedTCGAData)
     library(TCGAutils)
+    library(CNVRanger)
 })
 ```
 
@@ -23,6 +24,7 @@ Load packages:
 library(MultiAssayExperiment)
 library(curatedTCGAData)
 library(TCGAutils)
+library(CNVRanger)
 ```
 
 ## Obtain ACC data from curatedTCGAData:
@@ -36,8 +38,8 @@ suppressMessages({
 ```
 
 ```{r}
-acc.peaks <- granges(rowRanges(acc[["ACC_GISTIC_Peaks-20160128"]]))
-genome(acc.peaks) <- "hg19"
+# acc.peaks <- granges(rowRanges(acc[["ACC_GISTIC_Peaks-20160128"]]))
+# genome(acc.peaks) <- "hg19"
 ```
 
 ```{r}
@@ -51,9 +53,10 @@ subChr <- function(obj, chrs) {
 ```
 
 ```{r}
-acc <- acc[, , names(acc) != "ACC_GISTIC_Peaks-20160128"]
+# acc <- acc[, , names(acc) != "ACC_GISTIC_Peaks-20160128"]
 acc[["ACC_CNVSNP-20160128"]] <-
     subChr(acc[["ACC_CNVSNP-20160128"]])
+
 acc[["ACC_CNVSNP-20160128"]]
 genome(acc[["ACC_CNVSNP-20160128"]])
 ```
@@ -63,6 +66,7 @@ acc <- suppressMessages(symbolsToRanges(acc))
 acc <- acc[, , names(acc) != "ACC_RNASeq2GeneNorm-20160128_unranged"]
 acc[["ACC_RNASeq2GeneNorm-20160128_ranged"]] <-
     subChr(acc[["ACC_RNASeq2GeneNorm-20160128_ranged"]])
+
 acc[["ACC_RNASeq2GeneNorm-20160128_ranged"]]
 genome(acc[["ACC_RNASeq2GeneNorm-20160128_ranged"]])
 ```
@@ -75,6 +79,27 @@ sampleTables(acc)
 ```{r}
 acc <- suppressMessages(splitAssays(acc, sampleCodes="01"))
 acc <- as(acc, "MatchedAssayExperiment")
+```
+
+```{r}
+state <- round(mcols(acc[["01_ACC_CNVSNP-20160128"]])[["Segment_Mean"]])
+state[state > 2] <- 2
+state[state < -2] <- -2
+mcols(acc[["01_ACC_CNVSNP-20160128"]])$State <- state + 2
+mcols(acc[["01_ACC_CNVSNP-20160128"]]) <-
+    mcols(acc[["01_ACC_CNVSNP-20160128"]])[
+        c("State", "Segment_Mean", "Num_Probes")]
+table(mcols(acc[["01_ACC_CNVSNP-20160128"]])[["State"]])
+```
+
+
+```{r}
+CNVRanger::cnvExprAssoc(
+    cnvrs = "01_ACC_GISTIC_Peaks-20160128",
+    calls = "01_ACC_CNVSNP-20160128",
+    rcounts = "01_ACC_RNASeq2GeneNorm-20160128_ranged",
+    data = acc
+)
 ```
 
 
