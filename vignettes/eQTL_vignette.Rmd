@@ -1,7 +1,7 @@
 ---
-title: "eQTL"
-author: "Marcel"
-date: "March 5, 2019"
+title: "eQTL PAN-CAN"
+author: "Waldron Lab"
+date: "March 6, 2019"
 output: html_document
 ---
 
@@ -15,6 +15,7 @@ suppressPackageStartupMessages({
     library(curatedTCGAData)
     library(TCGAutils)
     library(CNVRanger)
+    library(BiocParallel)
 })
 ```
 
@@ -25,21 +26,14 @@ library(MultiAssayExperiment)
 library(curatedTCGAData)
 library(TCGAutils)
 library(CNVRanger)
+library(BiocParallel)
 ```
 
 ## Obtain ACC data from curatedTCGAData:
-
 ```{r}
-suppressMessages({
-    acc <- curatedTCGAData::curatedTCGAData("ACC",
-        assays = c("GISTIC_Peaks", "CNVSNP", "RNASeq2GeneNorm"),
-        dry.run = FALSE)
-})
-```
-
-```{r}
-# acc.peaks <- granges(rowRanges(acc[["ACC_GISTIC_Peaks-20160128"]]))
-# genome(acc.peaks) <- "hg19"
+data("diseaseCodes")
+head(avail <- diseaseCodes[
+    diseaseCodes[["Available"]] == "Yes", "Study.Abbreviation"])
 ```
 
 ```{r}
@@ -50,56 +44,49 @@ subChr <- function(obj, chrs) {
         obj <- obj[seqnames(rowRanges(obj)) %in% chrs, ]
     obj
 }
-```
 
-```{r}
-# acc <- acc[, , names(acc) != "ACC_GISTIC_Peaks-20160128"]
-acc[["ACC_CNVSNP-20160128"]] <-
-    subChr(acc[["ACC_CNVSNP-20160128"]])
+.addCallStates <-
+    function(mae, calls_assay, sample = "01", col = "Segment_Mean") {
+    calls_assay <- paste0(sample, "_", calls_assay)
+    state <- round(mcols(mae[[calls_assay]])[[col]])
+    state[state > 2] <- 2
+    state[state < -2] <- -2
+    mcols(mae[[calls_assay]])$State <- state + 2
+    mcols(mae[[calls_assay]]) <-
+        mcols(mae[[calls_assay]])[
+            c("State", "Segment_Mean", "Num_Probes")]
+}
 
-acc[["ACC_CNVSNP-20160128"]]
-genome(acc[["ACC_CNVSNP-20160128"]])
-```
-
-```{r}
-acc <- suppressMessages(symbolsToRanges(acc))
-acc <- acc[, , names(acc) != "ACC_RNASeq2GeneNorm-20160128_unranged"]
-acc[["ACC_RNASeq2GeneNorm-20160128_ranged"]] <-
-    subChr(acc[["ACC_RNASeq2GeneNorm-20160128_ranged"]])
-
-acc[["ACC_RNASeq2GeneNorm-20160128_ranged"]]
-genome(acc[["ACC_RNASeq2GeneNorm-20160128_ranged"]])
-```
-
-```{r}
-acc <- intersectColumns(acc)
-sampleTables(acc)
-```
-
-```{r}
-acc <- suppressMessages(splitAssays(acc, sampleCodes="01"))
-acc <- as(acc, "MatchedAssayExperiment")
-```
-
-```{r}
-state <- round(mcols(acc[["01_ACC_CNVSNP-20160128"]])[["Segment_Mean"]])
-state[state > 2] <- 2
-state[state < -2] <- -2
-mcols(acc[["01_ACC_CNVSNP-20160128"]])$State <- state + 2
-mcols(acc[["01_ACC_CNVSNP-20160128"]]) <-
-    mcols(acc[["01_ACC_CNVSNP-20160128"]])[
-        c("State", "Segment_Mean", "Num_Probes")]
-table(mcols(acc[["01_ACC_CNVSNP-20160128"]])[["State"]])
 ```
 
 
 ```{r}
-CNVRanger::cnvExprAssoc(
-    cnvrs = "01_ACC_GISTIC_Peaks-20160128",
-    calls = "01_ACC_CNVSNP-20160128",
-    rcounts = "01_ACC_RNASeq2GeneNorm-20160128_ranged",
-    data = acc
-)
+suppressMessages({
+    pancan <- bplapply(avail, function(ccode, sample = "01") {
+        mae <- curatedTCGAData::curatedTCGAData(ccode,
+            assays = c("GISTIC_Peaks", "CNVSNP", "RNASeq2GeneNorm"),
+            dry.run = FALSE)
+        calls <- paste0(ccode, "_CNVSNP-20160128")
+        rnas <- paste0(ccode, "_RNASeq2GeneNorm-20160128")
+        cnvrs <- paste0(ccode, "_GISTIC_Peaks-20160128")
+        scalls <- paste0(sample, "_", calls)
+        srnas <- paste0(sample, "_", rnas)
+        scnvrs <- paste0(sample, "_", cnvrs)
+        
+        mae[[calls]] <- subChr(mae[[calls]])
+        mae <- symbolsToRanges(mae)
+        mae <- mae[, , names(mae) != paste0(rnas, "_unranged")]
+        mae[[rnas]] <- subChr(mae[[rnas]])
+        mae <- intersectColumns(mae)
+        mae <- splitAssays(mae, sampleCodes=sample)
+        mae <- as(mae, "MatchedAssayExperiment")
+        mae <- .addCallStates(mae, paste0(ccode, "_CNVSNP-20160128"))
+        CNVRanger::cnvExprAssoc(
+            cnvrs = scnvrs,
+            calls = scalls,
+            rcounts = paste0(srnas, "_ranged"),
+            data = mae
+        )
+    })
+})
 ```
-
-
