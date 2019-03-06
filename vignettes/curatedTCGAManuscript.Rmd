@@ -60,7 +60,7 @@ ggsurvplot(fit, data = colData(accsurv), risk.table = TRUE)
 
 ```{r}
 profvis::profvis({
-    wideacc <- wideFormat(accsurv["EZH2", , ],
+    wideacc <- wideFormat(accsurv["EZH2", , c(2,3,5,6)],
         colDataCols = c("vital_status", "days_to_death", "pathology_N_stage"))
 })
 wideacc$y <- Surv(wideacc$days_to_death, wideacc$vital_status)

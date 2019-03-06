@@ -1,0 +1,80 @@
+---
+title: "eQTL"
+author: "Marcel"
+date: "March 5, 2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r, echo = FALSE, warning = FALSE}
+suppressPackageStartupMessages({
+    library(MultiAssayExperiment)
+    library(curatedTCGAData)
+    library(TCGAutils)
+})
+```
+
+Load packages:
+
+```{r, eval = FALSE}
+library(MultiAssayExperiment)
+library(curatedTCGAData)
+library(TCGAutils)
+```
+
+## Obtain ACC data from curatedTCGAData:
+
+```{r}
+suppressMessages({
+    acc <- curatedTCGAData::curatedTCGAData("ACC",
+        assays = c("GISTIC_Peaks", "CNVSNP", "RNASeq2GeneNorm"),
+        dry.run = FALSE)
+})
+```
+
+```{r}
+acc.peaks <- granges(rowRanges(acc[["ACC_GISTIC_Peaks-20160128"]]))
+genome(acc.peaks) <- "hg19"
+```
+
+```{r}
+subChr <- function(obj, chrs) {
+    seqlevelsStyle(obj) <- "UCSC"
+    genome(rowRanges(obj)) <- "hg19"
+    if (!missing(chrs))
+        obj <- obj[seqnames(rowRanges(obj)) %in% chrs, ]
+    obj
+}
+```
+
+```{r}
+acc <- acc[, , names(acc) != "ACC_GISTIC_Peaks-20160128"]
+acc[["ACC_CNVSNP-20160128"]] <-
+    subChr(acc[["ACC_CNVSNP-20160128"]])
+acc[["ACC_CNVSNP-20160128"]]
+genome(acc[["ACC_CNVSNP-20160128"]])
+```
+
+```{r}
+acc <- suppressMessages(symbolsToRanges(acc))
+acc <- acc[, , names(acc) != "ACC_RNASeq2GeneNorm-20160128_unranged"]
+acc[["ACC_RNASeq2GeneNorm-20160128_ranged"]] <-
+    subChr(acc[["ACC_RNASeq2GeneNorm-20160128_ranged"]])
+acc[["ACC_RNASeq2GeneNorm-20160128_ranged"]]
+genome(acc[["ACC_RNASeq2GeneNorm-20160128_ranged"]])
+```
+
+```{r}
+acc <- intersectColumns(acc)
+sampleTables(acc)
+```
+
+```{r}
+acc <- suppressMessages(splitAssays(acc, sampleCodes="01"))
+acc <- as(acc, "MatchedAssayExperiment")
+```
+
+
