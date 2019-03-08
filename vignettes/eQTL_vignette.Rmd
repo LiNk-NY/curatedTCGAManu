@@ -34,6 +34,8 @@ library(BiocParallel)
 data("diseaseCodes")
 head(avail <- diseaseCodes[
     diseaseCodes[["Available"]] == "Yes", "Study.Abbreviation"])
+## Peaks data not available in LAML or SKCM
+avail <- avail[avail != c("LAML", "SKCM")]
 ```
 
 ```{r}
@@ -74,7 +76,7 @@ suppressMessages({
         srnas <- paste0(sample, "_", rnas)
         scnvrs <- paste0(sample, "_", cnvrs)
         rrnas <- paste0(rnas, "_ranged")
-        
+
         mae[[calls]] <- subChr(mae[[calls]])
         mae <- symbolsToRanges(mae)
         mae <- mae[, , names(mae) != paste0(rnas, "_unranged")]
