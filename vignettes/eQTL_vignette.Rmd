@@ -35,7 +35,7 @@ data("diseaseCodes")
 head(avail <- diseaseCodes[
     diseaseCodes[["Available"]] == "Yes", "Study.Abbreviation"])
 ## Peaks data not available in LAML or SKCM
-avail <- avail[avail != c("LAML", "SKCM")]
+avail <- avail[!avail %in% c("LAML", "SKCM")]
 ```
 
 ```{r}
@@ -59,37 +59,36 @@ subChr <- function(obj, chrs) {
             c("State", "Segment_Mean", "Num_Probes")]
     mae
 }
-
 ```
 
 
 ```{r}
-suppressMessages({
-    pancan <- bplapply(avail, function(ccode, sample = "01") {
-        mae <- curatedTCGAData::curatedTCGAData(ccode,
-            assays = c("GISTIC_Peaks", "CNVSNP", "RNASeq2GeneNorm"),
-            dry.run = FALSE)
-        calls <- paste0(ccode, "_CNVSNP-20160128")
-        rnas <- paste0(ccode, "_RNASeq2GeneNorm-20160128")
-        cnvrs <- paste0(ccode, "_GISTIC_Peaks-20160128")
-        scalls <- paste0(sample, "_", calls)
-        srnas <- paste0(sample, "_", rnas)
-        scnvrs <- paste0(sample, "_", cnvrs)
-        rrnas <- paste0(rnas, "_ranged")
+pancan <- bplapply(avail, function(ccode, sample = "01") {
+    mae <- curatedTCGAData::curatedTCGAData(ccode,
+        assays = c("GISTIC_Peaks", "CNVSNP", "RNASeq2GeneNorm"),
+        dry.run = FALSE)
+    calls <- paste0(ccode, "_CNVSNP-20160128")
+    rnas <- paste0(ccode, "_RNASeq2GeneNorm-20160128")
+    cnvrs <- paste0(ccode, "_GISTIC_Peaks-20160128")
+    scalls <- paste0(sample, "_", calls)
+    srnas <- paste0(sample, "_", rnas)
+    scnvrs <- paste0(sample, "_", cnvrs)
+    rrnas <- paste0(rnas, "_ranged")
 
-        mae[[calls]] <- subChr(mae[[calls]])
-        mae <- symbolsToRanges(mae)
-        mae <- mae[, , names(mae) != paste0(rnas, "_unranged")]
-        mae[[rrnas]] <- subChr(mae[[rrnas]])
-        mae <- intersectColumns(mae)
-        mae <- splitAssays(mae, sampleCodes=sample)
-        mae <- .addCallStates(mae, paste0(ccode, "_CNVSNP-20160128"))
-        CNVRanger::cnvExprAssoc(
-            cnvrs = scnvrs,
-            calls = scalls,
-            rcounts = paste0(srnas, "_ranged"),
-            data = mae
-        )
-    })
+    mae[[calls]] <- subChr(mae[[calls]])
+    mae <- symbolsToRanges(mae)
+    mae <- mae[, , names(mae) != paste0(rnas, "_unranged")]
+    mae[[rrnas]] <- subChr(mae[[rrnas]])
+    mae <- intersectColumns(mae)
+    mae <- splitAssays(mae, sampleCodes=sample)
+    mae <- .addCallStates(mae, paste0(ccode, "_CNVSNP-20160128"))
+    CNVRanger::cnvExprAssoc(
+        cnvrs = scnvrs,
+        calls = scalls,
+        rcounts = paste0(srnas, "_ranged"),
+        data = mae
+    )
 })
+
+save(pancan, file = "pancanres.rda")
 ```
