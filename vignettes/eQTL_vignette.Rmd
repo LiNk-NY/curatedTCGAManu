@@ -39,14 +39,6 @@ avail <- avail[!avail %in% c("LAML", "SKCM")]
 ```
 
 ```{r}
-subChr <- function(obj, chrs) {
-    seqlevelsStyle(obj) <- "UCSC"
-    genome(rowRanges(obj)) <- "hg19"
-    if (!missing(chrs))
-        obj <- obj[seqnames(rowRanges(obj)) %in% chrs, ]
-    obj
-}
-
 .addCallStates <-
     function(mae, calls_assay, sample = "01", col = "Segment_Mean") {
     calls_assay <- paste0(sample, "_", calls_assay)
@@ -61,34 +53,40 @@ subChr <- function(obj, chrs) {
 }
 ```
 
+MultiOmic Quality Control
 
 ```{r}
-pancan <- bplapply(avail, function(ccode, sample = "01") {
+# BiocManager::install("Bioconductor/MultiOmicQC")
+library(MultiOmicQC)
+```
+
+```{r}
+param <- MulticoreParam(workers = 14, stop.on.error = FALSE)
+pancan <- bptry(
+    bplapply(avail, function(ccode, sample = "01") {
     mae <- curatedTCGAData::curatedTCGAData(ccode,
         assays = c("GISTIC_Peaks", "CNVSNP", "RNASeq2GeneNorm"),
         dry.run = FALSE)
-    calls <- paste0(ccode, "_CNVSNP-20160128")
-    rnas <- paste0(ccode, "_RNASeq2GeneNorm-20160128")
-    cnvrs <- paste0(ccode, "_GISTIC_Peaks-20160128")
-    scalls <- paste0(sample, "_", calls)
-    srnas <- paste0(sample, "_", rnas)
-    scnvrs <- paste0(sample, "_", cnvrs)
-    rrnas <- paste0(rnas, "_ranged")
+    scalls <- paste0(sample, "_", ccode, "_CNVSNP-20160128")
+    rrnas <- paste0(sample, "_", ccode, "_RNASeq2GeneNorm-20160128",
+        "_ranged")
+    scnvrs <- paste0(sample, "_", ccode, "_GISTIC_Peaks-20160128")
 
-    mae[[calls]] <- subChr(mae[[calls]])
-    mae <- symbolsToRanges(mae)
-    mae <- mae[, , names(mae) != paste0(rnas, "_unranged")]
-    mae[[rrnas]] <- subChr(mae[[rrnas]])
+    mae <- symbolsToRanges(mae, unmapped = FALSE)
+    genome(mae) <- "hg19"
+    seqlevelsStyle(mae) <- "UCSC"
+
     mae <- intersectColumns(mae)
     mae <- splitAssays(mae, sampleCodes=sample)
     mae <- .addCallStates(mae, paste0(ccode, "_CNVSNP-20160128"))
     CNVRanger::cnvExprAssoc(
         cnvrs = scnvrs,
         calls = scalls,
-        rcounts = paste0(srnas, "_ranged"),
+        rcounts = rrnas,
         data = mae
     )
-})
+    }, BPPARAM = param)
+)
 
 save(pancan, file = "pancanres.rda")
 ```
