@@ -51,6 +51,21 @@ avail <- avail[!avail %in% c("LAML", "SKCM")]
             c("State", "Segment_Mean", "Num_Probes")]
     mae
 }
+
+.fixRowRanges <- function(mae, cnvrs) {
+    peakObj <- mae[[cnvrs]]
+    if (is.null(rowRanges(peakObj))) {
+        peakrow <- rowData(peakObj)
+        rows <- peakrow[,
+            grepl("gene|ranges", names(peakrow), ignore.case = TRUE)]
+        if (length(rows)) {
+            rowRanges(peakObj) <- as(rows, "GRanges")
+            rowData(peakObj) <- peakrow
+        }
+    }
+    mae[[cnvrs]] <- peakObj
+    mae
+}
 ```
 
 MultiOmic Quality Control
@@ -60,10 +75,11 @@ MultiOmic Quality Control
 library(MultiOmicQC)
 ```
 
+eQTL Analysis
+
+
 ```{r}
-param <- MulticoreParam(workers = 14, stop.on.error = FALSE)
-pancan <- bptry(
-    bplapply(avail, function(ccode, sample = "01") {
+eQTL_pan <- function(ccode, sample = "01") {
     mae <- curatedTCGAData::curatedTCGAData(ccode,
         assays = c("GISTIC_Peaks", "CNVSNP", "RNASeq2GeneNorm"),
         dry.run = FALSE)
@@ -79,14 +95,26 @@ pancan <- bptry(
     mae <- intersectColumns(mae)
     mae <- splitAssays(mae, sampleCodes=sample)
     mae <- .addCallStates(mae, paste0(ccode, "_CNVSNP-20160128"))
+    mae <- .fixRowRanges(mae, scnvrs)
     CNVRanger::cnvExprAssoc(
         cnvrs = scnvrs,
         calls = scalls,
         rcounts = rrnas,
         data = mae
     )
-    }, BPPARAM = param)
+}
+```
+
+```{r}
+param <- MulticoreParam(workers = 14, stop.on.error = FALSE)
+pancan <- bptry(
+    bplapply(avail, eQTL_pan, BPPARAM = param)
 )
 
 save(pancan, file = "pancanres.rda")
+```
+
+```{r}
+pancan.redo <- bplapply(avail, eQTL_pan, BPREDO = pancan, BPPARAM = param)
+save(pancan.redo, file = "pancan_second_try.rda")
 ```
