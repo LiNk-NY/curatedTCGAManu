@@ -1,0 +1,67 @@
+---
+title: "GSEA PanCan"
+author: "Waldron Lab"
+date: "March 19, 2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r, echo = FALSE, warning = FALSE}
+suppressPackageStartupMessages({
+    library(MultiAssayExperiment)
+    library(curatedTCGAData)
+    library(TCGAutils)
+    library(GSEABenchmarkeR)
+    library(BiocParallel)
+})
+```
+
+Load packages:
+
+```{r, eval = FALSE}
+library(MultiAssayExperiment)
+library(curatedTCGAData)
+library(TCGAutils)
+library(GSEABenchmarkeR)
+library(BiocParallel)
+```
+
+## Obtain ACC data from curatedTCGAData:
+
+```{r}
+data("diseaseCodes")
+head(avail <- diseaseCodes[
+    diseaseCodes[["Available"]] == "Yes", "Study.Abbreviation"])
+```
+
+```{r}
+rnacomp <- curatedTCGAData("*", "RNASeq2*", FALSE)
+sampleTables(rnacomp)
+
+tumnorm <- splitAssays(rnacomp, c("01", "11"))
+
+okCodes <- vapply(
+    strsplit(names(which(
+        vapply(sampleTables(rnacomp),
+            function(x) {
+            all(c("01", "11") %in% names(x))
+            },
+            logical(1L)))),
+        "_"),
+    `[`,
+    character(1L),
+    1L
+)
+
+rnacomp2 <- curatedTCGAData(okCodes, "RNASeq2*", FALSE)
+rnatumnorm <- splitAssays(rnacomp2, c("01", "11"))
+
+listmap <- mapToList(sampleMap(rnatumnorm))
+lapply(listmap, function(
+
+rnamae <- as(rnatumnorm, "MatchedAssayExperiment")
+
+```
