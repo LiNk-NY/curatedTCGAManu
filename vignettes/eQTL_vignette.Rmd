@@ -115,6 +115,14 @@ save(pancan, file = "pancanres.rda")
 ```
 
 ```{r}
-pancan.redo <- bplapply(avail, eQTL_pan, BPREDO = pancan, BPPARAM = param)
+pancan.redo <- bptry(
+    bplapply(avail, eQTL_pan, BPREDO = pancan, BPPARAM = param)
+)
 save(pancan.redo, file = "pancan_second_try.rda")
+## rinse and repeat
+pancan.try2 <- bptry(
+    bplapply(avail, eQTL_pan, BPREDO = pancan.redo, BPPARAM = param)
+)
+
+save(pancan.try2, file = "pancan_third_try.rda")
 ```
