@@ -57,17 +57,13 @@ okCodes <- vapply(
 )
 
 rnacomp2 <- curatedTCGAData(okCodes, "RNASeq2*", FALSE)
-## TCGAsampleSelect METHOD for MultiAssayExperiment (exclusive = TRUE)
-lvect <- IRanges::LogicalList(
-    lapply(colnames(rnacomp2), TCGAutils::TCGAsampleSelect, c("01", "11"))
-)
-rnacomp3 <- rnacomp2[, lvect]
 
-rnatumnorm <- splitAssays(rnacomp2, c("01", "11"))
+selects <- TCGAsampleSelect(colnames(rnacomp2), c("01", "11"))
 
-listmap <- mapToList(sampleMap(rnatumnorm))
-lapply(listmap, function(
+rnacomp3 <- rnacomp2[, selects]
+enoughNorm <- vapply(sampleTables(rnacomp3),
+    function(samp) { samp["11"] > 10L }, logical(1L))
 
-rnamae <- as(rnatumnorm, "MatchedAssayExperiment")
+rnacomp3[, , enoughNorm]
 
 ```
