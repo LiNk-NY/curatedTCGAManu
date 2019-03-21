@@ -64,6 +64,35 @@ rnacomp3 <- rnacomp2[, selects]
 enoughNorm <- vapply(sampleTables(rnacomp3),
     function(samp) { samp["11"] > 10L }, logical(1L))
 
-rnacomp3[, , enoughNorm]
+rnacomp4 <- rnacomp3[, , enoughNorm]
+sampleTables(rnacomp4)
+tlogic <- TCGAsampleSelect(colnames(rnacomp4), "01")
+sampIndx <- IntegerList(lapply(tlogic, ifelse, 1L, 0L))
 
+naks <- mendoapply(function(x, y) {
+    colData(x)[["GROUP"]] <- y
+    x
+}, x = experiments(rnacomp4), y = sampIndx)
+
+rnacomp5 <- BiocGenerics:::replaceSlots(rnacomp4,
+    ExperimentList = naks,
+    check = FALSE)
+
+table(rnacomp5[[1L]]$GROUP)
+matchlist <- lapply(setNames(seq_along(rnacomp5), names(rnacomp5)),
+    function(idx) {
+        as(splitAssays(rnacomp5[, , idx]), "MatchedAssayExperiment")
+    }
+)
+newEXPS <- ExperimentList(
+    lapply(matchlist, function(expr) {
+        do.call(cbind, experiments(expr))
+    })
+)
+
+rnacomp6 <- BiocGenerics:::replaceSlots(rnacomp5,
+    ExperimentList = newEXPS,
+    check = FALSE
+)
 ```
+
