@@ -52,6 +52,7 @@ avail <- avail[!avail %in% c("LAML", "SKCM")]
     mae
 }
 
+## add helper for datasets with duplicate rownames (weren't added via pipeline)
 .fixRowRanges <- function(mae, cnvrs) {
     peakObj <- mae[[cnvrs]]
     if (is.null(rowRanges(peakObj))) {
@@ -107,6 +108,7 @@ eQTL_pan <- function(ccode, sample = "01") {
 
 ```{r}
 param <- MulticoreParam(workers = 14, stop.on.error = FALSE)
+avail <- setNames(avail, avail)
 pancan <- bptry(
     bplapply(avail, eQTL_pan, BPPARAM = param)
 )
@@ -123,6 +125,11 @@ save(pancan.redo, file = "pancan_second_try.rda")
 pancan.try2 <- bptry(
     bplapply(avail, eQTL_pan, BPREDO = pancan.redo, BPPARAM = param)
 )
+
+pancan.try2 <- setNames(pancan.try2, avail)
+
+names(which(!bpok(pancan.try2)))
+# [1] "DLBC" "KICH" "THYM"
 
 save(pancan.try2, file = "pancan_third_try.rda")
 ```
