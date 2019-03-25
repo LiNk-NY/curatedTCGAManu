@@ -37,12 +37,22 @@ head(avail <- diseaseCodes[
     diseaseCodes[["Available"]] == "Yes", "Study.Abbreviation"])
 ```
 
+## Download and reshape data
+
 ```{r}
 rnacomp <- curatedTCGAData("*", "RNASeq2*", FALSE)
+```
+
+Here we check for the samples of interest using `sampleTables`:
+
+```{r}
 sampleTables(rnacomp)
+```
 
-tumnorm <- splitAssays(rnacomp, c("01", "11"))
+Which cancer codes have both tumors and normal samples?
 
+```{r}
+(
 okCodes <- vapply(
     strsplit(names(which(
         vapply(sampleTables(rnacomp),
@@ -53,11 +63,21 @@ okCodes <- vapply(
         "_"),
     `[`,
     character(1L),
-    1L
+    1L)
 )
+```
 
+Download and assemble appropriate `MultiAssayExperiment` object with
+cancer codes that have both tumors and normals.
+
+```{r}
 rnacomp2 <- curatedTCGAData(okCodes, "RNASeq2*", FALSE)
+```
 
+Isolate tumor and normal samples for each cancer that have more than 10
+samples of each:
+
+```{r}
 selects <- TCGAsampleSelect(colnames(rnacomp2), c("01", "11"))
 
 rnacomp3 <- rnacomp2[, selects]
@@ -66,6 +86,12 @@ enoughNorm <- vapply(sampleTables(rnacomp3),
 
 rnacomp4 <- rnacomp3[, , enoughNorm]
 sampleTables(rnacomp4)
+```
+
+Create an index to annotate each of the `SummarizedExperiment` objects
+contained in the `ExperimentList`:
+
+```{r}
 tlogic <- TCGAsampleSelect(colnames(rnacomp4), "01")
 sampIndx <- IntegerList(lapply(tlogic, ifelse, 1L, 0L))
 
@@ -79,6 +105,12 @@ rnacomp5 <- BiocGenerics:::replaceSlots(rnacomp4,
     check = FALSE)
 
 table(rnacomp5[[1L]]$GROUP)
+```
+
+Split, create matched tumors and normals, and then recombine into a
+single `MultiAssayExperiment`:
+
+```{r}
 matchlist <- lapply(setNames(seq_along(rnacomp5), names(rnacomp5)),
     function(idx) {
         as(splitAssays(rnacomp5[, , idx]), "MatchedAssayExperiment")
