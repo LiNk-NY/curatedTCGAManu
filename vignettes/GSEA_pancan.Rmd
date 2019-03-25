@@ -97,6 +97,7 @@ sampIndx <- IntegerList(lapply(tlogic, ifelse, 1L, 0L))
 
 naks <- mendoapply(function(x, y) {
     colData(x)[["GROUP"]] <- y
+    colData(x)[["BLOCK"]] <- TCGAbarcode(rownames(colData(x)))
     x
 }, x = experiments(rnacomp4), y = sampIndx)
 
