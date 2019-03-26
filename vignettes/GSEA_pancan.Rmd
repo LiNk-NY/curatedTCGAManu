@@ -129,3 +129,21 @@ rnacomp6 <- BiocGenerics:::replaceSlots(rnacomp5,
 )
 ```
 
+Run Differential Expression analysis using `limma`
+
+```{r}
+res <- runDE(experiments(rnacomp6), padj.method="BH")
+save(res, file = "~/data/pancan_DE_results.rda")
+```
+
+Run unmatched expresssion analysis using `limma`
+
+```{r}
+unmatch_rnacomp6 <- endoapply(experiments(rnacomp6), function(x) {
+    colData(x) <- DataFrame(GROUP = colData(x)[, "GROUP"])
+    x
+})
+res2 <- runDE(unmatch_rnacomp6, padj.method="BH")
+save(res2, file = "~/data/pancan_DE_2.rda")
+```
+
