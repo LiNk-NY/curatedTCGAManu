@@ -52,15 +52,16 @@ sampleTables(rnacomp)
 Which cancer codes have both tumors and normal samples?
 
 ```{r}
+okCA <- vapply(sampleTables(rnacomp),
+    function(x) {
+        all(c("01", "11") %in% names(x))
+    },
+    logical(1L)
+)
+
 (
 okCodes <- vapply(
-    strsplit(names(which(
-        vapply(sampleTables(rnacomp),
-            function(x) {
-            all(c("01", "11") %in% names(x))
-            },
-            logical(1L)))),
-        "_"),
+    strsplit(names(which(okCA)), "_"),
     `[`,
     character(1L),
     1L)
@@ -71,7 +72,7 @@ Download and assemble appropriate `MultiAssayExperiment` object with
 cancer codes that have both tumors and normals.
 
 ```{r}
-rnacomp2 <- curatedTCGAData(okCodes, "RNASeq2*", FALSE)
+rnacomp2 <- rnacomp[ , , okCA]
 ```
 
 Isolate tumor and normal samples for each cancer that have more than 10
