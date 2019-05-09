@@ -43,6 +43,27 @@ head(avail <- diseaseCodes[
 rnacomp <- curatedTCGAData("*", "RNASeq2*", FALSE)
 ```
 
+Some datasets were missing normals and we suspected that there were different
+datasets being produced by RTCGAToolbox.
+Upon further inspection, TCGA provides 'illuminaga' and 'illumina HiSeq'
+datasets.
+
+First, download the 'altRNA' branch of RTCGAToolbox.
+
+```{r}
+## remotes::install_github("LiNk-NY/RTCGAToolbox", ref = "altRNA")
+library(RTCGAToolbox)
+dl <- c("COAD", "READ", "UCEC")
+redl <- lapply(setNames(dl, dl), function(x) {
+    tx <- getFirehoseData(x, RNASeq2GeneNorm = TRUE, clinical = FALSE)
+    biocExtract(tx, "RNASeq2GeneNorm")
+    }
+)
+exper <- as(unlist(redl), "ExperimentList")
+remae <- MultiAssayExperiment(experiments = exper)
+sampleTables(remae)
+```
+
 Here we check for the samples of interest using `sampleTables`:
 
 ```{r}
@@ -83,7 +104,7 @@ selects <- TCGAsampleSelect(colnames(rnacomp2), c("01", "11"))
 
 rnacomp3 <- rnacomp2[, selects]
 enoughNorm <- vapply(sampleTables(rnacomp3),
-    function(samp) { samp["11"] > 10L }, logical(1L))
+    function(samp) { samp["11"] >= 10L }, logical(1L))
 
 rnacomp4 <- rnacomp3[, , enoughNorm]
 sampleTables(rnacomp4)
