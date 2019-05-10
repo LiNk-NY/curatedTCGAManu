@@ -1,7 +1,7 @@
 ---
 title: "GSEA PanCan"
 author: "Waldron Lab"
-date: "March 19, 2019"
+date: "May 10, 2019"
 output: html_document
 ---
 
@@ -48,10 +48,10 @@ datasets being produced by RTCGAToolbox.
 Upon further inspection, TCGA provides 'illuminaga' and 'illumina HiSeq'
 datasets.
 
-First, download the 'altRNA' branch of RTCGAToolbox.
+First, download the 'master' branch of RTCGAToolbox.
 
 ```{r}
-## remotes::install_github("LiNk-NY/RTCGAToolbox", ref = "altRNA")
+## remotes::install_github("LiNk-NY/RTCGAToolbox")
 library(RTCGAToolbox)
 dl <- c("COAD", "READ", "UCEC")
 redl <- lapply(setNames(dl, dl), function(x) {
@@ -60,8 +60,53 @@ redl <- lapply(setNames(dl, dl), function(x) {
     }
 )
 exper <- as(unlist(redl), "ExperimentList")
-remae <- MultiAssayExperiment(experiments = exper)
-sampleTables(remae)
+sampleTables(MultiAssayExperiment(exper))
+```
+
+Create a pseduo clinical DataFrame for new samples
+
+```{r}
+allSamps <- unlist(colnames(exper))
+clinphone <- DataFrame(patientID = TCGAbarcode(allSamps))
+rownames(clinphone) <- clinphone[["patientID"]]
+clinphone <- clinphone[!duplicated(rownames(clinphone)), , drop = FALSE]
+```
+
+Check the correlation between platforms 'illuminaga' and 'illuminahiseq':
+
+```{r}
+lapply(1:3, function(i) {
+    dfx <- data.frame(idx = seq(1, 6), place = rep(1:3, each= 2))
+    ind <- dfx[dfx[["place"]] == i, "idx"]
+    sameSamp <- Reduce(intersect, colnames(exper[ind]))
+
+    cor(
+        cbind.data.frame(
+            assay(exper[[ind[1]]][, sameSamp]),
+            assay(exper[[ind[2]]][, sameSamp])
+        )
+    )
+})
+## 0.8698399 for intersecting sample in UCEC
+```
+
+```{r}
+outAssays <- c("COAD_RNASeq2GeneNorm-20160128",
+    "READ_RNASeq2GeneNorm-20160128", "UCEC_RNASeq2GeneNorm-20160128")
+core <-
+    exper[ c("COAD.illuminahiseq", "READ.illuminahiseq", "UCEC.illuminahiseq") ]
+names(core) <- outAssays
+mapper <- generateMap(core, clinphone, idConverter = TCGAbarcode)
+coremae <-
+    MultiAssayExperiment(
+        experiments = core, sampleMap = mapper, colData = clinphone
+    )
+```
+
+```{r}
+rnacopy <- rnacomp
+rnacomp <- rnacomp[, , !names(rnacomp) %in% outAssays]
+rnacomp <- c(rnacomp, coremae)
 ```
 
 Here we check for the samples of interest using `sampleTables`:
@@ -89,7 +134,7 @@ okCodes <- vapply(
 )
 ```
 
-Download and assemble appropriate `MultiAssayExperiment` object with
+Assemble appropriate `MultiAssayExperiment` object with
 cancer codes that have both tumors and normals.
 
 ```{r}
