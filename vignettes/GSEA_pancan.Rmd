@@ -56,11 +56,26 @@ library(RTCGAToolbox)
 dl <- c("COAD", "READ", "UCEC")
 redl <- lapply(setNames(dl, dl), function(x) {
     tx <- getFirehoseData(x, RNASeq2GeneNorm = TRUE, clinical = FALSE)
-    biocExtract(tx, "RNASeq2GeneNorm")
+    txl <- biocExtract(tx, "RNASeq2GeneNorm")
+    newassay <- cbind(assay(txl[[1]]), assay(txl[[2]]))
+    newassay <- newassay[, !duplicated(colnames(newassay))]
+    newmeta <- c(metadata(txl[[1]]), metadata(txl[[2]]))
+    newColData <- DataFrame(row.names = colnames(newassay))
+    SummarizedExperiment(assays = list(TPM = newassay),
+        metadata = newmeta, colData = newColData)
     }
 )
-exper <- as(unlist(redl), "ExperimentList")
+exper <- as(redl, "ExperimentList")
 sampleTables(MultiAssayExperiment(exper))
+```
+
+```{r, eval = FALSE}
+source("../data/ids.R")
+ccids$sample %in% colnames(exper[[1]]) &
+ccids$sample %in% colnames(exper[[2]])
+ccids$sample %in% unlist(colnames(exper[1:2]))
+reids$sample %in% unlist(colnames(exper[3:4]))
+ceids$sample %in% unlist(colnames(exper[5:6]))
 ```
 
 Create a pseduo clinical DataFrame for new samples

@@ -30,12 +30,15 @@ library(BiocParallel)
 ```
 
 ## Obtain ACC data from curatedTCGAData:
+
 ```{r}
 data("diseaseCodes")
 head(avail <- diseaseCodes[
     diseaseCodes[["Available"]] == "Yes", "Study.Abbreviation"])
 ## Peaks data not available in LAML or SKCM
 avail <- avail[!avail %in% c("LAML", "SKCM")]
+# previous run with first 3
+avail <- avail[-(1:3)]
 ```
 
 ```{r}
@@ -133,3 +136,7 @@ names(which(!bpok(pancan.try2)))
 
 save(pancan.try2, file = "pancan_third_try.rda")
 ```
+
+about n = 100
+
+permute sample labels
