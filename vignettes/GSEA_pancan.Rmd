@@ -39,10 +39,6 @@ head(avail <- diseaseCodes[
 
 ## Download and reshape data
 
-```{r}
-rnacomp <- curatedTCGAData("*", "RNASeq2*", FALSE)
-```
-
 Some datasets were missing normals and we suspected that there were different
 datasets being produced by RTCGAToolbox.
 Upon further inspection, TCGA provides 'illuminaga' and 'illumina HiSeq'
@@ -71,11 +67,9 @@ sampleTables(MultiAssayExperiment(exper))
 
 ```{r, eval = FALSE}
 source("../data/ids.R")
-ccids$sample %in% colnames(exper[[1]]) &
-ccids$sample %in% colnames(exper[[2]])
-ccids$sample %in% unlist(colnames(exper[1:2]))
-reids$sample %in% unlist(colnames(exper[3:4]))
-ceids$sample %in% unlist(colnames(exper[5:6]))
+ccids$sample %in% colnames(exper[[1]])
+reids$sample %in% colnames(exper[[2]])
+ceids$sample %in% colnames(exper[[3]])
 ```
 
 Create a pseduo clinical DataFrame for new samples
@@ -108,14 +102,19 @@ lapply(1:3, function(i) {
 ```{r}
 outAssays <- c("COAD_RNASeq2GeneNorm-20160128",
     "READ_RNASeq2GeneNorm-20160128", "UCEC_RNASeq2GeneNorm-20160128")
-core <-
-    exper[ c("COAD.illuminahiseq", "READ.illuminahiseq", "UCEC.illuminahiseq") ]
+core <- exper[ c("COAD", "READ", "UCEC") ]
 names(core) <- outAssays
 mapper <- generateMap(core, clinphone, idConverter = TCGAbarcode)
 coremae <-
     MultiAssayExperiment(
         experiments = core, sampleMap = mapper, colData = clinphone
     )
+```
+
+Obtain the RNAseq data from `curatedTCGAData`:
+
+```{r}
+rnacomp <- curatedTCGAData("*", "RNASeq2*", FALSE)
 ```
 
 ```{r}
