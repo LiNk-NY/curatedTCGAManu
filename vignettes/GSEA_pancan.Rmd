@@ -54,7 +54,7 @@ redl <- lapply(setNames(dl, dl), function(x) {
     tx <- getFirehoseData(x, RNASeq2GeneNorm = TRUE, clinical = FALSE)
     txl <- biocExtract(tx, "RNASeq2GeneNorm")
     newassay <- cbind(assay(txl[[1]]), assay(txl[[2]]))
-    newassay <- newassay[, !duplicated(colnames(newassay))]
+    newassay <- data.matrix(newassay[, !duplicated(colnames(newassay))])
     newmeta <- c(metadata(txl[[1]]), metadata(txl[[2]]))
     newColData <- DataFrame(row.names = colnames(newassay))
     SummarizedExperiment(assays = list(TPM = newassay),
