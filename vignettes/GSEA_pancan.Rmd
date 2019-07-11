@@ -214,19 +214,26 @@ rnacomp6 <- BiocGenerics:::replaceSlots(rnacomp5,
 )
 ```
 
+Share data with collaborators:
+
+```{r}
+saveRDS(experiments(rnacomp6), file = "pancan_exprs.rds")
+```
+
 Differential Expression analysis:
 
 ```{r}
 exp.list <- experiments(rnacomp6)
 names(exp.list) <- substring(names(exp.list), 1, 4)
-exp.list <- lapply(exp.list, 
+exp.list <- lapply(exp.list,
     function(se)
     {
         # if assay is matrix: assay(se) <- log(assay(se) + 1, base=2)
         assays(se) <- list(TPM=log(as.matrix(assay(se)) + 1, base=2))
-        return(se)    
+        return(se)
     })
 exp.list <- runDE(exp.list)
+save(exp.list, file = "~/data/pancan_DE_results.rda")
 ```
 
 Extract genes with consistent expression changes:
@@ -237,8 +244,8 @@ wfcs <- metaFC(exp.list, max.na=3)
 # Heatmap
 top.wfcs.genes <- names(wfcs)[1:50]
 extractFC <- function(exp.list, top.wfcs.genes)
-{   
-    fcs <- vapply(exp.list, 
+{
+    fcs <- vapply(exp.list,
         function(d) rowData(d)[top.wfcs.genes, "FC"],
         numeric(length(top.wfcs.genes)))
     rownames(fcs) <- top.wfcs.genes
@@ -247,16 +254,16 @@ extractFC <- function(exp.list, top.wfcs.genes)
 fcs <- extractFC(exp.list, top.wfcs.genes)
 Heatmap(fcs, name="log2FC", show_row_names=TRUE)
 
-# Boxplot 
+# Boxplot
 top.wfcs.genes <- names(c(wfcs[wfcs > 0][1:8], wfcs[wfcs < 0][1:8]))
 fcs <- extractFC(exp.list, top.wfcs.genes)
 df <- reshape2::melt(fcs)
 medians <- apply(fcs, 1, median, na.rm=TRUE)
 o <- names(sort(medians))
-p <- ggboxplot(df, x = "Var1", y = "value", width = 0.8, 
+p <- ggboxplot(df, x = "Var1", y = "value", width = 0.8,
                 ylab="log2 fold change", xlab="", order=o, color="Var1", add ="jitter")
 p <- ggpar(p, x.text.angle=45, palette = "simpsons", legend="none")
-p + geom_hline(yintercept=0, linetype="dashed", color = "darkgrey") + 
+p + geom_hline(yintercept=0, linetype="dashed", color = "darkgrey") +
     geom_vline(xintercept=8.5, linetype="dashed", color = "darkgrey")
 ```
 
