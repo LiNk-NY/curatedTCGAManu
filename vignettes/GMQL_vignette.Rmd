@@ -1,0 +1,69 @@
+---
+title: "Example Use Case to counter GMQL"
+author: "Waldron Lab"
+date: "July 11, 2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r, echo = FALSE, warning = FALSE}
+suppressPackageStartupMessages({
+    library(MultiAssayExperiment)
+    library(curatedTCGAData)
+    library(TCGAutils)
+})
+```
+
+Load packages:
+
+```{r, eval = FALSE}
+library(MultiAssayExperiment)
+library(curatedTCGAData)
+library(TCGAutils)
+```
+
+From [Masseroli et al. 2018](https://doi.org/10.1093/bioinformatics/bty688)
+> "In TCGA data of BRCA patients, find the DNA somatic mutations
+ within the first 2000 bp outside of the genes that are both
+ expressed with FPKM > 3 and have at least a methylation in the same patient
+ biospecimen, and extract these mutations of the top 5% patients
+ with the highest number of such mutations."
+
+```{r}
+library(curatedTCGAData)
+system.time(
+    brca <- curatedTCGAData(
+        diseaseCode = "BRCA",
+        assays = c("Mutation", "RNASeq2GeneNorm", "Methylation"),
+        dry.run = FALSE
+    )
+)
+```
+
+```{r}
+library(TCGAutils)
+
+brca0 <- symbolsToRanges(brca, unmapped = FALSE)
+
+if (!require("IlluminaHumanMethylation450kanno.ilmn12.hg19", quietly = TRUE))
+    BiocManager::install("IlluminaHumanMethylation450kanno.ilmn12.hg19")
+
+library(IlluminaHumanMethylation450kanno.ilmn12.hg19)
+
+brca1 <- CpGtoRanges(brca0, unmapped = FALSE)
+```
+
+Have at least a methylation:
+
+```{r}
+unmeth <- is.na(rowSums(assay(brca1[[4]])))
+methyl <- brca1[[4]][!unmeth, ]
+brca1[[4]] <- methyl
+```
+RPKM
+```{r}
+head(assay(brca1[[2]]))
+```
