@@ -63,7 +63,29 @@ unmeth <- is.na(rowSums(assay(brca1[[4]])))
 methyl <- brca1[[4]][!unmeth, ]
 brca1[[4]] <- methyl
 ```
-RPKM
+
+TPM > 3
+
 ```{r}
-head(assay(brca1[[2]]))
+validRows <- apply(assay(brca1[["BRCA_RNASeq2GeneNorm-20160128_ranged"]]) > 3, 1L, any)
+brca1[["BRCA_RNASeq2GeneNorm-20160128_ranged"]] <- brca1[["BRCA_RNASeq2GeneNorm-20160128_ranged"]][validRows, ]
+brca1[["BRCA_RNASeq2GeneNorm-20160128_ranged"]]
 ```
+
+Restrict Methylation to genes with values > 4
+
+```{r}
+rnaranges <- rowRanges(brca1[["BRCA_RNASeq2GeneNorm-20160128_ranged"]])
+methranges <- rowRanges(brca1[["BRCA_Methylation_methyl450-20160128_ranged"]])
+hits <- findOverlaps(rnaranges, methranges)
+methdx <- sort(unique(subjectHits(hits)))
+
+methsub <- brca1[["BRCA_Methylation_methyl450-20160128_ranged"]][methdx, ]
+brca1[["BRCA_Methylation_methyl450-20160128_ranged"]] <- methsub
+brca1
+```
+
+```{r}
+mcols(brca1[["BRCA_Mutation-20160128"]])
+```
+
