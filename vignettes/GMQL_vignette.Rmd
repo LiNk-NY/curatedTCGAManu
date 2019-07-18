@@ -9,17 +9,9 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-```{r, echo = FALSE, warning = FALSE}
-suppressPackageStartupMessages({
-    library(MultiAssayExperiment)
-    library(curatedTCGAData)
-    library(TCGAutils)
-})
-```
-
 Load packages:
 
-```{r, eval = FALSE}
+```{r,results="hide",include=TRUE,message=FALSE,warning=FALSE}
 library(MultiAssayExperiment)
 library(curatedTCGAData)
 library(TCGAutils)
@@ -33,7 +25,6 @@ From [Masseroli et al. 2018](https://doi.org/10.1093/bioinformatics/bty688)
  with the highest number of such mutations."
 
 ```{r}
-library(curatedTCGAData)
 system.time(
     brca <- curatedTCGAData(
         diseaseCode = "BRCA",
@@ -44,8 +35,6 @@ system.time(
 ```
 
 ```{r}
-library(TCGAutils)
-
 brca0 <- symbolsToRanges(brca, unmapped = FALSE)
 
 if (!require("IlluminaHumanMethylation450kanno.ilmn12.hg19", quietly = TRUE))
@@ -59,9 +48,9 @@ brca1 <- CpGtoRanges(brca0, unmapped = FALSE)
 Have at least a methylation:
 
 ```{r}
-unmeth <- is.na(rowSums(assay(brca1[[4]])))
-methyl <- brca1[[4]][!unmeth, ]
-brca1[[4]] <- methyl
+unmeth <- is.na(rowSums(assay(brca1[["BRCA_Methylation_methyl450-20160128_ranged"]])))
+methyl <- brca1[["BRCA_Methylation_methyl450-20160128_ranged"]][!unmeth, ]
+brca1[["BRCA_Methylation_methyl450-20160128_ranged"]] <- methyl
 ```
 
 TPM > 3
@@ -72,7 +61,7 @@ brca1[["BRCA_RNASeq2GeneNorm-20160128_ranged"]] <- brca1[["BRCA_RNASeq2GeneNorm-
 brca1[["BRCA_RNASeq2GeneNorm-20160128_ranged"]]
 ```
 
-Restrict Methylation to genes with values > 4
+Restrict Methylation to genes with expression values > 3
 
 ```{r}
 rnaranges <- rowRanges(brca1[["BRCA_RNASeq2GeneNorm-20160128_ranged"]])
@@ -85,7 +74,14 @@ brca1[["BRCA_Methylation_methyl450-20160128_ranged"]] <- methsub
 brca1
 ```
 
+Find matching genes in mutations from RNA
+
 ```{r}
-mcols(brca1[["BRCA_Mutation-20160128"]])
+validMuts <-
+    mcols(brca1[["BRCA_Mutation-20160128"]])[["Hugo_Symbol"]] %in%
+        names(rnaranges)
+
+muts <- brca1[["BRCA_Mutation-20160128"]][validMuts, ]
+ROIs <- flank(rowRanges(muts), 2000, start = FALSE)
 ```
 
