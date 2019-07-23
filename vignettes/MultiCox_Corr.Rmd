@@ -52,7 +52,8 @@ acc.mats <- assays(subacc)
 
 Log-transform the RNA-seq assay:
 ```{r}
-acc.mats[[1]] <- log2(acc.mats[[1]] + 1)
+acc.mats[["ACC_RNASeq2GeneNorm-20160128"]] <-
+    log2(acc.mats[["ACC_RNASeq2GeneNorm-20160128"]] + 1)
 ```
 
 Transpose both, so genes are in columns:
