@@ -1,0 +1,77 @@
+---
+title: "Figures 1 and 2"
+author: "Waldron Lab"
+date: "July 11, 2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+Load packages:
+
+```{r,results="hide",include=TRUE,message=FALSE,warning=FALSE}
+library(MultiAssayExperiment)
+library(curatedTCGAData)
+library(TCGAutils)
+library(survival)
+```
+# Using ACC
+
+```{r,results="hide",include=TRUE,message=FALSE,warning=FALSE}
+acc <- curatedTCGAData("ACC", c("RNASeq2GeneNorm", "GISTIC_T*"), FALSE)
+```
+
+## Figure 1 Example
+
+```{r}
+wideacc <- wideFormat(acc["EZH2", , ],
+    colDataCols=c("vital_status", "days_to_death", "pathology_N_stage"))
+wideacc[["y"]] <- Surv(wideacc$days_to_death, wideacc$vital_status)
+wideacc
+coxph(
+    Surv(days_to_death, vital_status) ~ `ACC_GISTIC_ThresholdedByGene.20160128_EZH2` +
+        log2(`ACC_RNASeq2GeneNorm.20160128_EZH2`) + pathology_N_stage,
+    data=wideacc
+)
+```
+
+## Figure 2
+
+```{r}
+subacc <- intersectColumns(acc)
+subacc <- intersectRows(subacc)
+```
+
+Create a list of numeric matrices:
+
+```{r}
+acc.mats <- assays(subacc)
+```
+
+
+Log-transform the RNA-seq assay:
+```{r}
+acc.mats[[1]] <- log2(acc.mats[[1]] + 1)
+```
+
+Transpose both, so genes are in columns:
+
+```{r}
+subacc.list <- lapply(acc.mats, t)
+```
+
+Calculate the correlation between columns in the first matrix and columns in the
+second matrix:
+
+
+```{r}
+corres <- cor(subacc.list[[1]], subacc.list[[2]])
+```
+
+And finally, create the histograms:
+
+```{r}
+hist(diag(corres))
+hist(corres[upper.tri(corres)])
+```
