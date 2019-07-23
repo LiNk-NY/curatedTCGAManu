@@ -1,5 +1,5 @@
 ---
-title: "Figures 1 and 2"
+title: "Figures 1, 2, and 3"
 author: "Waldron Lab"
 date: "July 11, 2019"
 output: html_document
@@ -76,3 +76,31 @@ And finally, create the histograms:
 hist(diag(corres))
 hist(corres[upper.tri(corres)])
 ```
+
+## Figure 3 Example
+
+Gene with the highest correlation to CN, make boxplot of log2 expression vs
+copy number
+
+```{r}
+head(sort(abs(diag(corres)), decreasing = TRUE))
+```
+
+SNRPB2 Gene
+
+```{r}
+snr <- subacc["SNRPB2", ]
+```
+
+```{r}
+snpexp <- as.data.frame(wideFormat(snr, check.names = FALSE))
+names(snpexp) <- c("primary", "CopyNumber", "Expression")
+## remove outlier in CN
+table(snpexp$CopyNumber)
+snpexp <- snpexp[snpexp$CopyNumber != -2, ]
+
+snpexp[["Log2Exp"]] <- log(snpexp[["Expression"]], 2)
+library(ggplot2)
+ggplot(snpexp, aes(factor(CopyNumber), Log2Exp)) + geom_violin() + theme_classic()
+```
+
