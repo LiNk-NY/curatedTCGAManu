@@ -1,7 +1,7 @@
 ---
-title: "Figures 1, 2, and 3"
+title: "Figures 1 to 4"
 author: "Waldron Lab"
-date: "July 11, 2019"
+date: "July 23, 2019"
 output: html_document
 ---
 
@@ -22,7 +22,7 @@ library(survival)
 acc <- curatedTCGAData("ACC", c("RNASeq2GeneNorm", "GISTIC_T*"), FALSE)
 ```
 
-## Figure 1 Example
+## Figure 1 Example: Multivariate Cox regression with RNASeq expression, copy number, and pathology
 
 ```{r}
 wideacc <- wideFormat(acc["EZH2", , ],
@@ -36,7 +36,7 @@ coxph(
 )
 ```
 
-## Figure 2
+## Figure 2 Example: Correlation between RNASeq expression and copy number
 
 ```{r}
 subacc <- intersectColumns(acc)
@@ -77,7 +77,7 @@ hist(diag(corres))
 hist(corres[upper.tri(corres)])
 ```
 
-## Figure 3 Example
+## Figure 3 Example: Violin plot of log2 expression by copy number
 
 Gene with the highest correlation to CN, make boxplot of log2 expression vs
 copy number
@@ -104,7 +104,7 @@ library(ggplot2)
 ggplot(snpexp, aes(factor(CopyNumber), Log2Exp)) + geom_violin() + theme_classic()
 ```
 
-## Identifying correlated principal components
+## Figure 4 example: Identifying correlated principal components
 
 Perform Principal Components Analysis of each of the five assays, using samples
 available on each assay, log-transforming RNA-seq data first.  Using the first
