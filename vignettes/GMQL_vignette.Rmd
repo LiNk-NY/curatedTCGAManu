@@ -52,6 +52,19 @@ library(IlluminaHumanMethylation450kanno.ilmn12.hg19)
 brca1 <- CpGtoRanges(brca0, unmapped = FALSE)
 ```
 
+Select only tumors in the data
+
+```{r}
+library(TCGAutils)
+sampleTables(brca1)
+head(sampleTypes)
+
+sampleselector <- lapply(colnames(brca1), function(x)
+    TCGAsampleSelect(x, c("01", "06"))
+)
+brca1 <- brca1[, sampleselector]
+```
+
 We check what probes "have at least a methylation..." across all samples:
 
 ```{r}
@@ -98,6 +111,29 @@ validMuts <-
         names(rnaranges)
 
 muts <- brca1[["BRCA_Mutation-20160128"]][validMuts, ]
-ROIs <- flank(rowRanges(muts), 2000, start = FALSE)
+mutsdown <- flank(rowRanges(muts), 2000, start = FALSE)
+mutsup <- flank(rowRanges(muts), 2000)
+allROIs <- c(mutsdown, mutsup)
+updownmuts <- muts %within% allROIs
+brcamuts <- muts[updownmuts, ]
+
+reps <- replicated(brca1)[["BRCA_Mutation-20160128"]]
+mutbyregion <- assay(brcamuts, i = "Variant_Classification")
+mutTally <- ifelse(!is.na(mutbyregion), 1, 0)
+rseMut <- SummarizedExperiment(assay = mutTally,
+    rowRanges = as(rownames(mutTally), "GRanges"))
+
+# Find 5 percent of patients with most mutations
+compReps <- mergeReplicates(mutTally, reps, sum)
+mutsPerPt <- rowSums(t(compReps))
+
+top5 <- head(sort(mutsPerPt, decreasing = TRUE), ceiling(length(mutsPerPt)*0.05))
+
+pats <- TCGAbarcode(names(top5))
+
+brca2 <- c(brca1, flankMutations = rseMut, mapFrom = 1L)
+brcaf <- brca2[, rownames(colData(brca2)) %in% pats, ]
+rowRanges(brcaf[["flankMutations"]])
 ```
+
 
