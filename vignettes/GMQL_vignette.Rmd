@@ -18,11 +18,15 @@ library(TCGAutils)
 ```
 
 From [Masseroli et al. 2018](https://doi.org/10.1093/bioinformatics/bty688)
+
 > "In TCGA data of BRCA patients, find the DNA somatic mutations
  within the first 2000 bp outside of the genes that are both
  expressed with FPKM > 3 and have at least a methylation in the same patient
  biospecimen, and extract these mutations of the top 5% patients
  with the highest number of such mutations."
+
+First we load the 'BRCA' dataset with 'Mutation', 'RNASeq2GeneNorm' and
+'Methylation' assays / experiments:
 
 ```{r}
 system.time(
@@ -33,6 +37,9 @@ system.time(
     )
 )
 ```
+
+We then add gene symbol annotations with genomic ranges and drop any unmapped
+symbols. We also do the same for CpG probe identifiers:
 
 ```{r}
 brca0 <- symbolsToRanges(brca, unmapped = FALSE)
@@ -45,23 +52,28 @@ library(IlluminaHumanMethylation450kanno.ilmn12.hg19)
 brca1 <- CpGtoRanges(brca0, unmapped = FALSE)
 ```
 
-"have at least a methylation..."
+We check what probes "have at least a methylation..." across all samples:
 
 ```{r}
-unmeth <- is.na(rowSums(assay(brca1[["BRCA_Methylation_methyl450-20160128_ranged"]])))
+unmeth <- is.na(rowSums(
+    assay(brca1[["BRCA_Methylation_methyl450-20160128_ranged"]])
+))
 methyl <- brca1[["BRCA_Methylation_methyl450-20160128_ranged"]][!unmeth, ]
 brca1[["BRCA_Methylation_methyl450-20160128_ranged"]] <- methyl
+brca1[["BRCA_Methylation_methyl450-20160128_ranged"]]
 ```
 
-"FPKM > 3"
-Here we use the better alternative: TPM > 3
+An expression threshold is used where "FPKM > 3". In our case, we use the better
+alternative: TPM > 3
 
 https://haroldpimentel.wordpress.com/2014/05/08/what-the-fpkm-a-review-rna-seq-expression-units/
 http://diytranscriptomics.com/Reading/files/wagnerTPM.pdf
 
 ```{r}
-validRows <- apply(assay(brca1[["BRCA_RNASeq2GeneNorm-20160128_ranged"]]) > 3, 1L, any)
-brca1[["BRCA_RNASeq2GeneNorm-20160128_ranged"]] <- brca1[["BRCA_RNASeq2GeneNorm-20160128_ranged"]][validRows, ]
+validRows <- apply(
+    assay(brca1[["BRCA_RNASeq2GeneNorm-20160128_ranged"]]) > 3, 1L, any)
+brca1[["BRCA_RNASeq2GeneNorm-20160128_ranged"]] <-
+    brca1[["BRCA_RNASeq2GeneNorm-20160128_ranged"]][validRows, ]
 brca1[["BRCA_RNASeq2GeneNorm-20160128_ranged"]]
 ```
 
