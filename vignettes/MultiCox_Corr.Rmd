@@ -86,7 +86,7 @@ copy number
 head(sort(abs(diag(corres)), decreasing = TRUE))
 ```
 
-SNRPB2 Gene
+The 'SNRPB2' gene expression has a correlation to CNV = 0.83
 
 ```{r}
 snr <- subacc["SNRPB2", ]
@@ -104,3 +104,89 @@ library(ggplot2)
 ggplot(snpexp, aes(factor(CopyNumber), Log2Exp)) + geom_violin() + theme_classic()
 ```
 
+## Identifying correlated principal components
+
+Perform Principal Components Analysis of each of the five assays, using samples
+available on each assay, log-transforming RNA-seq data first.  Using the first
+10 components, calculate Pearson correlation between all scores and plot these
+correlations as a heatmap to identify correlated components across assays.
+
+```{r}
+acc_full <- curatedTCGAData("ACC",
+    assays = c("RNASeq2*", "GISTIC_T*", "RPPA*", "Mutation", "miRNASeqGene"),
+    dry.run = FALSE)
+```
+
+```{r}
+getLoadings <- function(x, ncomp=10, dolog=FALSE, center=TRUE, scale.=TRUE) {
+    if (dolog){
+        x <- log2(x + 1)
+    }
+    pc <- prcomp(x, center=center, scale.=scale.)
+    t(pc$rotation[, 1:10])
+}
+```
+
+```{r}
+acc2 <- intersectColumns(acc_full)
+```
+
+Categorize by silent mutations:
+
+```{r}
+mut <- assay(acc2[["ACC_Mutation-20160128"]], i = "Variant_Classification")
+mut <- ifelse(is.na(mut) | mut == "Silent", 0, 1)
+acc2[["ACC_Mutation-20160128"]] <- mut
+```
+
+```{r}
+acc2 <- c(acc2,
+    rnaseqPCA = getLoadings(assays(acc2)[["ACC_RNASeq2GeneNorm-20160128"]],
+        dolog=TRUE), mapFrom=1L
+    )
+acc2 <- c(acc2,
+    gistictPCA = getLoadings(assays(acc2)[["ACC_GISTIC_ThresholdedByGene-20160128"]],
+        center=FALSE, scale.=FALSE), mapFrom=2L)
+acc2 <- c(acc2,
+    proteinPCA = getLoadings(assays(acc2)[["ACC_RPPAArray-20160128"]]),
+        mapFrom=3L)
+acc2 <- c(acc2,
+    mutationsPCA = getLoadings(assays(acc2)[["ACC_Mutation-20160128"]],
+        center=FALSE, scale.=FALSE), mapFrom=4L)
+acc2 <- c(acc2,
+    miRNAPCA = getLoadings(assays(acc2)[["ACC_miRNASeqGene-20160128"]]),
+        mapFrom=5L)
+```
+
+Now subset to keep *only* the PCA results:
+```{r}
+acc2 <- acc2[, , 6:10]
+experiments(acc2)
+```
+
+Note, it would be equally easy (and maybe better) to do PCA on all samples
+available for each assay, then do intersectColumns at this point instead.
+
+Now, steps for calculating the correlations and plotting a heatmap:
+* Use *wideFormat* to paste these together, which has the nice property of
+adding assay names to the column names.
+* The first column always contains the sample identifier, so remove it.
+* Coerce to a matrix
+* Calculate the correlations, and take the absolute value (since signs of
+principal components are arbitrary)
+* Set the diagonals to NA (each variable has a correlation of 1 to itself).
+
+```{r}
+df <- wideFormat(acc2)[, -1]
+mycors <- cor(as.matrix(df))
+mycors <- abs(mycors)
+diag(mycors) <- NA
+```
+
+To simplify the heatmap, show only components that have at least one correlation
+greater than 0.5.
+```{r}
+has.high.cor <- apply(mycors, 2, max, na.rm=TRUE) > 0.5
+mycors <- mycors[has.high.cor, has.high.cor]
+pheatmap::pheatmap(mycors)
+```
