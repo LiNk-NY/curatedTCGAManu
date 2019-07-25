@@ -111,9 +111,7 @@ validMuts <-
         names(rnaranges)
 
 muts <- brca1[["BRCA_Mutation-20160128"]][validMuts, ]
-mutsdown <- flank(rowRanges(muts), 2000, start = FALSE)
-mutsup <- flank(rowRanges(muts), 2000)
-allROIs <- c(mutsdown, mutsup)
+allROIs <- flank(rnaranges, 2000, both = TRUE)
 updownmuts <- muts %within% allROIs
 brcamuts <- muts[updownmuts, ]
 
