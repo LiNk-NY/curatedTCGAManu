@@ -68,12 +68,35 @@ brca1 <- brca1[, sampleselector]
 We check what probes "have at least a methylation..." across all samples:
 
 ```{r}
-unmeth <- is.na(rowSums(
+meth.has.genes <-
+    !is.na(rowData(
+        brca1[["BRCA_Methylation_methyl450-20160128_ranged"]])$Gene_Symbol)
+brca1 <-
+    subsetByRow(brca1,
+        List("BRCA_Methylation_methyl450-20160128_ranged"=meth.has.genes))
+genes <-
+    rowData(brca1[["BRCA_Methylation_methyl450-20160128_ranged"]])$Gene_Symbol
+methylated <- !is.na(as.matrix(
     assay(brca1[["BRCA_Methylation_methyl450-20160128_ranged"]])
 ))
-methyl <- brca1[["BRCA_Methylation_methyl450-20160128_ranged"]][!unmeth, ]
-brca1[["BRCA_Methylation_methyl450-20160128_ranged"]] <- methyl
-brca1[["BRCA_Methylation_methyl450-20160128_ranged"]]
+```
+
+Number of non-missing per gene in each column
+
+```{r}
+# convert to integer first
+meth <- methylated * 1L
+system.time(meth1 <- rowsum(meth, group = genes))
+# where genes have at least one methylation
+meth2 <- meth1 > 0L
+brca1 <- c(brca1, has.meth = SummarizedExperiment(meth2))
+```
+
+Get ranges and add "within the first 2000 bp outside of the genes"
+
+```{r}
+rnaranges <- rowRanges(brca1[["BRCA_RNASeq2GeneNorm-20160128_ranged"]])
+allROIs <- flank(rnaranges, 2000, both = TRUE)
 ```
 
 An expression threshold is used where "FPKM > 3". In our case, we use the better
@@ -83,55 +106,44 @@ https://haroldpimentel.wordpress.com/2014/05/08/what-the-fpkm-a-review-rna-seq-e
 http://diytranscriptomics.com/Reading/files/wagnerTPM.pdf
 
 ```{r}
-validRows <- apply(
-    assay(brca1[["BRCA_RNASeq2GeneNorm-20160128_ranged"]]) > 3, 1L, any)
-brca1[["BRCA_RNASeq2GeneNorm-20160128_ranged"]] <-
-    brca1[["BRCA_RNASeq2GeneNorm-20160128_ranged"]][validRows, ]
-brca1[["BRCA_RNASeq2GeneNorm-20160128_ranged"]]
+rnaexp <- assay(brca1[["BRCA_RNASeq2GeneNorm-20160128_ranged"]]) > 3
 ```
 
-Restrict Methylation to genes with expression values > 3
+Find any somatic mutations within regions of interest:
 
 ```{r}
-rnaranges <- rowRanges(brca1[["BRCA_RNASeq2GeneNorm-20160128_ranged"]])
-methranges <- rowRanges(brca1[["BRCA_Methylation_methyl450-20160128_ranged"]])
-hits <- findOverlaps(rnaranges, methranges)
-methdx <- sort(unique(subjectHits(hits)))
+somatic <- function(scores, ranges, qranges) any(!is.na(scores))
 
-methsub <- brca1[["BRCA_Methylation_methyl450-20160128_ranged"]][methdx, ]
-brca1[["BRCA_Methylation_methyl450-20160128_ranged"]] <- methsub
-brca1
+genome(brca1[["BRCA_Mutation-20160128"]]) <-
+    TCGAutils::translateBuild(genome(brca1[["BRCA_Mutation-20160128"]]))
+
+mutations <- RaggedExperiment::qreduceAssay(
+    x = brca1[["BRCA_Mutation-20160128"]],
+    query = allROIs,
+    simplifyReduce = somatic,
+    i = "Variant_Classification"
+)
+rownames(mutations) <- names(rnaranges)
+mutations[is.na(mutations)] <- 0
+
+brca1 <- c(brca1, mutations = SummarizedExperiment(mutations))
 ```
 
-Find matching genes in mutations from RNA
+Handle technical replicates and take the sum of number of mutations per sample
 
 ```{r}
-validMuts <-
-    mcols(brca1[["BRCA_Mutation-20160128"]])[["Hugo_Symbol"]] %in%
-        names(rnaranges)
-
-muts <- brca1[["BRCA_Mutation-20160128"]][validMuts, ]
-allROIs <- flank(rnaranges, 2000, both = TRUE)
-updownmuts <- muts %within% allROIs
-brcamuts <- muts[updownmuts, ]
-
-reps <- replicated(brca1)[["BRCA_Mutation-20160128"]]
-mutbyregion <- assay(brcamuts, i = "Variant_Classification")
-mutTally <- ifelse(!is.na(mutbyregion), 1, 0)
-rseMut <- SummarizedExperiment(assay = mutTally,
-    rowRanges = as(rownames(mutTally), "GRanges"))
-
-# Find 5 percent of patients with most mutations
-compReps <- mergeReplicates(mutTally, reps, sum)
-mutsPerPt <- rowSums(t(compReps))
-
-top5 <- head(sort(mutsPerPt, decreasing = TRUE), ceiling(length(mutsPerPt)*0.05))
-
-pats <- TCGAbarcode(names(top5))
-
-brca2 <- c(brca1, flankMutations = rseMut, mapFrom = 1L)
-brcaf <- brca2[, rownames(colData(brca2)) %in% pats, ]
-rowRanges(brcaf[["flankMutations"]])
+reps <- replicated(brca1)[["mutations"]]
+compreps <- mergeReplicates(assay(brca1[["mutations"]]), reps, sum)
+brca1[["mutations"]] <- SummarizedExperiment(compreps)
 ```
 
+TODO: resolve replicates in other assays
+
+```{r}
+brca2 <- brca1[, , c("BRCA_RNASeq2GeneNorm-20160128_ranged", "has.meth", "mutations")]
+brca3 <- MatchedAssayExperiment(brca3)
+keep <- assay(brca3, "ACC_RNASeq2GeneNorm-20160128_ranged") > 3 &
+  assay(brca3, "has.meth_ranged") &
+  assay(brca3, "mutations")
+```
 
