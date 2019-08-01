@@ -151,31 +151,3 @@ mycors <- mycors[has.high.cor, has.high.cor]
 pheatmap::pheatmap(mycors)
 ```
 
-## GMQL Example
-
-```{r}
-system.time(
-    mae <- curatedTCGAData("ACC",
-        c("Mutation", "RNASeq2GeneNorm", "Methylation"), dry.run = FALSE)
-    )
-
-system.time(
-    mae <- symbolsToRanges(mae)
-)
-
-rangedMethylation <- function(SE) {
-  SEranged <- SE[!is.na(rowData(SE)$Chromosome), ]
-  rd <- rowData(SEranged)
-  rowRanges(SEranged) <- GRanges(rd$Chromosome, rd$Genomic_Coordinate)
-  SEranged
-}
-
-system.time(
-    mae[[1]] <- rangedMethylation(mae[[1]])
-)
-
-system.time(
-    mae <- intersectColumns(mae)
-)
-```
-

@@ -137,7 +137,7 @@ compreps <- mergeReplicates(assay(brca1[["mutations"]]), reps, sum)
 brca1[["mutations"]] <- SummarizedExperiment(compreps)
 ```
 
-TODO: resolve replicates in other assays
+Resolving replicates in other assays
 
 ```{r}
 brca2 <- brca1[, ,
