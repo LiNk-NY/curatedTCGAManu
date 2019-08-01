@@ -9,6 +9,9 @@
 *.rds
 *.orig
 
+# Plot files
+*.png
+
 # Example code in package build process
 *-Ex.R
 
