@@ -9,16 +9,14 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-```{r, echo = FALSE, warning = FALSE}
-suppressPackageStartupMessages({
-    library(MultiAssayExperiment)
-    library(curatedTCGAData)
-    library(TCGAutils)
-    library(GSEABenchmarkeR) # >= 1.5.1
-    library(BiocParallel)
-    library(ComplexHeatmap)
-    library(ggpubr)
-})
+```{r, echo = FALSE, warning = FALSE, error = FALSE, results = "hide"}
+library(MultiAssayExperiment)
+library(curatedTCGAData)
+library(TCGAutils)
+library(GSEABenchmarkeR) # >= 1.5.1
+library(BiocParallel)
+library(ComplexHeatmap)
+library(ggpubr)
 ```
 
 Load packages:

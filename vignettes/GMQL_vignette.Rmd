@@ -143,7 +143,7 @@ TODO: resolve replicates in other assays
 brca2 <- brca1[, ,
     c("BRCA_RNASeq2GeneNorm-20160128_ranged", "has.meth", "mutations")]
 
-rnamerged <- mergeReplicates(brca2[, , "BRCA_RNASeq2GeneNorm-20160128_ranged"],
+rnamerged <- mergeReplicates(brca2[["BRCA_RNASeq2GeneNorm-20160128_ranged"]],
     replicates = replicated(brca2[, , "BRCA_RNASeq2GeneNorm-20160128_ranged"]),
     simplify = function (x) {
         gt3 <- x > 3
@@ -154,7 +154,7 @@ rnamerged <- mergeReplicates(brca2[, , "BRCA_RNASeq2GeneNorm-20160128_ranged"],
     }
 )
 
-brca2[["BRCA_RNASeq2GeneNorm-20160128_ranged"]] <- rnamerged[[1]]
+brca2[["BRCA_RNASeq2GeneNorm-20160128_ranged"]] <- rnamerged
 
 methmerge <- mergeReplicates(brca2[["has.meth"]],
     replicates = replicated(brca2[, , "has.meth"])[[1L]],
@@ -169,6 +169,7 @@ mutmerge <- mergeReplicates(brca2[["mutations"]],
 brca2[["has.meth"]] <- methmerge
 brca2[["mutations"]] <- mutmerge
 
+brca3 <- as(brca2, "MatchedAssayExperiment")
 keep <- assay(brca2, "BRCA_RNASeq2GeneNorm-20160128_ranged") > 3 &
   assay(brca2, "has.meth") &
   assay(brca2, "mutations")
