@@ -144,7 +144,7 @@ brca2 <- brca1[, ,
     c("BRCA_RNASeq2GeneNorm-20160128_ranged", "has.meth", "mutations")]
 
 rnamerged <- mergeReplicates(brca2[["BRCA_RNASeq2GeneNorm-20160128_ranged"]],
-    replicates = replicated(brca2[, , "BRCA_RNASeq2GeneNorm-20160128_ranged"]),
+    replicates = replicated(brca2[, , "BRCA_RNASeq2GeneNorm-20160128_ranged"])[[1L]],
     simplify = function (x) {
         gt3 <- x > 3
         if (any(gt3))
