@@ -73,7 +73,14 @@ corres <- cor(subacc.list[[1]], subacc.list[[2]])
 And finally, create the histograms:
 
 ```{r}
-hist(diag(corres))
+png("rnaseq-cn-correl.png")
+hist(diag(corres),
+    main = "Correlation between RNASeq and Copy Number Values",
+    xlab = expression(paste("Pearson coefficient (", rho, ")")))
+dev.off()
+```
+
+```{r}
 hist(corres[upper.tri(corres)])
 ```
 
@@ -83,13 +90,13 @@ Gene with the highest correlation to CN, make boxplot of log2 expression vs
 copy number
 
 ```{r}
-head(sort(abs(diag(corres)), decreasing = TRUE))
+(topvals <- head(sort(abs(diag(corres)), decreasing = TRUE)))
 ```
 
 The 'SNRPB2' gene expression has a correlation to CNV = 0.83
 
 ```{r}
-snr <- subacc["SNRPB2", ]
+snr <- subacc[names(topvals)[1L], ]
 ```
 
 ```{r}
@@ -101,7 +108,14 @@ snpexp <- snpexp[snpexp$CopyNumber != -2, ]
 
 snpexp[["Log2Exp"]] <- log(snpexp[["Expression"]], 2)
 library(ggplot2)
-ggplot(snpexp, aes(factor(CopyNumber), Log2Exp)) + geom_violin() + theme_classic()
+png("violin_exp.png")
+ggplot(snpexp, aes(factor(CopyNumber), Log2Exp)) +
+    geom_violin() +
+    theme_classic() +
+    xlab("Copy Number") +
+    ylab("log2(expression)") +
+    geom_boxplot(width=0.1)
+dev.off()
 ```
 
 ## Figure 4 example: Identifying correlated principal components

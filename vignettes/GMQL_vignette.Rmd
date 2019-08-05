@@ -137,14 +137,14 @@ compreps <- mergeReplicates(assay(brca1[["mutations"]]), reps, sum)
 brca1[["mutations"]] <- SummarizedExperiment(compreps)
 ```
 
-TODO: resolve replicates in other assays
+Resolving replicates in other assays
 
 ```{r}
 brca2 <- brca1[, ,
     c("BRCA_RNASeq2GeneNorm-20160128_ranged", "has.meth", "mutations")]
 
-rnamerged <- mergeReplicates(brca2[, , "BRCA_RNASeq2GeneNorm-20160128_ranged"],
-    replicates = replicated(brca2[, , "BRCA_RNASeq2GeneNorm-20160128_ranged"]),
+rnamerged <- mergeReplicates(brca2[["BRCA_RNASeq2GeneNorm-20160128_ranged"]],
+    replicates = replicated(brca2[, , "BRCA_RNASeq2GeneNorm-20160128_ranged"])[[1L]],
     simplify = function (x) {
         gt3 <- x > 3
         if (any(gt3))
@@ -154,7 +154,7 @@ rnamerged <- mergeReplicates(brca2[, , "BRCA_RNASeq2GeneNorm-20160128_ranged"],
     }
 )
 
-brca2[["BRCA_RNASeq2GeneNorm-20160128_ranged"]] <- rnamerged[[1]]
+brca2[["BRCA_RNASeq2GeneNorm-20160128_ranged"]] <- rnamerged
 
 methmerge <- mergeReplicates(brca2[["has.meth"]],
     replicates = replicated(brca2[, , "has.meth"])[[1L]],
@@ -162,15 +162,20 @@ methmerge <- mergeReplicates(brca2[["has.meth"]],
 )
 
 mutmerge <- mergeReplicates(brca2[["mutations"]],
-    replicates = replicated(brca2[, , "has.meth"])[[1L]],
+    replicates = replicated(brca2[, , "mutations"])[[1L]],
     simplify = sum
 )
 
 brca2[["has.meth"]] <- methmerge
 brca2[["mutations"]] <- mutmerge
 
-keep <- assay(brca2, "BRCA_RNASeq2GeneNorm-20160128_ranged") > 3 &
-  assay(brca2, "has.meth") &
-  assay(brca2, "mutations")
+brca3 <- as(brca2, "MatchedAssayExperiment")
+brca3 <- intersectRows(brca3)
+keep <- assay(brca3, "BRCA_RNASeq2GeneNorm-20160128_ranged") > 3 &
+  assay(brca3, "has.meth") &
+  assay(brca3, "mutations")
+
+summary(colSums(keep))
+sort(colSums(keep), decreasing = TRUE)[seq_len(round(ncol(keep)*0.05))]
 ```
 
