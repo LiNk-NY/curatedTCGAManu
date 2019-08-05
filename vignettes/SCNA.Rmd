@@ -1,0 +1,38 @@
+---
+title: "PAN-CAN SCNA"
+author: "Waldron Lab"
+date: "Aug 5, 2019"
+output: html_document
+---
+
+```{r, echo = FALSE, warning = FALSE}
+suppressPackageStartupMessages({
+    library(curatedTCGAData)
+    library(CNVRanger)
+})
+```
+
+Load packages:
+
+```{r, eval = FALSE}
+library(curatedTCGAData)
+library(CNVRanger)
+```
+
+
+```{r}
+peaks <- curatedTCGAData(diseaseCode = "*", assays = "GISTIC_Peaks", dry.run = FALSE)
+grl <- GRangesList(lapply(experiments(peaks), rowRanges))
+
+for(i in seq_along(grl))
+{
+    type <- substring(mcols(grl[[i]])$Unique.Name, 1, 1)
+    mcols(grl[[i]])$state <- ifelse(type == "A", 3, 1)
+}
+
+pranges <- populationRanges(grl, density=0.15)
+pranges[order(pranges$freq, decreasing=TRUE)]
+```
+
+
+
