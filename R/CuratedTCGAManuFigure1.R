@@ -49,6 +49,8 @@ ratings <- data.frame(
     "TCGAbiolinks", "GenomicDataCommons", "GDAC Firehose")
 )
 
+png("ggtriangle_TCGAresources.png", width = 9, height = 8, units = "in", res = 300)
+
 ggplot() + xlim(1.75, 4.25) + ylim(1.75, 4.25) +
     geom_polygon(data = triangle, mapping = aes(x = x, y = y), fill = "white",
         size = 1, color = "black") +
@@ -70,3 +72,5 @@ ggplot() + xlim(1.75, 4.25) + ylim(1.75, 4.25) +
         size = 3) +
     geom_text_repel(data = ratings, mapping = aes(x, y, label = resource),
         size = 6, fontface = "bold")
+
+dev.off()
