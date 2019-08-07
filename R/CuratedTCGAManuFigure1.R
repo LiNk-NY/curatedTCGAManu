@@ -52,9 +52,11 @@ ratings <- data.frame(
 ggplot() + xlim(1.75, 4.25) + ylim(1.75, 4.25) +
     geom_polygon(data = triangle, mapping = aes(x = x, y = y), fill = "white",
         size = 1, color = "black") +
-    geom_segment(aes(x = cmat[, 1], y = cmat[, 2], xend = 3, yend = 2.666), lty = 3, color = "grey80", lwd = 2) +
+    geom_segment(aes(x = cmat[, 1], y = cmat[, 2], xend = 3, yend = 2.666),
+        lty = 3, color = "grey80", lwd = 2) +
     geom_text(data = triangle, aes(x = x, y = y, label = r),
-        hjust = c(0.5, 0.5, 0.5), vjust = c(1.2, 1.2, -0.5), size = 8) +
+        hjust = c(0.5, 0.5, 0.5), vjust = c(1.2, 1.2, -0.5), size = 8,
+        fontface = "bold") +
     theme(
         axis.line=element_blank(),
         axis.title.x = element_blank(), axis.title.y = element_blank(),
@@ -64,5 +66,7 @@ ggplot() + xlim(1.75, 4.25) + ylim(1.75, 4.25) +
         panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
         panel.background = element_blank()
     ) +
-    geom_point(data = ratings, mapping = aes(x = x, y = y), color = "red", size = 3) +
-    geom_text_repel(data = ratings, mapping = aes(x, y, label = resource), size = 6)
+    geom_point(data = ratings, mapping = aes(x = x, y = y), color = "red",
+        size = 3) +
+    geom_text_repel(data = ratings, mapping = aes(x, y, label = resource),
+        size = 6, fontface = "bold")
