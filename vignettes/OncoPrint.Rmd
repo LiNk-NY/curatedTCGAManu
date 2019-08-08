@@ -1,0 +1,64 @@
+---
+title: "OncoPrint Figure"
+author: "Waldron Lab"
+date: "July 23, 2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+Load packages:
+
+```{r,results="hide",include=TRUE,message=FALSE,warning=FALSE}
+library(MultiAssayExperiment)
+library(curatedTCGAData)
+library(TCGAutils)
+library(ComplexHeatmap)
+library(RColorBrewer)
+```
+
+# Using ACC
+
+```{r,results="hide",include=TRUE,message=FALSE,warning=FALSE}
+acc <- curatedTCGAData("ACC",
+    c("RNASeq2GeneNorm", "GISTIC_T*", "Mutation"), FALSE)
+## remove single Translation_Site_* mutation
+TranslationSite <-
+    mcols(acc[["ACC_Mutation-20160128"]])$Variant_Classification ==
+        "Translation_Start_Site"
+mcols(acc[["ACC_Mutation-20160128"]])$Variant_Classification[TranslationSite] <-
+    NA_character_
+
+variants <- mcols(acc[["ACC_Mutation-20160128"]])$Variant_Classification
+(mutclass <- table(variants))
+
+length(mutclass)
+```
+
+```{r}
+variant_mat <- assay(acc[["ACC_Mutation-20160128"]], i = "Variant_Classification")
+list_mats <- lapply(names(mutclass), function(variant) {
+    ifelse(variant_mat == variant & !is.na(variant_mat), 1, 0)
+})
+```
+
+```{r}
+qualcolors <- brewer.pal(n = 9, "Set3")
+colors <- setNames(qualcolors, names(mutclass))
+```
+
+```{r}
+mutfuns <- lapply(colors, function(couleur) {
+    args <- alist(x =, y =, w =, h =)
+    args <- as.pairlist(args)
+    body <- substitute({
+        grid::grid.rect(x, y, w, h, gp = gpar(fill = z, col = NA))
+    }, list(z = couleur))
+    eval(call("function", args, body))
+})
+```
+
+```{r}
+oncoPrint(list_mats, alter_fun = mutfuns)
+```
