@@ -16,6 +16,9 @@ library(curatedTCGAData)
 library(TCGAutils)
 library(ComplexHeatmap)
 library(RColorBrewer)
+library(TxDb.Hsapiens.UCSC.hg19.knownGene)
+library(org.Hs.eg.db)
+library(GenomeInfoDb)
 ```
 
 # Using ACC
@@ -34,12 +37,39 @@ variants <- mcols(acc[["ACC_Mutation-20160128"]])$Variant_Classification
 (mutclass <- table(variants))
 
 length(mutclass)
+vclass <- setNames(names(mutclass), names(mutclass))
 ```
 
 ```{r}
-variant_mat <- assay(acc[["ACC_Mutation-20160128"]], i = "Variant_Classification")
-list_mats <- lapply(names(mutclass), function(variant) {
-    ifelse(variant_mat == variant & !is.na(variant_mat), 1, 0)
+gn <- genes(TxDb.Hsapiens.UCSC.hg19.knownGene)
+gn <- keepStandardChromosomes(granges(gn), pruning.mode="coarse")
+seqlevelsStyle(gn) <- "NCBI"
+names(gn) <- AnnotationDbi::mapIds(org.Hs.eg.db::org.Hs.eg.db, names(gn),
+    keytype = "ENTREZID", column = "SYMBOL")
+
+simplify_funs <- lapply(vclass, function(variant) {
+    args <- alist(scores =, ranges =, qranges =)
+    args <- as.pairlist(args)
+    body <- substitute({
+       any(scores %in% z)
+    }, list(z = variant))
+    eval(call("function", args, body))
+})
+
+ragex <- acc[["ACC_Mutation-20160128"]]
+genome(ragex) <- translateBuild(genome(ragex))
+
+list_mats <- lapply(simplify_funs, function(variant_fun) {
+    res <- qreduceAssay(ragex, gn, variant_fun, "Variant_Classification")
+    rownames(res) <- names(gn)
+    res[is.na(res)] <- 0
+    res[!is.na(rownames(res)), ]
+})
+
+nomutgenes <- Reduce(intersect, lapply(list_mats, function(x) rownames(x[rowSums(x) == 0, ])))
+
+updated_mats <- lapply(list_mats, function(genemat) {
+    genemat[!rownames(genemat) %in% nomutgenes, ]
 })
 ```
 
@@ -60,5 +90,5 @@ mutfuns <- lapply(colors, function(couleur) {
 ```
 
 ```{r}
-oncoPrint(list_mats, alter_fun = mutfuns)
+oncoPrint(updated_mats, alter_fun = mutfuns)
 ```
