@@ -39,17 +39,18 @@ midxy <- c(n[1]+0.666666*(m[1]-n[1]),  n[2]+0.666666*(m[2]-n[2]))
 # gglocator(n = 7)
 
 ratings <- data.frame(
-        x = c(2.87957519262172, 2.62101863265239, 3.23234225831191,
-            3.21648660231498, 3.15130223877203, 3.36447272495301,
-            3.00331611613399),
-        y = c(2.71593776544351,  2.23753058101305, 3.23145436778364,
-            2.90589275552184, 2.85162307159464, 2.95337659029189,
-            2.19002009185595),
-        resource = c("curatedTCGAData", "cBioPortal", "cgdsr", "firebrowseR",
-    "TCGAbiolinks", "GenomicDataCommons", "GDAC Firehose")
+    x = c(2.87957519262172, 2.62101863265239, 3.23234225831191,
+        3.21648660231498, 3.15130223877203, 3.36447272495301,
+        3.00331611613399),
+    y = c(2.71593776544351,  2.23753058101305, 3.23145436778364,
+        2.90589275552184, 2.85162307159464, 2.95337659029189,
+        2.19002009185595),
+    resource = c("curatedTCGAData", "cBioPortal", "cgdsr", "firebrowseR",
+        "TCGAbiolinks", "GenomicDataCommons", "GDAC Firehose")
 )
 
-png("ggtriangle_TCGAresources.png", width = 9, height = 8, units = "in", res = 300)
+png("ggtriangle_TCGAresources.png", width = 9, height = 8, units = "in",
+    res = 300)
 
 ggplot() + xlim(1.75, 4.25) + ylim(1.75, 4.25) +
     geom_polygon(data = triangle, mapping = aes(x = x, y = y), fill = "white",
