@@ -25,6 +25,7 @@ Load packages:
 library(MultiAssayExperiment)
 library(curatedTCGAData)
 library(TCGAutils)
+library(EnrichmentBrowser)
 library(GSEABenchmarkeR)
 library(BiocParallel)
 library(ComplexHeatmap)
@@ -231,7 +232,7 @@ exp.list <- lapply(exp.list,
         return(se)
     })
 exp.list <- runDE(exp.list)
-save(exp.list, file = "~/data/pancan_DE_results.rda")
+for(n in names(exp.list)) saveRDS(exp.list[[n]], file = paste(n, "rds", sep="."))
 ```
 
 Extract genes with consistent expression changes:
@@ -265,3 +266,69 @@ p + geom_hline(yintercept=0, linetype="dashed", color = "darkgrey") +
     geom_vline(xintercept=8.5, linetype="dashed", color = "darkgrey")
 ```
 
+# GSEA
+
+ID mapping
+
+```{r}
+exp.list <- lapply(exp.list, 
+    function(se) idMap(se, org="hsa", from="SYMBOL", to="ENTREZID"))
+```
+
+Obtain gene sets
+
+```{r}
+kegg.gs <- getGenesets(org="hsa", db="kegg")
+go.gs <- getGenesets(org="hsa", db="go")
+hall.gs <- getGenesets("../data/h.all.v6.2.entrez.gmt")  
+names(hall.gs) <- sub("^HALLMARK_", "", names(hall.gs))
+```
+
+Execute ORA:
+
+```{r, eval=FALSE}
+res <- runEA(exp.list, methods=c("ora", "padog"), 
+                gs=kegg.gs, perm=c(0, 1000), save2file=TRUE, out.dir="../data/gsea/kegg")
+res <- runEA(exp.list, methods=c("ora", "padog") 
+                gs=go.gs, perm=c(0, 1000), save2file=TRUE, out.dir="../data/gsea/go")
+res <- runEA(exp.list, methods=c("ora", "padog"), gs=hall.gs, 
+                perm=c(0,1000), save2file=TRUE, out.dir="../data/gsea/hall")
+res <- lapply(res$ora, function(r) r$ranking)
+```
+
+```{r}
+res <- readResults(data.dir="../data/gsea/hall", data.ids=names(exp.list), 
+                    methods=c("ora", "padog"), type="ranking")
+```
+
+Determine enrichment across datasets:
+
+```{r}
+isEnriched <- function(res, pthresh=0.05, nr.top=1:15)
+{
+    for(i in seq_along(res)) rownames(res[[i]]) <- res[[i]]$GENE.SET
+    pmat <- vapply(res, function(r) r[rownames(res[[1]]), "PVAL"], res[[1]]$PVAL)
+    rownames(pmat) <- rownames(res[[1]])
+    is.enriched <- pmat < pthresh
+    rse <- rowSums(is.enriched)
+
+    top.gs <- names(sort(rse, decreasing=TRUE)[nr.top])
+    top.mat <- is.enriched[top.gs,]
+    mode(top.mat) <- "integer"
+    return(top.mat)
+}
+
+hall.ora <- isEnriched(res$ora)
+hall.padog <- isEnriched(res$padog, nr.top=rownames(hall.ora))
+
+rownames(hall.ora) <- rownames(hall.padog) <- hall.i2n[rownames(hall.ora)]
+
+h1 <- Heatmap(hall.ora, cluster_rows=FALSE, cluster_columns=FALSE, 
+                show_row_names=FALSE, show_heatmap_legend = FALSE, 
+                col=c("white", "black"), column_title="ORA p < 0.05")
+h2 <- Heatmap(hall.padog, cluster_rows=FALSE, cluster_columns=FALSE, 
+                show_row_names=TRUE, show_heatmap_legend = FALSE, 
+                col=c("white", "black"), column_title="PADOG p < 0.05")
+hl <- h1 + h2
+draw(hl, ht_gap = unit(1, "cm"))
+```
