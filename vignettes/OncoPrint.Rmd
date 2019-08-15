@@ -46,6 +46,7 @@ gn <- keepStandardChromosomes(granges(gn), pruning.mode="coarse")
 seqlevelsStyle(gn) <- "NCBI"
 names(gn) <- AnnotationDbi::mapIds(org.Hs.eg.db::org.Hs.eg.db, names(gn),
     keytype = "ENTREZID", column = "SYMBOL")
+gn <- sort(gn)
 
 simplify_funs <- lapply(vclass, function(variant) {
     args <- alist(scores =, ranges =, qranges =)
@@ -90,5 +91,15 @@ mutfuns <- lapply(colors, function(couleur) {
 ```
 
 ```{r}
-oncoPrint(updated_mats, alter_fun = mutfuns)
+tops <- ceiling(nrow(updated_mats[[1]]) * 0.0025)
+mgenes <- Reduce(union, lapply(updated_mats, function(x)
+    names(sort(rowSums(x), decreasing = TRUE)[seq_len(tops)]))
+)
+length(mgenes)
+upmats2 <- lapply(updated_mats, function(mat) mat[mgenes, ])
 ```
+
+```{r}
+oncoPrint(upmats2, alter_fun = mutfuns, col = colors)
+```
+
