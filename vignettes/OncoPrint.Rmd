@@ -26,6 +26,9 @@ library(GenomeInfoDb)
 ```{r,results="hide",include=TRUE,message=FALSE,warning=FALSE}
 acc <- curatedTCGAData("ACC",
     c("RNASeq2GeneNorm", "GISTIC_T*", "Mutation"), FALSE)
+```
+
+```{r}
 ## remove single Translation_Site_* mutation
 TranslationSite <-
     mcols(acc[["ACC_Mutation-20160128"]])$Variant_Classification ==
