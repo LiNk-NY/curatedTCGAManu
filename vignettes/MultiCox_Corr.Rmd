@@ -112,6 +112,7 @@ png("violin_exp.png")
 ggplot(snpexp, aes(factor(CopyNumber), Log2Exp)) +
     geom_violin() +
     theme_classic() +
+    ggtitle("Log2 Expression values by Copy Number for SNRPB2") +
     xlab("Copy Number") +
     ylab("log2(expression)") +
     geom_boxplot(width=0.1)
