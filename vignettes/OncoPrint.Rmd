@@ -26,6 +26,9 @@ library(GenomeInfoDb)
 ```{r,results="hide",include=TRUE,message=FALSE,warning=FALSE}
 acc <- curatedTCGAData("ACC",
     c("RNASeq2GeneNorm", "GISTIC_T*", "Mutation"), FALSE)
+```
+
+```{r}
 ## remove single Translation_Site_* mutation
 TranslationSite <-
     mcols(acc[["ACC_Mutation-20160128"]])$Variant_Classification ==
@@ -48,14 +51,16 @@ names(gn) <- AnnotationDbi::mapIds(org.Hs.eg.db::org.Hs.eg.db, names(gn),
     keytype = "ENTREZID", column = "SYMBOL")
 gn <- sort(gn)
 
-simplify_funs <- lapply(vclass, function(variant) {
-    args <- alist(scores =, ranges =, qranges =)
-    args <- as.pairlist(args)
-    body <- substitute({
-       any(scores %in% z)
-    }, list(z = variant))
-    eval(call("function", args, body))
-})
+simplify_funs <- lapply(vclass,
+    function(variant) {
+        args <- alist(scores =, ranges =, qranges =)
+        args <- as.pairlist(args)
+        body <- substitute({
+            any(scores %in% z)
+        }, list(z = variant))
+        eval(call("function", args, body))
+    }
+)
 
 ragex <- acc[["ACC_Mutation-20160128"]]
 genome(ragex) <- translateBuild(genome(ragex))
@@ -67,7 +72,9 @@ list_mats <- lapply(simplify_funs, function(variant_fun) {
     res[!is.na(rownames(res)), ]
 })
 
-nomutgenes <- Reduce(intersect, lapply(list_mats, function(x) rownames(x[rowSums(x) == 0, ])))
+nomutgenes <- Reduce(intersect,
+    lapply(list_mats, function(x) rownames(x[rowSums(x) == 0, ]))
+)
 
 updated_mats <- lapply(list_mats, function(genemat) {
     genemat[!rownames(genemat) %in% nomutgenes, ]
@@ -88,18 +95,28 @@ mutfuns <- lapply(colors, function(couleur) {
     }, list(z = couleur))
     eval(call("function", args, body))
 })
+
+background <- function(x, y, w, h)
+    grid.rect(x, y, w, h, gp = gpar(fill = "#FFFFFF", col = "#FFFFFF"))
+mutfuns2 <- c(background = background, mutfuns)
 ```
 
 ```{r}
-tops <- ceiling(nrow(updated_mats[[1]]) * 0.0025)
+tops <- ceiling(nrow(updated_mats[[1]]) * 0.0005)
 mgenes <- Reduce(union, lapply(updated_mats, function(x)
     names(sort(rowSums(x), decreasing = TRUE)[seq_len(tops)]))
 )
-length(mgenes)
+ug <- length(unique(mgenes))
 upmats2 <- lapply(updated_mats, function(mat) mat[mgenes, ])
 ```
 
 ```{r}
-oncoPrint(upmats2, alter_fun = mutfuns, col = colors)
+png("Mutations-oncoprint.png", width = 12, height = 8, units = "in", res = 300)
+oncoPrint(upmats2, alter_fun = mutfuns2, col = colors, show_pct = FALSE,
+    column_title =
+        paste0("OncoPrint of Top ", ug, " Mutated Genes by Mutation type"),
+    column_title_gp =
+        gpar(fontsize = 20, fontface = "bold", just = "center"))
+dev.off()
 ```
 

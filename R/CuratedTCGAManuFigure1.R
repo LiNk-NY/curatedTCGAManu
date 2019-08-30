@@ -26,6 +26,7 @@ n <- cmat2[1, ]
 midxy <- c(n[1]+0.666666*(m[1]-n[1]),  n[2]+0.666666*(m[2]-n[2]))
 
 # x11()
+# quartz()
 
 # ggplot() + xlim(1.5, 4.5) + ylim(1.5, 4.5) +
 #     geom_polygon(data = triangle, mapping = aes(x = x, y = y), fill = "white",
