@@ -156,20 +156,20 @@ acc2[["ACC_Mutation-20160128"]] <- mut
 
 ```{r}
 acc2 <- c(acc2,
-    rnaseqPCA = getLoadings(assays(acc2)[["ACC_RNASeq2GeneNorm-20160128"]],
+    `RNA-Seq` = getLoadings(assays(acc2)[["ACC_RNASeq2GeneNorm-20160128"]],
         dolog=TRUE), mapFrom=1L
     )
 acc2 <- c(acc2,
-    gistictPCA = getLoadings(assays(acc2)[["ACC_GISTIC_ThresholdedByGene-20160128"]],
+    `GISTIC-T` = getLoadings(assays(acc2)[["ACC_GISTIC_ThresholdedByGene-20160128"]],
         center=FALSE, scale.=FALSE), mapFrom=2L)
 acc2 <- c(acc2,
-    proteinPCA = getLoadings(assays(acc2)[["ACC_RPPAArray-20160128"]]),
+    Protein = getLoadings(assays(acc2)[["ACC_RPPAArray-20160128"]]),
         mapFrom=3L)
 acc2 <- c(acc2,
-    mutationsPCA = getLoadings(assays(acc2)[["ACC_Mutation-20160128"]],
+    Mutations = getLoadings(assays(acc2)[["ACC_Mutation-20160128"]],
         center=FALSE, scale.=FALSE), mapFrom=4L)
 acc2 <- c(acc2,
-    miRNAPCA = getLoadings(assays(acc2)[["ACC_miRNASeqGene-20160128"]]),
+    miRNA = getLoadings(assays(acc2)[["ACC_miRNASeqGene-20160128"]]),
         mapFrom=5L)
 ```
 
@@ -203,5 +203,13 @@ greater than 0.5.
 ```{r}
 has.high.cor <- apply(mycors, 2, max, na.rm=TRUE) > 0.5
 mycors <- mycors[has.high.cor, has.high.cor]
-pheatmap::pheatmap(mycors)
+
+# colors
+library(RColorBrewer)
+mycolors <- colorRampPalette(brewer.pal(n = 7, name = "Oranges"))(100)
+
+png("pca_correls.png", width = 9, height = 8, units = "in", res = 300)
+pheatmap::pheatmap(mycors, color = mycolors,
+    main = "Correlated principal components across experimental assays")
+dev.off()
 ```
