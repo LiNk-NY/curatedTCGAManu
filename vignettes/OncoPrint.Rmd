@@ -29,10 +29,13 @@ acc <- curatedTCGAData("ACC",
 ```
 
 ```{r}
+Variants <- mcols(acc[["ACC_Mutation-20160128"]])$Variant_Classification
+Variants <- gsub("_", " ", Variants)
+mcols(acc[["ACC_Mutation-20160128"]])$Variant_Classification <- Variants
 ## remove single Translation_Site_* mutation
 TranslationSite <-
     mcols(acc[["ACC_Mutation-20160128"]])$Variant_Classification ==
-        "Translation_Start_Site"
+        "Translation Start Site"
 mcols(acc[["ACC_Mutation-20160128"]])$Variant_Classification[TranslationSite] <-
     NA_character_
 
