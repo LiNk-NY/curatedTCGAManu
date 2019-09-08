@@ -73,10 +73,17 @@ corres <- cor(subacc.list[[1]], subacc.list[[2]])
 And finally, create the histograms:
 
 ```{r}
-png("rnaseq-cn-correl.png")
-hist(diag(corres),
-    main = "Correlation between RNASeq and Copy Number Values",
-    xlab = expression(paste("Pearson coefficient (", rho, ")")))
+library(ggplot2)
+diagvals <- diag(corres)
+diagframe <- data.frame(genename = names(diagvals), value = diagvals)
+
+png("rnaseq-cn-correl.png", width = 8, height = 6, units = "in", res = 300)
+ggplot(diagframe, aes(x = value)) + geom_histogram(color = "black",
+    fill = "white", binwidth = 0.082) + theme_bw() +
+    ggtitle("Correlation between RNASeq and Copy Number Values in ACC") +
+    xlab(expression(paste("Pearson coefficient (", rho, ")"))) +
+    ylab("Frequency")
+
 dev.off()
 ```
 
