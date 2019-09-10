@@ -217,6 +217,7 @@ mycolors <- colorRampPalette(brewer.pal(n = 7, name = "Oranges"))(100)
 
 png("pca_correls.png", width = 9, height = 8, units = "in", res = 300)
 pheatmap::pheatmap(mycors, color = mycolors,
-    main = "Correlated principal components across experimental assays")
+    main = "Correlated principal components across experimental assays",
+    angle_col = 90)
 dev.off()
 ```
