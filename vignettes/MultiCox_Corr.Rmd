@@ -1,5 +1,5 @@
 ---
-title: "Figures 1 to 4"
+title: "Figures 5, 6, and S4"
 author: "Waldron Lab"
 date: "July 23, 2019"
 output: html_document
@@ -22,7 +22,7 @@ library(survival)
 acc <- curatedTCGAData("ACC", c("RNASeq2GeneNorm", "GISTIC_T*"), FALSE)
 ```
 
-## Figure 1 Example: Multivariate Cox regression with RNASeq expression, copy number, and pathology
+## Example: Multivariate Cox regression with RNASeq expression, copy number, and pathology
 
 ```{r}
 wideacc <- wideFormat(acc["EZH2", , ],
@@ -36,7 +36,7 @@ coxph(
 )
 ```
 
-## Figure 2 Example: Correlation between RNASeq expression and copy number
+## Example: Correlation between RNASeq expression and copy number
 
 ```{r}
 subacc <- intersectColumns(acc)
@@ -72,17 +72,37 @@ corres <- cor(subacc.list[[1]], subacc.list[[2]])
 
 And finally, create the histograms:
 
+## Figure 5
+
+Histogram of the distribution of Pearson correlation coefficients between RNA-Seq
+and copy number alteration in adrenocortical carcinoma (ACC). An integrative
+representaiton readily allows comparison and correlation of multi-omics experiments.
+
 ```{r}
 library(ggplot2)
 diagvals <- diag(corres)
 diagframe <- data.frame(genename = names(diagvals), value = diagvals)
 
 png("rnaseq-cn-correl.png", width = 8, height = 6, units = "in", res = 300)
+
 ggplot(diagframe, aes(x = value)) + geom_histogram(color = "black",
-    fill = "white", binwidth = 0.082) + theme_bw() +
-    ggtitle("Correlation between RNASeq and Copy Number Values in ACC") +
+    fill = jco, binwidth = 0.082, alpha = 0.25) + theme_bw() +
     xlab(expression(paste("Pearson coefficient (", rho, ")"))) +
     ylab("Frequency")
+
+dev.off()
+```
+
+### Figure 5: `gghistogram` version
+
+```{r}
+jco <- get_palette(palette = "jco", 1)
+
+png("rnaseq-cn-correl_ggpubr.png", width = 8, height = 6, units = "in", res = 300)
+
+gghistogram(diagframe, x = "value", color = jco, fill = jco, ylab = "Frequency",
+    xlab = expression(paste("Pearson coefficient (", rho, ")")), alpha = 0.25,
+    ggtheme = theme_bw(), rug = TRUE, bins = 45, add = "mean")
 
 dev.off()
 ```
@@ -91,10 +111,13 @@ dev.off()
 hist(corres[upper.tri(corres)])
 ```
 
-## Figure 3 Example: Violin plot of log2 expression by copy number
+## Figure 6: Violin plots
 
-Gene with the highest correlation to CN, make boxplot of log2 expression vs
-copy number
+Log 2 expression values by copy number alteration for the highly correlated
+SNRPB2 gene in adrenocortical carcinoma tumors. Violin plots show differences in
+expression by copy number loss or gain of SNRPB2, the gene with the highest
+corration of expression to copy number values (0.83). Copy number increases as
+log 2 expression values also increase.
 
 ```{r}
 (topvals <- head(sort(abs(diag(corres)), decreasing = TRUE)))
@@ -114,19 +137,31 @@ table(snpexp$CopyNumber)
 snpexp <- snpexp[snpexp$CopyNumber != -2, ]
 
 snpexp[["Log2Exp"]] <- log(snpexp[["Expression"]], 2)
-library(ggplot2)
-png("violin_exp.png")
-ggplot(snpexp, aes(factor(CopyNumber), Log2Exp)) +
-    geom_violin() +
-    theme_classic() +
-    ggtitle("Log2 Expression values by Copy Number for SNRPB2") +
+snpexp$CopyNumber <- factor(snpexp$CopyNumber)
+
+library(ggpubr)
+jcols <- get_palette(palette = "jco", 3)
+
+png("violin_exp.png", width = 8, height = 6, units = "in", res = 300)
+
+ggplot(snpexp, aes(CopyNumber, Log2Exp, fill = CopyNumber)) +
+    geom_violin(trim = FALSE) +
+    theme_bw() +
     xlab("Copy Number") +
     ylab("log2(expression)") +
-    geom_boxplot(width=0.1)
+    geom_boxplot(width=0.2, fill = "white") +
+    scale_color_manual(values = jcols)
+
 dev.off()
 ```
 
-## Figure 4 example: Identifying correlated principal components
+## Supplemental Figure 4: Identifying correlated principal components
+
+Correlated Principal Components across experimental assays in Adrenocortical
+carcinoma (ACC) from The Cancer Genome Atlas (TCGA). Plot identifies correlated
+principal components across protein, GISTIC copy number, microRNA, mutation, and
+RNA-Seq assays obtained from curatedTCGAData. The RNA-Seq PC is consistently
+correlated with protein arrays, GISTIC, and miRNA.
 
 Perform Principal Components Analysis of each of the five assays, using samples
 available on each assay, log-transforming RNA-seq data first.  Using the first
