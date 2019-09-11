@@ -140,17 +140,18 @@ snpexp[["Log2Exp"]] <- log(snpexp[["Expression"]], 2)
 snpexp$CopyNumber <- factor(snpexp$CopyNumber)
 
 library(ggpubr)
-jcols <- get_palette(palette = "jco", 3)
+jcols <- get_palette(palette = "jco", 4)
+jcols <- jcols[c(1, 3, 4)]
 
 png("violin_exp.png", width = 8, height = 6, units = "in", res = 300)
 
 ggplot(snpexp, aes(CopyNumber, Log2Exp, fill = CopyNumber)) +
     geom_violin(trim = FALSE) +
-    theme_bw() +
     xlab("Copy Number") +
     ylab("log2(expression)") +
     geom_boxplot(width=0.2, fill = "white") +
-    scale_color_manual(values = jcols)
+    scale_fill_manual(values = jcols) +
+    theme_bw()
 
 dev.off()
 ```
