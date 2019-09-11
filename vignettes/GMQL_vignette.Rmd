@@ -55,7 +55,6 @@ brca1 <- CpGtoRanges(brca0, unmapped = FALSE)
 Select only tumors in the data
 
 ```{r}
-library(TCGAutils)
 sampleTables(brca1)
 head(sampleTypes)
 

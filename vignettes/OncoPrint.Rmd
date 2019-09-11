@@ -115,11 +115,7 @@ upmats2 <- lapply(updated_mats, function(mat) mat[mgenes, ])
 
 ```{r}
 png("Mutations-oncoprint.png", width = 12, height = 8, units = "in", res = 300)
-oncoPrint(upmats2, alter_fun = mutfuns2, col = colors, show_pct = FALSE,
-    column_title =
-        paste0("OncoPrint of Top ", ug, " Mutated Genes by Mutation type"),
-    column_title_gp =
-        gpar(fontsize = 20, fontface = "bold", just = "center"))
+oncoPrint(upmats2, alter_fun = mutfuns2, col = colors, show_pct = FALSE)
 dev.off()
 ```
 
