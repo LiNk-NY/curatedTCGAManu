@@ -84,6 +84,19 @@ updated_mats <- lapply(list_mats, function(genemat) {
 })
 ```
 
+Check across all assays for any mutations
+
+```{r}
+resto <- qreduceAssay(ragex, gn,
+    function(scores, ranges, qranges) {any(scores %in% vclass)}, "Variant_Classification")
+rownames(resto) <- names(gn)
+resto[is.na(resto)] <- 0
+resto <- resto[!is.na(rownames(resto)), ]
+head(sort(rowSums(resto), decreasing = TRUE), 25)
+```
+
+Create a color palette based on the number of variants
+
 ```{r}
 qualcolors <- brewer.pal(n = 9, "Set3")
 colors <- setNames(qualcolors, names(mutclass))
