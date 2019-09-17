@@ -21,29 +21,78 @@ library(org.Hs.eg.db)
 library(GenomeInfoDb)
 ```
 
-# Using ACC
+# PANCAN Mutations
 
 ```{r,results="hide",include=TRUE,message=FALSE,warning=FALSE}
-acc <- curatedTCGAData("ACC",
-    c("RNASeq2GeneNorm", "GISTIC_T*", "Mutation"), FALSE)
+pancanmut <- curatedTCGAData("*", "Mutation", FALSE)
 ```
 
 ```{r}
-Variants <- mcols(acc[["ACC_Mutation-20160128"]])$Variant_Classification
-Variants <- gsub("_", " ", Variants)
-mcols(acc[["ACC_Mutation-20160128"]])$Variant_Classification <- Variants
-## remove single Translation_Site_* mutation
-TranslationSite <-
-    mcols(acc[["ACC_Mutation-20160128"]])$Variant_Classification ==
-        "Translation Start Site"
-mcols(acc[["ACC_Mutation-20160128"]])$Variant_Classification[TranslationSite] <-
-    NA_character_
+mutnames <-
+    grep(glob2rx("*_Mutation-*"), names(pancanmut), value = TRUE)
+## 32 types of cancer MESO does not have a mutation dataset?
 
-variants <- mcols(acc[["ACC_Mutation-20160128"]])$Variant_Classification
-(mutclass <- table(variants))
+mutlist <- experiments(pancanmut)
 
-length(mutclass)
-vclass <- setNames(names(mutclass), names(mutclass))
+mutlist <- lapply(mutlist, function(mutassay) {
+    if (all(genome(mutassay) == "19"))
+        genome(mutassay) <- paste0("hg", genome(mutassay))
+    else
+        genome(mutassay) <- TCGAutils::translateBuild(genome(mutassay))
+    
+    seqlevelsStyle(mutassay) <- "UCSC"
+    rownames(mutassay) <- mcols(mutassay)$Hugo_Symbol
+    mutassay
+})
+```
+
+LiftOver for Hg18 genomes
+
+```{r}
+library(BiocFileCache)
+lifturl <-
+"http://hgdownload.cse.ucsc.edu/goldenpath/hg18/liftOver/hg18ToHg19.over.chain.gz"
+bfc <- BiocFileCache()
+qfile <- bfcquery(bfc, "18to19chain", exact = TRUE)[["rpath"]]
+cfile <-
+if (length(qfile) && file.exists(qfile)) {
+    bfcquery(bfc, "18to19chain", exact = TRUE)[["rpath"]]
+} else {
+    bfcadd(bfc, "18to19chain", lifturl)
+}
+chainfile <- file.path(tempdir(), gsub("\\.gz", "", basename(cfile)))
+R.utils::gunzip(cfile, destname = chainfile, remove = FALSE)
+chain <- suppressMessages(
+    rtracklayer::import.chain(chainfile)
+)
+
+mutlift <- lapply(mutlist, function(mutassay) {
+    if (all(genome(mutassay) == "hg18")) {
+        ranges19 <- rtracklayer::liftOver(rowRanges(mutassay), chain)
+        mutassay <- mutassay[as.logical(lengths(ranges19))]
+        rowRanges(mutassay) <- unlist(ranges19)
+        genome(mutassay) <- rep("hg19", length(genome(mutassay)))
+    }
+    seqlevelsStyle(mutassay) <- "NCBI"
+    mutassay
+})
+```
+
+
+```{r}
+vclass <- lapply(mutlist, function(mutassay) {
+    somas <- mcols(mutassay)$Mutation_Status == "Somatic"
+    mutassay <- mutassay[somas, ]
+    
+    Variants <- mcols(mutassay)$Variant_Classification
+    Variants <- gsub("_", " ", Variants)
+    mcols(mutassay)$Variant_Classification <- Variants
+    
+    mutclass <- table(Variants)
+    setNames(names(mutclass), names(mutclass))
+})
+
+vclass <- Reduce(union, vclass)
 ```
 
 ```{r}
@@ -54,52 +103,50 @@ names(gn) <- AnnotationDbi::mapIds(org.Hs.eg.db::org.Hs.eg.db, names(gn),
     keytype = "ENTREZID", column = "SYMBOL")
 gn <- sort(gn)
 
-simplify_funs <- lapply(vclass,
-    function(variant) {
-        args <- alist(scores =, ranges =, qranges =)
-        args <- as.pairlist(args)
-        body <- substitute({
-            any(scores %in% z)
-        }, list(z = variant))
-        eval(call("function", args, body))
-    }
-)
+variant_fun <- function(scores, ranges, qranges)
+    { any(scores != "Silent") }
 
-ragex <- acc[["ACC_Mutation-20160128"]]
-genome(ragex) <- translateBuild(genome(ragex))
-
-list_mats <- lapply(simplify_funs, function(variant_fun) {
-    res <- qreduceAssay(ragex, gn, variant_fun, "Variant_Classification")
+list_mats <- lapply(mutlift, function(mutassay) {
+    res <- qreduceAssay(mutassay, gn, variant_fun, "Variant_Classification",
+        background = FALSE)
     rownames(res) <- names(gn)
-    res[is.na(res)] <- 0
     res[!is.na(rownames(res)), ]
 })
 
-nomutgenes <- Reduce(intersect,
-    lapply(list_mats, function(x) rownames(x[rowSums(x) == 0, ]))
-)
+withmut <- lapply(list_mats, function(x) x[rowSums(x) > 0, ])
+genesinall <- Reduce(intersect, lapply(withmut, rownames))
 
 updated_mats <- lapply(list_mats, function(genemat) {
     genemat[!rownames(genemat) %in% nomutgenes, ]
 })
+
+mgenes <- Reduce(union, lapply(updated_mats, function(x)
+    names(sort(rowSums(x), decreasing = TRUE)[seq_len(tops)]))
+)
+
+allmuts <- do.call(cbind, list_mats)
+
+topgenes <- head(sort(rowSums(allmuts), decreasing = TRUE), 25)
 ```
 
 Check across all assays for any mutations
 
 ```{r}
-resto <- qreduceAssay(ragex, gn,
-    function(scores, ranges, qranges) {any(scores %in% vclass)}, "Variant_Classification")
+summaryfun <- function(scores, ranges, qranges)
+    { sum(S4Vectors::`%in%`(scores, vclass)) }
+resto <- qreduceAssay(ragex, gn, summaryfun, "Variant_Classification",
+    background = 0)
 rownames(resto) <- names(gn)
-resto[is.na(resto)] <- 0
 resto <- resto[!is.na(rownames(resto)), ]
-head(sort(rowSums(resto), decreasing = TRUE), 25)
+tops2 <- head(sort(rowSums(resto), decreasing = TRUE), 25)
 ```
 
 Create a color palette based on the number of variants
 
 ```{r}
-qualcolors <- brewer.pal(n = 9, "Set3")
-colors <- setNames(qualcolors, names(mutclass))
+# qualcolors <- brewer.pal(n = length(vclass), "Set3")
+qualcolors <- colorRampPalette(brewer.pal(n = 12, "Set3"))(26)
+colors <- setNames(qualcolors, vclass)
 ```
 
 ```{r}
@@ -117,6 +164,8 @@ background <- function(x, y, w, h)
 mutfuns2 <- c(background = background, mutfuns)
 ```
 
+Using most frequently mutated for each mutation type
+
 ```{r}
 tops <- ceiling(nrow(updated_mats[[1]]) * 0.0005)
 mgenes <- Reduce(union, lapply(updated_mats, function(x)
@@ -131,4 +180,17 @@ png("Mutations-oncoprint.png", width = 12, height = 8, units = "in", res = 300)
 oncoPrint(upmats2, alter_fun = mutfuns2, col = colors, show_pct = FALSE)
 dev.off()
 ```
+
+Using top 25 of all mutations
+
+```{r}
+am <- lapply(mutlift, function(mutassay) {
+    assay(mutassay[names(topgenes), ], i = "Variant_Classification")
+})
+ammo <- do.call(cbind, am)
+
+oncoPrint(ammo, alter_fun = mutfuns2, col = colors, show_pct = FALSE)
+```
+
+
 
