@@ -54,6 +54,7 @@ mutlist <- lapply(mutlist, function(mutassay) {
 
     Variants <- mcols(mutassay)$Variant_Classification
     Variants <- gsub("_", " ", Variants)
+    Variants <- ifelse(Variants == "R", "RNA", Variants)
     mcols(mutassay)$Variant_Classification <- Variants
 
     mutassay
@@ -68,6 +69,7 @@ varikeep <- muttable / sum(muttable) > 0.001
 cbind.data.frame(muttable, keep = varikeep, row.names = NULL)
 validvariants <- names(muttable)[varikeep]
 validvariants <- setNames(validvariants, validvariants)
+save(validvariants, file = file.path(datafolder, "validvariants.rda"))
 ```
 
 LiftOver for Hg18 genomes
