@@ -28,6 +28,7 @@ pancanmut <- curatedTCGAData("*", "Mutation", FALSE)
 sampleTables(pancanmut)
 pancanmut <- TCGAprimaryTumors(pancanmut)
 save(pancanmut, file = "primarypancanmutations.rda")
+load("~/data/primarypancanmutations.rda")
 ```
 
 ```{r}
@@ -45,11 +46,26 @@ mutlist <- lapply(mutlist, function(mutassay) {
 
     seqlevelsStyle(mutassay) <- "UCSC"
     rownames(mutassay) <- mcols(mutassay)$Hugo_Symbol
-    validvariants <- mcols(mutassay)$Mutation_Status == "Somatic" &
+    somaticnonsilent <- mcols(mutassay)$Mutation_Status == "Somatic" &
         mcols(mutassay)$Variant_Classification != "Silent"
-    mutassay <- mutassay[validvariants, ]
+    mutassay <- mutassay[somaticnonsilent, ]
+
+    Variants <- mcols(mutassay)$Variant_Classification
+    Variants <- gsub("_", " ", Variants)
+    mcols(mutassay)$Variant_Classification <- Variants
+
     mutassay
 })
+```
+
+```{r}
+muttable <- table(unlist(
+    lapply(mutlist, function(x) mcols(x)$Variant_Classification)
+))
+varikeep <- muttable / sum(muttable) > 0.001
+cbind.data.frame(muttable, keep = varikeep, row.names = NULL)
+validvariants <- names(muttable)[varikeep]
+validvariants <- setNames(validvariants, validvariants)
 ```
 
 LiftOver for Hg18 genomes
@@ -84,20 +100,6 @@ mutlift <- lapply(mutlist, function(mutassay) {
 })
 ```
 
-
-```{r}
-vclass <- lapply(mutlist, function(mutassay) {
-    Variants <- mcols(mutassay)$Variant_Classification
-    Variants <- gsub("_", " ", Variants)
-    mcols(mutassay)$Variant_Classification <- Variants
-    
-    mutclass <- table(Variants)
-    setNames(names(mutclass), names(mutclass))
-})
-
-validvariants <- Reduce(union, vclass)
-```
-
 ```{r}
 library(TxDb.Hsapiens.UCSC.hg18.knownGene)
 gn18 <- genes(TxDb.Hsapiens.UCSC.hg18.knownGene)
@@ -119,6 +121,7 @@ gn19 <- unstrand(gn19)
 
 mutlist2 <- lapply(mutlist, function(ragex) {
     rowRanges(ragex) <- unstrand(rowRanges(ragex))
+    seqlevelsStyle(ragex) <- "NCBI"
     ragex
 })
 
@@ -130,12 +133,12 @@ variant_fun <- function(scores, ranges, qranges) {
 
 mut3 <- lapply(mutlist2, function(mutassay) {
     gen <- unique(genome(mutassay))
-    
+
     if (identical(gen, "hg19"))
         gn <- gn19
     else if (identical(gen, "hg18"))
         gn <- gn18
-    
+
     resov <- qreduceAssay(mutassay, gn, variant_fun, "Variant_Classification",
         background = 0)
     rownames(resov) <- names(gn)
@@ -143,35 +146,96 @@ mut3 <- lapply(mutlist2, function(mutassay) {
 })
 
 allgenes <- Reduce(intersect, lapply(mut3, rownames))
+
+genomut <- vapply(mutlist2, function(x) unique(genome(x)), character(1))
+
 mut4 <- lapply(mut3, function(mutmat) {
     mutmat[allgenes, ]
 })
 
 save(mut4, file = "mutationspancan.rda")
+load("~/data/mutationspancan.rda")
 
-mutfull <- do.call(cbind.data.frame, mut4)
+mut18 <- mut4[genomut == "hg18"]
+mut19 <- mut4[genomut == "hg19"]
 
-list_mats <- lapply(mutlift, function(mutassay) {
-    res <- qreduceAssay(mutassay, gn, variant_fun, "Variant_Classification",
-        background = FALSE)
-    rownames(res) <- names(gn)
-    res[!is.na(rownames(res)), ]
-})
+mut18full <- do.call(cbind.data.frame, mut18)
+mut19full <- do.call(cbind.data.frame, mut19)
 
-withmut <- lapply(list_mats, function(x) x[rowSums(x) > 0, ])
-genesinall <- Reduce(intersect, lapply(withmut, rownames))
+tot18 <- rowSums(mut18full)
+tot19 <- rowSums(mut19full)
 
-updated_mats <- lapply(list_mats, function(genemat) {
-    genemat[!rownames(genemat) %in% nomutgenes, ]
-})
+allgenes <- union(names(tot18), names(tot19))
+allsums <- vapply(allgenes, function(g) sum(tot18[g], tot19[g], na.rm = TRUE), double(1L))
 
-mgenes <- Reduce(union, lapply(updated_mats, function(x)
-    names(sort(rowSums(x), decreasing = TRUE)[seq_len(tops)]))
+topgenes <- head(sort(allsums, decreasing = TRUE), 25)
+
+mutlist18 <- mutlist2[genomut == "hg18"]
+
+mutlist19 <- mutlist2[genomut == "hg19"]
+
+
+
+simplify_funs <- lapply(validvariants,
+    function(variant) {
+        args <- alist(scores =, ranges =, qranges =)
+        args <- as.pairlist(args)
+        body <- substitute({
+            as.numeric(any(S4Vectors::`%in%`(scores, z)))
+        }, list(z = variant))
+        eval(call("function", args, body))
+    }
 )
 
-allmuts <- do.call(cbind, list_mats)
 
-topgenes <- head(sort(rowSums(allmuts), decreasing = TRUE), 25)
+simpres18 <- lapply(simplify_funs, function(variant_fun) {
+    lapply(mutlist18, function(mutmat) {
+        gn <- gn18[names(gn18) %in% names(topgenes)]
+        res <- qreduceAssay(mutmat, gn, variant_fun, "Variant_Classification", background = 0)
+        rownames(res) <- names(gn)
+        res[!is.na(rownames(res)), ]
+    })
+})
+
+simps18 <- lapply(simpres18, function(x) do.call(cbind.data.frame, x))
+
+simpres19 <- lapply(simplify_funs, function(variant_fun) {
+    lapply(mutlist19, function(mutmat) {
+        gn <- gn19[names(gn19) %in% names(topgenes)]
+        res <- qreduceAssay(mutmat, gn, variant_fun, "Variant_Classification", background = 0)
+        rownames(res) <- names(gn)
+        res[!is.na(rownames(res)), ]
+    })
+})
+
+simps19 <- lapply(simpres19, function(x) do.call(cbind.data.frame, x))
+
+list_mats <- Map(cbind, simps18, simps19)
+list_mats2 <- lapply(list_mats, data.matrix)
+
+qualcolors <- RColorBrewer::brewer.pal(n = length(validvariants), 'Set3')
+colors <- setNames(qualcolors, validvariants)
+
+mutfuns <- lapply(colors, function(couleur) {
+    args <- alist(x =, y =, w =, h =)
+    args <- as.pairlist(args)
+    body <- substitute({
+        grid::grid.rect(x, y, w, h, gp = grid::gpar(fill = z, col = NA))
+    }, list(z = couleur))
+    eval(call("function", args, body))
+})
+
+background <- function(x, y, w, h)
+    grid::grid.rect(x, y, w, h,
+        gp = grid::gpar(fill = "#FFFFFF", col = "#FFFFFF"))
+mutfuns2 <- c(background = background, mutfuns)
+
+save(list_mats2, file = "list_mats2.rda")
+save(mutfuns2, file = "mutfuns2.rda")
+
+ComplexHeatmap::oncoPrint(
+    list_mats2, alter_fun = mutfuns2, col = colors, show_pct = FALSE
+)
 ```
 
 Check across all assays for any mutations
