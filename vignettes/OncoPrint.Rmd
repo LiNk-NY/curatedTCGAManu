@@ -27,10 +27,7 @@ library(GenomeInfoDb)
 pancanmut <- curatedTCGAData("*", "Mutation", FALSE)
 sampleTables(pancanmut)
 pancanmut <- TCGAprimaryTumors(pancanmut)
-```
-
-```{r}
-ov <- curatedTCGAData("OV", "Mutation", FALSE)
+save(pancanmut, file = "primarypancanmutations.rda")
 ```
 
 ```{r}
@@ -40,10 +37,6 @@ mutnames <-
 
 mutlist <- experiments(pancanmut)
 
-regov <- ov[[1]]
-gen <- translateBuild(unique(genome(regov)))
-genome(regov) <- gen
-
 mutlist <- lapply(mutlist, function(mutassay) {
     if (all(genome(mutassay) == "19"))
         genome(mutassay) <- paste0("hg", genome(mutassay))
@@ -52,6 +45,9 @@ mutlist <- lapply(mutlist, function(mutassay) {
 
     seqlevelsStyle(mutassay) <- "UCSC"
     rownames(mutassay) <- mcols(mutassay)$Hugo_Symbol
+    validvariants <- mcols(mutassay)$Mutation_Status == "Somatic" &
+        mcols(mutassay)$Variant_Classification != "Silent"
+    mutassay <- mutassay[validvariants, ]
     mutassay
 })
 ```
@@ -91,9 +87,6 @@ mutlift <- lapply(mutlist, function(mutassay) {
 
 ```{r}
 vclass <- lapply(mutlist, function(mutassay) {
-    somas <- mcols(mutassay)$Mutation_Status == "Somatic"
-    mutassay <- mutassay[somas, ]
-    
     Variants <- mcols(mutassay)$Variant_Classification
     Variants <- gsub("_", " ", Variants)
     mcols(mutassay)$Variant_Classification <- Variants
@@ -102,17 +95,10 @@ vclass <- lapply(mutlist, function(mutassay) {
     setNames(names(mutclass), names(mutclass))
 })
 
-vclass <- Reduce(union, vclass)
+validvariants <- Reduce(union, vclass)
 ```
 
 ```{r}
-gn <- genes(TxDb.Hsapiens.UCSC.hg19.knownGene)
-gn <- keepStandardChromosomes(granges(gn), pruning.mode="coarse")
-seqlevelsStyle(gn) <- "NCBI"
-names(gn) <- AnnotationDbi::mapIds(org.Hs.eg.db::org.Hs.eg.db, names(gn),
-    keytype = "ENTREZID", column = "SYMBOL")
-gn <- sort(gn)
-
 library(TxDb.Hsapiens.UCSC.hg18.knownGene)
 gn18 <- genes(TxDb.Hsapiens.UCSC.hg18.knownGene)
 gn18 <- keepStandardChromosomes(granges(gn18), pruning.mode="coarse")
@@ -122,16 +108,48 @@ names(gn18) <- AnnotationDbi::mapIds(org.Hs.eg.db::org.Hs.eg.db, names(gn18),
 gn18 <- sort(gn18)
 gn18 <- unstrand(gn18)
 
-rowRanges(ragov) <- unstrand(rowRanges(ragov))
-## OV 
+library(TxDb.Hsapiens.UCSC.hg19.knownGene)
+gn19 <- genes(TxDb.Hsapiens.UCSC.hg19.knownGene)
+gn19 <- keepStandardChromosomes(granges(gn19), pruning.mode="coarse")
+seqlevelsStyle(gn19) <- "NCBI"
+names(gn19) <- AnnotationDbi::mapIds(org.Hs.eg.db::org.Hs.eg.db, names(gn19),
+    keytype = "ENTREZID", column = "SYMBOL")
+gn19 <- sort(gn19)
+gn19 <- unstrand(gn19)
 
-variant_fun <- function(scores, ranges, qranges)
-    { any(scores != "Silent") }
-genome(ragov) <- translateBuild(genome(ragov))
-resov <- qreduceAssay(ragov, gn18, variant_fun, "Variant_Classification",
-    background = FALSE)
-rownames(resov) <- names(gn18)
-resov <- resov[!is.na(rownames(resov)), ]
+mutlist2 <- lapply(mutlist, function(ragex) {
+    rowRanges(ragex) <- unstrand(rowRanges(ragex))
+    ragex
+})
+
+## combine all cancers
+
+variant_fun <- function(scores, ranges, qranges) {
+    as.numeric(any(scores != "Silent"))
+}
+
+mut3 <- lapply(mutlist2, function(mutassay) {
+    gen <- unique(genome(mutassay))
+    
+    if (identical(gen, "hg19"))
+        gn <- gn19
+    else if (identical(gen, "hg18"))
+        gn <- gn18
+    
+    resov <- qreduceAssay(mutassay, gn, variant_fun, "Variant_Classification",
+        background = 0)
+    rownames(resov) <- names(gn)
+    resov[!is.na(rownames(resov)), ]
+})
+
+allgenes <- Reduce(intersect, lapply(mut3, rownames))
+mut4 <- lapply(mut3, function(mutmat) {
+    mutmat[allgenes, ]
+})
+
+save(mut4, file = "mutationspancan.rda")
+
+mutfull <- do.call(cbind.data.frame, mut4)
 
 list_mats <- lapply(mutlift, function(mutassay) {
     res <- qreduceAssay(mutassay, gn, variant_fun, "Variant_Classification",
