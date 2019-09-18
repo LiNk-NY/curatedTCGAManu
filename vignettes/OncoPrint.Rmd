@@ -173,12 +173,10 @@ allgenes <- union(names(tot18), names(tot19))
 allsums <- vapply(allgenes, function(g) sum(tot18[g], tot19[g], na.rm = TRUE), double(1L))
 
 topgenes <- head(sort(allsums, decreasing = TRUE), 25)
+topgenes
 
 mutlist18 <- mutlist2[genomut == "hg18"]
-
 mutlist19 <- mutlist2[genomut == "hg19"]
-
-
 
 simplify_funs <- lapply(validvariants,
     function(variant) {
@@ -194,7 +192,7 @@ simplify_funs <- lapply(validvariants,
 
 simpres18 <- lapply(simplify_funs, function(variant_fun) {
     lapply(mutlist18, function(mutmat) {
-        gn <- gn18[names(gn18) %in% names(topgenes)]
+        gn <- gn18[match(names(topgenes), names(gn18))]
         res <- qreduceAssay(mutmat, gn, variant_fun, "Variant_Classification", background = 0)
         rownames(res) <- names(gn)
         res[!is.na(rownames(res)), ]
@@ -205,7 +203,7 @@ simps18 <- lapply(simpres18, function(x) do.call(cbind.data.frame, x))
 
 simpres19 <- lapply(simplify_funs, function(variant_fun) {
     lapply(mutlist19, function(mutmat) {
-        gn <- gn19[names(gn19) %in% names(topgenes)]
+        gn <- gn19[match(names(topgenes), names(gn19))]
         res <- qreduceAssay(mutmat, gn, variant_fun, "Variant_Classification", background = 0)
         rownames(res) <- names(gn)
         res[!is.na(rownames(res)), ]
@@ -217,7 +215,8 @@ simps19 <- lapply(simpres19, function(x) do.call(cbind.data.frame, x))
 list_mats <- Map(cbind, simps18, simps19)
 list_mats2 <- lapply(list_mats, data.matrix)
 
-load("~/data/validvariants.rda")
+load(file.path(datafolder, "validvariants.rda"))
+
 qualcolors <- RColorBrewer::brewer.pal(n = length(validvariants), 'Set3')
 colors <- setNames(qualcolors, validvariants)
 
