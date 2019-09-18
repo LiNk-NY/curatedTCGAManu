@@ -25,6 +25,12 @@ library(GenomeInfoDb)
 
 ```{r,results="hide",include=TRUE,message=FALSE,warning=FALSE}
 pancanmut <- curatedTCGAData("*", "Mutation", FALSE)
+sampleTables(pancanmut)
+pancanmut <- TCGAprimaryTumors(pancanmut)
+```
+
+```{r}
+ov <- curatedTCGAData("OV", "Mutation", FALSE)
 ```
 
 ```{r}
@@ -34,12 +40,16 @@ mutnames <-
 
 mutlist <- experiments(pancanmut)
 
+regov <- ov[[1]]
+gen <- translateBuild(unique(genome(regov)))
+genome(regov) <- gen
+
 mutlist <- lapply(mutlist, function(mutassay) {
     if (all(genome(mutassay) == "19"))
         genome(mutassay) <- paste0("hg", genome(mutassay))
     else
         genome(mutassay) <- TCGAutils::translateBuild(genome(mutassay))
-    
+
     seqlevelsStyle(mutassay) <- "UCSC"
     rownames(mutassay) <- mcols(mutassay)$Hugo_Symbol
     mutassay
@@ -103,8 +113,25 @@ names(gn) <- AnnotationDbi::mapIds(org.Hs.eg.db::org.Hs.eg.db, names(gn),
     keytype = "ENTREZID", column = "SYMBOL")
 gn <- sort(gn)
 
+library(TxDb.Hsapiens.UCSC.hg18.knownGene)
+gn18 <- genes(TxDb.Hsapiens.UCSC.hg18.knownGene)
+gn18 <- keepStandardChromosomes(granges(gn18), pruning.mode="coarse")
+seqlevelsStyle(gn18) <- "NCBI"
+names(gn18) <- AnnotationDbi::mapIds(org.Hs.eg.db::org.Hs.eg.db, names(gn18),
+    keytype = "ENTREZID", column = "SYMBOL")
+gn18 <- sort(gn18)
+gn18 <- unstrand(gn18)
+
+rowRanges(ragov) <- unstrand(rowRanges(ragov))
+## OV 
+
 variant_fun <- function(scores, ranges, qranges)
     { any(scores != "Silent") }
+genome(ragov) <- translateBuild(genome(ragov))
+resov <- qreduceAssay(ragov, gn18, variant_fun, "Variant_Classification",
+    background = FALSE)
+rownames(resov) <- names(gn18)
+resov <- resov[!is.na(rownames(resov)), ]
 
 list_mats <- lapply(mutlift, function(mutassay) {
     res <- qreduceAssay(mutassay, gn, variant_fun, "Variant_Classification",
