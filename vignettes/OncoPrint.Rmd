@@ -173,7 +173,12 @@ allgenes <- union(names(tot18), names(tot19))
 allsums <- vapply(allgenes, function(g) sum(tot18[g], tot19[g], na.rm = TRUE), double(1L))
 
 topgenes <- head(sort(allsums, decreasing = TRUE), 25)
-topgenes
+
+genesoi <- c("CASP8", "CDKN1A", "EP300", "CREBBP", "ARID1A", "ARID2", "KDM6A",
+"TP53", "NF1", "NF2", "CDH1", "APC", "PIK3R1", "IDH1", "IDH2", "GNA11", "GNAQ",
+"GNAS", "EGFR", "ERBB2", "ERBB4", "KRAS", "PIK3CA", "RHOA", "AKT1", "CTNNB1")
+
+save(genesoi, file = file.path(datafolder, "genesoi.rda"))
 
 mutlist18 <- mutlist2[genomut == "hg18"]
 mutlist19 <- mutlist2[genomut == "hg19"]
@@ -192,7 +197,7 @@ simplify_funs <- lapply(validvariants,
 
 simpres18 <- lapply(simplify_funs, function(variant_fun) {
     lapply(mutlist18, function(mutmat) {
-        gn <- gn18[match(names(topgenes), names(gn18))]
+        gn <- gn18[match(genesoi, names(gn18))]
         res <- qreduceAssay(mutmat, gn, variant_fun, "Variant_Classification", background = 0)
         rownames(res) <- names(gn)
         res[!is.na(rownames(res)), ]
@@ -203,7 +208,7 @@ simps18 <- lapply(simpres18, function(x) do.call(cbind.data.frame, x))
 
 simpres19 <- lapply(simplify_funs, function(variant_fun) {
     lapply(mutlist19, function(mutmat) {
-        gn <- gn19[match(names(topgenes), names(gn19))]
+        gn <- gn19[match(genesoi, names(gn19))]
         res <- qreduceAssay(mutmat, gn, variant_fun, "Variant_Classification", background = 0)
         rownames(res) <- names(gn)
         res[!is.na(rownames(res)), ]
