@@ -179,6 +179,7 @@ genesoi <- c("CASP8", "CDKN1A", "EP300", "CREBBP", "ARID1A", "ARID2", "KDM6A",
 "GNAS", "EGFR", "ERBB2", "ERBB4", "KRAS", "PIK3CA", "RHOA", "AKT1", "CTNNB1")
 
 save(genesoi, file = file.path(datafolder, "genesoi.rda"))
+load(file.path(datafolder, "genesoi.rda"))
 
 mutlist18 <- mutlist2[genomut == "hg18"]
 mutlist19 <- mutlist2[genomut == "hg19"]
