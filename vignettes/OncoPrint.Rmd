@@ -27,8 +27,10 @@ library(GenomeInfoDb)
 pancanmut <- curatedTCGAData("*", "Mutation", FALSE)
 sampleTables(pancanmut)
 pancanmut <- TCGAprimaryTumors(pancanmut)
-save(pancanmut, file = "primarypancanmutations.rda")
-load("~/data/primarypancanmutations.rda")
+
+datafolder <- "~/data"
+save(pancanmut, file = file.path(datafolder, "primarypancanmutations.rda"))
+load(file.path(datafolder, "primarypancanmutations.rda"))
 ```
 
 ```{r}
@@ -153,8 +155,8 @@ mut4 <- lapply(mut3, function(mutmat) {
     mutmat[allgenes, ]
 })
 
-save(mut4, file = "mutationspancan.rda")
-load("~/data/mutationspancan.rda")
+save(mut4, file = file.path(datafolder, "mutationspancan.rda"))
+load(file.path(datafolder, "mutationspancan.rda"))
 
 mut18 <- mut4[genomut == "hg18"]
 mut19 <- mut4[genomut == "hg19"]
@@ -213,6 +215,7 @@ simps19 <- lapply(simpres19, function(x) do.call(cbind.data.frame, x))
 list_mats <- Map(cbind, simps18, simps19)
 list_mats2 <- lapply(list_mats, data.matrix)
 
+load("~/data/validvariants.rda")
 qualcolors <- RColorBrewer::brewer.pal(n = length(validvariants), 'Set3')
 colors <- setNames(qualcolors, validvariants)
 
@@ -230,12 +233,23 @@ background <- function(x, y, w, h)
         gp = grid::gpar(fill = "#FFFFFF", col = "#FFFFFF"))
 mutfuns2 <- c(background = background, mutfuns)
 
-save(list_mats2, file = "list_mats2.rda")
-save(mutfuns2, file = "mutfuns2.rda")
+save(list_mats2, file = file.path(datafolder, "list_mats2.rda"))
+load(file.path(datafolder, "list_mats2.rda"))
 
+ll <- IRanges::LogicalList(lapply(list_mats2, function(y) colSums(y) == 0))
+matlog <- do.call(rbind, lapply(ll, unname))
+allzero <- apply(matlog, 2, all)
+list_mats3 <- lapply(list_mats2, function(x) x[, !allzero])
+
+save(mutfuns2, file = file.path(datafolder, "mutfuns2.rda"))
+load(file.path(datafolder, "mutfuns2.rda"))
+
+png("PANCAN_Mutations-oncoprint.png", width = 12, height = 8, units = "in",
+    res = 300)
 ComplexHeatmap::oncoPrint(
-    list_mats2, alter_fun = mutfuns2, col = colors, show_pct = FALSE
+    list_mats3, alter_fun = mutfuns2, col = colors, show_pct = FALSE
 )
+dev.off()
 ```
 
 Check across all assays for any mutations
