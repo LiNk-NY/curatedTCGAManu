@@ -1,5 +1,5 @@
 ---
-title: "GSEA PanCan"
+title: "Figure 3 - GSEA PanCan"
 author: "Waldron Lab"
 date: "May 10, 2019"
 output: html_document
@@ -113,6 +113,8 @@ coremae <-
         experiments = core, sampleMap = mapper, colData = clinphone
     )
 ```
+
+## PanCan RNASeq2*
 
 Obtain the RNAseq data from `curatedTCGAData`:
 
@@ -235,6 +237,9 @@ exp.list <- runDE(exp.list)
 for(n in names(exp.list)) saveRDS(exp.list[[n]], file = paste(n, "rds", sep="."))
 ```
 
+
+### Figure 3 BoxPlot
+
 Extract genes with consistent expression changes:
 
 ```{r}
@@ -271,7 +276,7 @@ p + geom_hline(yintercept=0, linetype="dashed", color = "darkgrey") +
 ID mapping
 
 ```{r}
-exp.list <- lapply(exp.list, 
+exp.list <- lapply(exp.list,
     function(se) idMap(se, org="hsa", from="SYMBOL", to="ENTREZID"))
 ```
 
@@ -280,24 +285,24 @@ Obtain gene sets
 ```{r}
 kegg.gs <- getGenesets(org="hsa", db="kegg")
 go.gs <- getGenesets(org="hsa", db="go")
-hall.gs <- getGenesets("../data/h.all.v6.2.entrez.gmt")  
+hall.gs <- getGenesets("../data/h.all.v6.2.entrez.gmt")
 names(hall.gs) <- sub("^HALLMARK_", "", names(hall.gs))
 ```
 
 Execute ORA:
 
 ```{r, eval=FALSE}
-res <- runEA(exp.list, methods=c("ora", "padog"), 
+res <- runEA(exp.list, methods=c("ora", "padog"),
                 gs=kegg.gs, perm=c(0, 1000), save2file=TRUE, out.dir="../data/gsea/kegg")
-res <- runEA(exp.list, methods=c("ora", "padog") 
+res <- runEA(exp.list, methods=c("ora", "padog")
                 gs=go.gs, perm=c(0, 1000), save2file=TRUE, out.dir="../data/gsea/go")
-res <- runEA(exp.list, methods=c("ora", "padog"), gs=hall.gs, 
+res <- runEA(exp.list, methods=c("ora", "padog"), gs=hall.gs,
                 perm=c(0,1000), save2file=TRUE, out.dir="../data/gsea/hall")
 res <- lapply(res$ora, function(r) r$ranking)
 ```
 
 ```{r}
-res <- readResults(data.dir="../data/gsea/hall", data.ids=names(exp.list), 
+res <- readResults(data.dir="../data/gsea/hall", data.ids=names(exp.list),
                     methods=c("ora", "padog"), type="ranking")
 ```
 
@@ -323,11 +328,11 @@ hall.padog <- isEnriched(res$padog, nr.top=rownames(hall.ora))
 
 rownames(hall.ora) <- rownames(hall.padog) <- hall.i2n[rownames(hall.ora)]
 
-h1 <- Heatmap(hall.ora, cluster_rows=FALSE, cluster_columns=FALSE, 
-                show_row_names=FALSE, show_heatmap_legend = FALSE, 
+h1 <- Heatmap(hall.ora, cluster_rows=FALSE, cluster_columns=FALSE,
+                show_row_names=FALSE, show_heatmap_legend = FALSE,
                 col=c("white", "black"), column_title="ORA p < 0.05")
-h2 <- Heatmap(hall.padog, cluster_rows=FALSE, cluster_columns=FALSE, 
-                show_row_names=TRUE, show_heatmap_legend = FALSE, 
+h2 <- Heatmap(hall.padog, cluster_rows=FALSE, cluster_columns=FALSE,
+                show_row_names=TRUE, show_heatmap_legend = FALSE,
                 col=c("white", "black"), column_title="PADOG p < 0.05")
 hl <- h1 + h2
 draw(hl, ht_gap = unit(1, "cm"))

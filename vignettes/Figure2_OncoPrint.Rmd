@@ -1,7 +1,7 @@
 ---
-title: "OncoPrint Figure"
+title: "Figure 2 - OncoPrint PANCAN"
 author: "Waldron Lab"
-date: "July 23, 2019"
+date: "September 18, 2019"
 output: html_document
 ---
 
@@ -28,15 +28,13 @@ pancanmut <- curatedTCGAData("*", "Mutation", FALSE)
 sampleTables(pancanmut)
 pancanmut <- TCGAprimaryTumors(pancanmut)
 
-datafolder <- "~/data"
-save(pancanmut, file = file.path(datafolder, "primarypancanmutations.rda"))
-load(file.path(datafolder, "primarypancanmutations.rda"))
+# datafolder <- "~/data"
+# save(pancanmut, file = file.path(datafolder, "primarypancanmutations.rda"))
+# load(file.path(datafolder, "primarypancanmutations.rda"))
 ```
 
 ```{r}
-mutnames <-
-    grep(glob2rx("*_Mutation-*"), names(pancanmut), value = TRUE)
-## 32 types of cancer MESO does not have a mutation dataset?
+## 32 types of cancer MESO does not have a mutation dataset
 
 mutlist <- experiments(pancanmut)
 
@@ -69,39 +67,7 @@ varikeep <- muttable / sum(muttable) > 0.001
 cbind.data.frame(muttable, keep = varikeep, row.names = NULL)
 validvariants <- names(muttable)[varikeep]
 validvariants <- setNames(validvariants, validvariants)
-save(validvariants, file = file.path(datafolder, "validvariants.rda"))
-```
-
-LiftOver for Hg18 genomes
-
-```{r}
-library(BiocFileCache)
-lifturl <-
-"http://hgdownload.cse.ucsc.edu/goldenpath/hg18/liftOver/hg18ToHg19.over.chain.gz"
-bfc <- BiocFileCache()
-qfile <- bfcquery(bfc, "18to19chain", exact = TRUE)[["rpath"]]
-cfile <-
-if (length(qfile) && file.exists(qfile)) {
-    bfcquery(bfc, "18to19chain", exact = TRUE)[["rpath"]]
-} else {
-    bfcadd(bfc, "18to19chain", lifturl)
-}
-chainfile <- file.path(tempdir(), gsub("\\.gz", "", basename(cfile)))
-R.utils::gunzip(cfile, destname = chainfile, remove = FALSE)
-chain <- suppressMessages(
-    rtracklayer::import.chain(chainfile)
-)
-
-mutlift <- lapply(mutlist, function(mutassay) {
-    if (all(genome(mutassay) == "hg18")) {
-        ranges19 <- rtracklayer::liftOver(rowRanges(mutassay), chain)
-        mutassay <- mutassay[as.logical(lengths(ranges19))]
-        rowRanges(mutassay) <- unlist(ranges19)
-        genome(mutassay) <- rep("hg19", length(genome(mutassay)))
-    }
-    seqlevelsStyle(mutassay) <- "NCBI"
-    mutassay
-})
+# save(validvariants, file = file.path(datafolder, "validvariants.rda"))
 ```
 
 ```{r}
@@ -157,8 +123,8 @@ mut4 <- lapply(mut3, function(mutmat) {
     mutmat[allgenes, ]
 })
 
-save(mut4, file = file.path(datafolder, "mutationspancan.rda"))
-load(file.path(datafolder, "mutationspancan.rda"))
+# save(mut4, file = file.path(datafolder, "mutationspancan.rda"))
+# load(file.path(datafolder, "mutationspancan.rda"))
 
 mut18 <- mut4[genomut == "hg18"]
 mut19 <- mut4[genomut == "hg19"]
@@ -178,8 +144,8 @@ genesoi <- c("CASP8", "CDKN1A", "EP300", "CREBBP", "ARID1A", "ARID2", "KDM6A",
 "TP53", "NF1", "NF2", "CDH1", "APC", "PIK3R1", "IDH1", "IDH2", "GNA11", "GNAQ",
 "GNAS", "EGFR", "ERBB2", "ERBB4", "KRAS", "PIK3CA", "RHOA", "AKT1", "CTNNB1")
 
-save(genesoi, file = file.path(datafolder, "genesoi.rda"))
-load(file.path(datafolder, "genesoi.rda"))
+# save(genesoi, file = file.path(datafolder, "genesoi.rda"))
+# load(file.path(datafolder, "genesoi.rda"))
 
 mutlist18 <- mutlist2[genomut == "hg18"]
 mutlist19 <- mutlist2[genomut == "hg19"]
@@ -240,16 +206,16 @@ background <- function(x, y, w, h)
         gp = grid::gpar(fill = "#FFFFFF", col = "#FFFFFF"))
 mutfuns2 <- c(background = background, mutfuns)
 
-save(list_mats2, file = file.path(datafolder, "list_mats2.rda"))
-load(file.path(datafolder, "list_mats2.rda"))
+# save(list_mats2, file = file.path(datafolder, "list_mats2.rda"))
+# load(file.path(datafolder, "list_mats2.rda"))
 
 ll <- IRanges::LogicalList(lapply(list_mats2, function(y) colSums(y) == 0))
 matlog <- do.call(rbind, lapply(ll, unname))
 allzero <- apply(matlog, 2, all)
 list_mats3 <- lapply(list_mats2, function(x) x[, !allzero])
 
-save(mutfuns2, file = file.path(datafolder, "mutfuns2.rda"))
-load(file.path(datafolder, "mutfuns2.rda"))
+# save(mutfuns2, file = file.path(datafolder, "mutfuns2.rda"))
+# load(file.path(datafolder, "mutfuns2.rda"))
 
 png("PANCAN_Mutations-oncoprint.png", width = 12, height = 8, units = "in",
     res = 300)
@@ -258,69 +224,4 @@ ComplexHeatmap::oncoPrint(
 )
 dev.off()
 ```
-
-Check across all assays for any mutations
-
-```{r}
-summaryfun <- function(scores, ranges, qranges)
-    { sum(S4Vectors::`%in%`(scores, vclass)) }
-resto <- qreduceAssay(ragex, gn, summaryfun, "Variant_Classification",
-    background = 0)
-rownames(resto) <- names(gn)
-resto <- resto[!is.na(rownames(resto)), ]
-tops2 <- head(sort(rowSums(resto), decreasing = TRUE), 25)
-```
-
-Create a color palette based on the number of variants
-
-```{r}
-# qualcolors <- brewer.pal(n = length(vclass), "Set3")
-qualcolors <- colorRampPalette(brewer.pal(n = 12, "Set3"))(26)
-colors <- setNames(qualcolors, vclass)
-```
-
-```{r}
-mutfuns <- lapply(colors, function(couleur) {
-    args <- alist(x =, y =, w =, h =)
-    args <- as.pairlist(args)
-    body <- substitute({
-        grid::grid.rect(x, y, w, h, gp = gpar(fill = z, col = NA))
-    }, list(z = couleur))
-    eval(call("function", args, body))
-})
-
-background <- function(x, y, w, h)
-    grid.rect(x, y, w, h, gp = gpar(fill = "#FFFFFF", col = "#FFFFFF"))
-mutfuns2 <- c(background = background, mutfuns)
-```
-
-Using most frequently mutated for each mutation type
-
-```{r}
-tops <- ceiling(nrow(updated_mats[[1]]) * 0.0005)
-mgenes <- Reduce(union, lapply(updated_mats, function(x)
-    names(sort(rowSums(x), decreasing = TRUE)[seq_len(tops)]))
-)
-ug <- length(unique(mgenes))
-upmats2 <- lapply(updated_mats, function(mat) mat[mgenes, ])
-```
-
-```{r}
-png("Mutations-oncoprint.png", width = 12, height = 8, units = "in", res = 300)
-oncoPrint(upmats2, alter_fun = mutfuns2, col = colors, show_pct = FALSE)
-dev.off()
-```
-
-Using top 25 of all mutations
-
-```{r}
-am <- lapply(mutlift, function(mutassay) {
-    assay(mutassay[names(topgenes), ], i = "Variant_Classification")
-})
-ammo <- do.call(cbind, am)
-
-oncoPrint(ammo, alter_fun = mutfuns2, col = colors, show_pct = FALSE)
-```
-
-
 
