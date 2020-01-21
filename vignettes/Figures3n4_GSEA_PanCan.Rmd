@@ -1,5 +1,5 @@
 ---
-title: "Figure 3 - GSEA PanCan"
+title: "Figure 3 and 4 - DE / GSEA PanCan"
 author: "Waldron Lab"
 date: "May 10, 2019"
 output: html_document
@@ -9,19 +9,9 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-```{r, echo = FALSE, warning = FALSE, error = FALSE, results = "hide"}
-library(MultiAssayExperiment)
-library(curatedTCGAData)
-library(TCGAutils)
-library(GSEABenchmarkeR) # >= 1.5.1
-library(BiocParallel)
-library(ComplexHeatmap)
-library(ggpubr)
-```
-
 Load packages:
 
-```{r, eval = FALSE}
+```{r, echo = FALSE, warning = FALSE, error = FALSE, results = "hide"}
 library(MultiAssayExperiment)
 library(curatedTCGAData)
 library(TCGAutils)
@@ -219,6 +209,7 @@ Share data with collaborators:
 
 ```{r}
 saveRDS(experiments(rnacomp6), file = "pancan_exprs.rds")
+# r6ex <- loadRDS(file = "pancan_exprs.rds")
 ```
 
 Differential Expression analysis:
@@ -256,6 +247,7 @@ extractFC <- function(exp.list, top.wfcs.genes)
     return(fcs)
 }
 fcs <- extractFC(exp.list, top.wfcs.genes)
+
 # pdf("log2fc.pdf", paper = "special", width = 8, height = 12)
 Heatmap(fcs, name="log2FC", show_row_names=TRUE)
 # dev.off()
@@ -273,6 +265,8 @@ gg <- p + geom_hline(yintercept=0, linetype="dashed", color = "darkgrey") +
     geom_vline(xintercept=8.5, linetype="dashed", color = "darkgrey")
 
 ggsave("boxplot_pancan.svg", gg, device = "svg")
+
+## pdf
 ggsave("boxplot_pancan.pdf", gg, device = "pdf")
 ```
 
@@ -290,6 +284,10 @@ Obtain gene sets
 ```{r}
 kegg.gs <- getGenesets(org="hsa", db="kegg")
 go.gs <- getGenesets(org="hsa", db="go")
+download.file(
+    url = "https://data.broadinstitute.org/gsea-msigdb/msigdb/release/6.2/h.all.v6.2.entrez.gmt",
+    destfile = "../data/h.all.v6.2.entrez.gmt"
+)
 hall.gs <- getGenesets("../data/h.all.v6.2.entrez.gmt")
 names(hall.gs) <- sub("^HALLMARK_", "", names(hall.gs))
 ```
@@ -299,7 +297,7 @@ Execute ORA:
 ```{r, eval=FALSE}
 res <- runEA(exp.list, methods=c("ora", "padog"),
                 gs=kegg.gs, perm=c(0, 1000), save2file=TRUE, out.dir="../data/gsea/kegg")
-res <- runEA(exp.list, methods=c("ora", "padog")
+res <- runEA(exp.list, methods=c("ora", "padog"),
                 gs=go.gs, perm=c(0, 1000), save2file=TRUE, out.dir="../data/gsea/go")
 res <- runEA(exp.list, methods=c("ora", "padog"), gs=hall.gs,
                 perm=c(0,1000), save2file=TRUE, out.dir="../data/gsea/hall")
@@ -340,5 +338,8 @@ h2 <- Heatmap(hall.padog, cluster_rows=FALSE, cluster_columns=FALSE,
                 show_row_names=TRUE, show_heatmap_legend = FALSE,
                 col=c("white", "black"), column_title="PADOG p < 0.05")
 hl <- h1 + h2
+
+pdf("orapadog.pdf", paper = "special", width = 12, height = 8)
 draw(hl, ht_gap = unit(1, "cm"))
+dev.off()
 ```
