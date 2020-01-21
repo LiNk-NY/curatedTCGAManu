@@ -28,13 +28,15 @@ pancanmut <- curatedTCGAData("*", "Mutation", FALSE)
 sampleTables(pancanmut)
 pancanmut <- TCGAprimaryTumors(pancanmut)
 
-# datafolder <- "~/data"
+datafolder <- "~/data"
 # save(pancanmut, file = file.path(datafolder, "primarypancanmutations.rda"))
-# load(file.path(datafolder, "primarypancanmutations.rda"))
+load(file.path(datafolder, "primarypancanmutations.rda"))
 ```
 
 ```{r}
-## 32 types of cancer MESO does not have a mutation dataset
+mutnames <-
+    grep(glob2rx("*_Mutation-*"), names(pancanmut), value = TRUE)
+## 32 types of cancer MESO does not have a mutation dataset?
 
 mutlist <- experiments(pancanmut)
 
@@ -68,6 +70,40 @@ cbind.data.frame(muttable, keep = varikeep, row.names = NULL)
 validvariants <- names(muttable)[varikeep]
 validvariants <- setNames(validvariants, validvariants)
 # save(validvariants, file = file.path(datafolder, "validvariants.rda"))
+load(file.path(datafolder, "validvariants.rda"))
+```
+
+LiftOver for Hg18 genomes
+
+```{r}
+library(BiocFileCache)
+lifturl <-
+"http://hgdownload.cse.ucsc.edu/goldenpath/hg18/liftOver/hg18ToHg19.over.chain.gz"
+bfc <- BiocFileCache()
+qfile <- bfcquery(bfc, "18to19chain", exact = TRUE)[["rpath"]]
+cfile <-
+if (length(qfile) && file.exists(qfile)) {
+    bfcquery(bfc, "18to19chain", exact = TRUE)[["rpath"]]
+} else {
+    bfcadd(bfc, "18to19chain", lifturl)
+}
+chainfile <- file.path(tempdir(), gsub("\\.gz", "", basename(cfile)))
+R.utils::gunzip(cfile, destname = chainfile, remove = FALSE)
+chain <- suppressMessages(
+    rtracklayer::import.chain(chainfile)
+)
+
+mutlift <- lapply(mutlist, function(mutassay) {
+    if (all(genome(mutassay) == "hg18")) {
+        seqlevelsStyle(mutassay) <- "UCSC"
+        ranges19 <- rtracklayer::liftOver(rowRanges(mutassay), chain)
+        mutassay <- mutassay[as.logical(lengths(ranges19))]
+        rowRanges(mutassay) <- unlist(ranges19)
+        genome(mutassay) <- rep("hg19", length(genome(mutassay)))
+    }
+    seqlevelsStyle(mutassay) <- "NCBI"
+    mutassay
+})
 ```
 
 ```{r}
@@ -136,7 +172,8 @@ tot18 <- rowSums(mut18full)
 tot19 <- rowSums(mut19full)
 
 allgenes <- union(names(tot18), names(tot19))
-allsums <- vapply(allgenes, function(g) sum(tot18[g], tot19[g], na.rm = TRUE), double(1L))
+allsums <- vapply(allgenes,
+    function(g) sum(tot18[g], tot19[g], na.rm = TRUE), double(1L))
 
 topgenes <- head(sort(allsums, decreasing = TRUE), 25)
 
@@ -214,14 +251,80 @@ matlog <- do.call(rbind, lapply(ll, unname))
 allzero <- apply(matlog, 2, all)
 list_mats3 <- lapply(list_mats2, function(x) x[, !allzero])
 
-# save(mutfuns2, file = file.path(datafolder, "mutfuns2.rda"))
-# load(file.path(datafolder, "mutfuns2.rda"))
+save(mutfuns2, file = file.path(datafolder, "mutfuns2.rda"))
+load(file.path(datafolder, "mutfuns2.rda"))
 
-png("PANCAN_Mutations-oncoprint.png", width = 12, height = 8, units = "in",
-    res = 300)
+# png("PANCAN_Mutations-oncoprint.png", width = 12, height = 8, units = "in",
+#    res = 600)
+svg("PANCAN_Mutations-oncoprint.svg", width = 12, height = 8)
+
 ComplexHeatmap::oncoPrint(
-    list_mats3, alter_fun = mutfuns2, col = colors, show_pct = FALSE
+    list_mats3, alter_fun = mutfuns2, col = colors, show_pct = FALSE, use_raster = FALSE
 )
 dev.off()
+```
+
+Check across all assays for any mutations
+
+```{r}
+summaryfun <- function(scores, ranges, qranges)
+    { sum(S4Vectors::`%in%`(scores, vclass)) }
+resto <- qreduceAssay(ragex, gn, summaryfun, "Variant_Classification",
+    background = 0)
+rownames(resto) <- names(gn)
+resto <- resto[!is.na(rownames(resto)), ]
+tops2 <- head(sort(rowSums(resto), decreasing = TRUE), 25)
+```
+
+Create a color palette based on the number of variants
+
+```{r}
+# qualcolors <- brewer.pal(n = length(vclass), "Set3")
+qualcolors <- colorRampPalette(brewer.pal(n = 12, "Set3"))(26)
+colors <- setNames(qualcolors, vclass)
+```
+
+```{r}
+mutfuns <- lapply(colors, function(couleur) {
+    args <- alist(x =, y =, w =, h =)
+    args <- as.pairlist(args)
+    body <- substitute({
+        grid::grid.rect(x, y, w, h, gp = gpar(fill = z, col = NA))
+    }, list(z = couleur))
+    eval(call("function", args, body))
+})
+
+background <- function(x, y, w, h)
+    grid.rect(x, y, w, h, gp = gpar(fill = "#FFFFFF", col = "#FFFFFF"))
+mutfuns2 <- c(background = background, mutfuns)
+```
+
+Using most frequently mutated for each mutation type
+
+```{r}
+tops <- ceiling(nrow(updated_mats[[1]]) * 0.0005)
+mgenes <- Reduce(union, lapply(updated_mats, function(x)
+    names(sort(rowSums(x), decreasing = TRUE)[seq_len(tops)]))
+)
+ug <- length(unique(mgenes))
+upmats2 <- lapply(updated_mats, function(mat) mat[mgenes, ])
+```
+
+```{r}
+# png("Mutations-oncoprint.png", width = 12, height = 8, units = "in", res = 300)
+svg("Mutations-oncoprint.svg", width = 12, height = 8, units = "in")
+oncoPrint(upmats2, alter_fun = mutfuns2, col = colors, show_pct = FALSE)
+dev.off()
+```
+
+Using top 25 of all mutations
+
+```{r}
+am <- lapply(mutlift, function(mutassay) {
+    assay(mutassay[names(topgenes), ], i = "Variant_Classification")
+})
+ammo <- do.call(cbind, am)
+
+oncoPrint(ammo, alter_fun = mutfuns2, col = colors, show_pct = FALSE)
 ```
 
