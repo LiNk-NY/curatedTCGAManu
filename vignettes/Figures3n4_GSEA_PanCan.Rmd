@@ -298,12 +298,12 @@ Execute ORA (has been pre-computed on a cluster, skip this step):
 
 ```{r, eval=FALSE}
 res <- runEA(exp.list, methods=c("ora", "padog"),
-                gs=go.gs, perm=c(0, 1000), save2file=TRUE, out.dir="../data/gsea/go")
+                gs=go.gs, perm=c(0, 1000), save2file=TRUE, out.dir="../data")
 ```
 
 Read pre-computed results for ORA and PADOG for GO-BP gene sets
 ```{r}
-res <- readResults(data.dir="../data/gsea/go", data.ids=names(exp.list),
+res <- readResults(data.dir="../data", data.ids=names(exp.list),
                     methods=c("ora", "padog"), type="ranking")
 ```
 
