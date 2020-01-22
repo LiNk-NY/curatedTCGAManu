@@ -55,7 +55,6 @@ brca1 <- CpGtoRanges(brca0, unmapped = FALSE)
 Select only tumors in the data
 
 ```{r}
-library(TCGAutils)
 sampleTables(brca1)
 head(sampleTypes)
 
@@ -99,15 +98,6 @@ rnaranges <- rowRanges(brca1[["BRCA_RNASeq2GeneNorm-20160128_ranged"]])
 allROIs <- flank(rnaranges, 2000, both = TRUE)
 ```
 
-An expression threshold is used where "FPKM > 3". In our case, we use the better
-alternative: TPM > 3
-
-https://haroldpimentel.wordpress.com/2014/05/08/what-the-fpkm-a-review-rna-seq-expression-units/
-http://diytranscriptomics.com/Reading/files/wagnerTPM.pdf
-
-```{r}
-rnaexp <- assay(brca1[["BRCA_RNASeq2GeneNorm-20160128_ranged"]]) > 3
-```
 
 Find any somatic mutations within regions of interest:
 
@@ -171,6 +161,15 @@ brca2[["mutations"]] <- mutmerge
 
 brca3 <- as(brca2, "MatchedAssayExperiment")
 brca3 <- intersectRows(brca3)
+```
+
+An expression threshold is used where "FPKM > 3". In our case, we use the better
+alternative: TPM > 3
+
+https://haroldpimentel.wordpress.com/2014/05/08/what-the-fpkm-a-review-rna-seq-expression-units/
+http://diytranscriptomics.com/Reading/files/wagnerTPM.pdf
+
+```{r}
 keep <- assay(brca3, "BRCA_RNASeq2GeneNorm-20160128_ranged") > 3 &
   assay(brca3, "has.meth") &
   assay(brca3, "mutations")

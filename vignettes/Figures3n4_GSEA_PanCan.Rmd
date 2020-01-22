@@ -1,5 +1,5 @@
 ---
-title: "GSEA PanCan"
+title: "Figure 3 and 4 - DE / GSEA PanCan"
 author: "Waldron Lab"
 date: "May 10, 2019"
 output: html_document
@@ -9,19 +9,9 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-```{r, echo = FALSE, warning = FALSE, error = FALSE, results = "hide"}
-library(MultiAssayExperiment)
-library(curatedTCGAData)
-library(TCGAutils)
-library(GSEABenchmarkeR) # >= 1.5.1
-library(BiocParallel)
-library(ComplexHeatmap)
-library(ggpubr)
-```
-
 Load packages:
 
-```{r, eval = FALSE}
+```{r, echo = FALSE, warning = FALSE, error = FALSE, results = "hide"}
 library(MultiAssayExperiment)
 library(curatedTCGAData)
 library(TCGAutils)
@@ -113,6 +103,8 @@ coremae <-
         experiments = core, sampleMap = mapper, colData = clinphone
     )
 ```
+
+## PanCan RNASeq2*
 
 Obtain the RNAseq data from `curatedTCGAData`:
 
@@ -217,6 +209,7 @@ Share data with collaborators:
 
 ```{r}
 saveRDS(experiments(rnacomp6), file = "pancan_exprs.rds")
+# r6ex <- loadRDS(file = "pancan_exprs.rds")
 ```
 
 Differential Expression analysis:
@@ -235,6 +228,9 @@ exp.list <- runDE(exp.list)
 for(n in names(exp.list)) saveRDS(exp.list[[n]], file = paste(n, "rds", sep="."))
 ```
 
+
+### Figure 3 BoxPlot
+
 Extract genes with consistent expression changes:
 
 ```{r}
@@ -251,7 +247,10 @@ extractFC <- function(exp.list, top.wfcs.genes)
     return(fcs)
 }
 fcs <- extractFC(exp.list, top.wfcs.genes)
+
+# pdf("log2fc.pdf", paper = "special", width = 8, height = 12)
 Heatmap(fcs, name="log2FC", show_row_names=TRUE)
+# dev.off()
 
 # Boxplot
 top.wfcs.genes <- names(c(wfcs[wfcs > 0][1:8], wfcs[wfcs < 0][1:8]))
@@ -262,8 +261,13 @@ o <- names(sort(medians))
 p <- ggboxplot(df, x = "Var1", y = "value", width = 0.8,
                 ylab="log2 fold change", xlab="", order=o, color="Var1", add ="jitter")
 p <- ggpar(p, x.text.angle=45, palette = "simpsons", legend="none")
-p + geom_hline(yintercept=0, linetype="dashed", color = "darkgrey") +
+gg <- p + geom_hline(yintercept=0, linetype="dashed", color = "darkgrey") +
     geom_vline(xintercept=8.5, linetype="dashed", color = "darkgrey")
+
+ggsave("boxplot_pancan.svg", gg, device = "svg")
+
+## pdf
+ggsave("boxplot_pancan.pdf", gg, device = "pdf")
 ```
 
 # GSEA
@@ -271,7 +275,7 @@ p + geom_hline(yintercept=0, linetype="dashed", color = "darkgrey") +
 ID mapping
 
 ```{r}
-exp.list <- lapply(exp.list, 
+exp.list <- lapply(exp.list,
     function(se) idMap(se, org="hsa", from="SYMBOL", to="ENTREZID"))
 ```
 
@@ -280,24 +284,28 @@ Obtain gene sets
 ```{r}
 kegg.gs <- getGenesets(org="hsa", db="kegg")
 go.gs <- getGenesets(org="hsa", db="go")
-hall.gs <- getGenesets("../data/h.all.v6.2.entrez.gmt")  
+download.file(
+    url = "https://data.broadinstitute.org/gsea-msigdb/msigdb/release/6.2/h.all.v6.2.entrez.gmt",
+    destfile = "../data/h.all.v6.2.entrez.gmt"
+)
+hall.gs <- getGenesets("../data/h.all.v6.2.entrez.gmt")
 names(hall.gs) <- sub("^HALLMARK_", "", names(hall.gs))
 ```
 
 Execute ORA:
 
 ```{r, eval=FALSE}
-res <- runEA(exp.list, methods=c("ora", "padog"), 
+res <- runEA(exp.list, methods=c("ora", "padog"),
                 gs=kegg.gs, perm=c(0, 1000), save2file=TRUE, out.dir="../data/gsea/kegg")
-res <- runEA(exp.list, methods=c("ora", "padog") 
+res <- runEA(exp.list, methods=c("ora", "padog"),
                 gs=go.gs, perm=c(0, 1000), save2file=TRUE, out.dir="../data/gsea/go")
-res <- runEA(exp.list, methods=c("ora", "padog"), gs=hall.gs, 
+res <- runEA(exp.list, methods=c("ora", "padog"), gs=hall.gs,
                 perm=c(0,1000), save2file=TRUE, out.dir="../data/gsea/hall")
 res <- lapply(res$ora, function(r) r$ranking)
 ```
 
 ```{r}
-res <- readResults(data.dir="../data/gsea/hall", data.ids=names(exp.list), 
+res <- readResults(data.dir="../data/gsea/hall", data.ids=names(exp.list),
                     methods=c("ora", "padog"), type="ranking")
 ```
 
@@ -323,12 +331,15 @@ hall.padog <- isEnriched(res$padog, nr.top=rownames(hall.ora))
 
 rownames(hall.ora) <- rownames(hall.padog) <- hall.i2n[rownames(hall.ora)]
 
-h1 <- Heatmap(hall.ora, cluster_rows=FALSE, cluster_columns=FALSE, 
-                show_row_names=FALSE, show_heatmap_legend = FALSE, 
+h1 <- Heatmap(hall.ora, cluster_rows=FALSE, cluster_columns=FALSE,
+                show_row_names=FALSE, show_heatmap_legend = FALSE,
                 col=c("white", "black"), column_title="ORA p < 0.05")
-h2 <- Heatmap(hall.padog, cluster_rows=FALSE, cluster_columns=FALSE, 
-                show_row_names=TRUE, show_heatmap_legend = FALSE, 
+h2 <- Heatmap(hall.padog, cluster_rows=FALSE, cluster_columns=FALSE,
+                show_row_names=TRUE, show_heatmap_legend = FALSE,
                 col=c("white", "black"), column_title="PADOG p < 0.05")
 hl <- h1 + h2
+
+pdf("orapadog.pdf", paper = "special", width = 12, height = 8)
 draw(hl, ht_gap = unit(1, "cm"))
+dev.off()
 ```
