@@ -9,6 +9,7 @@ output: html_document
 suppressPackageStartupMessages({
     library(curatedTCGAData)
     library(CNVRanger)
+    library(ComplexHeatmap)
 })
 ```
 
@@ -17,11 +18,18 @@ Load packages:
 ```{r, eval = FALSE}
 library(curatedTCGAData)
 library(CNVRanger)
+library(ComplexHeatmap)
 ```
 
+Get the peaks:
 
 ```{r}
 peaks <- curatedTCGAData(diseaseCode = "*", assays = "GISTIC_Peaks", dry.run = FALSE)
+```
+
+Extract ranges + annotation alteration type (Deletion=1, Amplification=3)
+
+```{r}
 grl <- GRangesList(lapply(experiments(peaks), rowRanges))
 
 for(i in seq_along(grl))
@@ -29,10 +37,67 @@ for(i in seq_along(grl))
     type <- substring(mcols(grl[[i]])$Unique.Name, 1, 1)
     mcols(grl[[i]])$state <- ifelse(type == "A", 3, 1)
 }
-
-pranges <- populationRanges(grl, density=0.15)
-pranges[order(pranges$freq, decreasing=TRUE)]
 ```
+
+Identify recurrent regions across cancer types:
+
+```{r}
+pranges <- populationRanges(grl, density=0.15)
+pranges <- pranges[order(mcols(pranges)[,2:1], decreasing=TRUE)]
+```
+
+Compute fraction of samples altered for each cancer type
+
+```{r}
+getFrac <- function(gis, pranges)
+{
+    # compute diffs
+    frac.altered <- rowMeans(assay(gis) > 0)
+
+    # find overlaps
+    olaps <- findOverlaps(rowRanges(gis), pranges)   
+   
+    # assign frac to pranges 
+    # TODO: deal with duplicated subjects hits, 
+    # ie several individual regions falling in a pancan region
+    # options: largest region, highest diff, wmean 
+    dd <- vector("numeric", length(pranges))
+    dd[subjectHits(olaps)] <- frac.altered[queryHits(olaps)]
+   
+    # sign frac depending on alteration type 
+    type <- substring(rowRanges(gis)$Unique.Name, 1, 1)
+    sig <- ifelse(type == "A", 1, -1)
+    dd[subjectHits(olaps)] <- dd[subjectHits(olaps)] * sig[queryHits(olaps)]
+
+    return(dd)
+}
+frac.mat <- vapply(experiments(peaks), getFrac, numeric(length(pranges)), pranges=pranges)
+```
+
+Heatmap
+
+```{r}
+colnames(frac.mat) <- substring(colnames(frac.mat), 1, 3)
+hp <- list(title_position = "lefttop-rot",# legend_direction = "horizontal", 
+            title="fraction amplified - \n fraction deleted")
+Heatmap(frac.mat, heatmap_legend_param=hp,
+        cluster_rows=FALSE, show_row_names=FALSE, row_split=pranges$type)
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
