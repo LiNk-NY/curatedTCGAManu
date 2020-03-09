@@ -1,15 +1,41 @@
+Type: Package
 Package: curatedTCGAManu
 Title: Presents example analyses using curatedTCGAData, MultiAssayExperiment,
   and TCGAutils
 Version: 0.0.1
-Authors@R: 
-    person(given = "Marcel", family = "Ramos", role = c("aut", "cre"),
-        email = "marcel.ramos@roswellpark.org")
+Authors@R: c(
+    person("Marcel", "Ramos", role = c("aut", "cre"),
+        email = "marcel.ramos@roswellpark.org",
+        comment = c(ORCID = "0000-0002-3242-0582")),
+    person("Ludwig", "Geistlinger", role = "ctb",
+        email = "Ludwig.Geistlinger@sph.cuny.edu"),
+    person("Levi", "Waldron", role = "aut",
+        email = "lwaldron.research@gmail.com")
+    )
 Description: Shows a step by step tutorial for running analyses using the
   MultiAssayExperiment data structure
 License: Artistic-2.0
+BugReports: https://github.com/LiNk-NY/curatedTCGAManu/issues
+Depends: R (>= 3.6.0)
 Imports:
+  BiocFileCache,
+  BiocParallel,
+  ComplexHeatmap,
   curatedTCGAData,
+  EnrichmentBrowser,
+  GenomeInfoDb,
+  ggplot2,
+  ggpubr,
+  GSEBenchmarkeR,
   MultiAssayExperiment,
+  org.Hs.eg.db,
+  RColorBrewer,
+  RTCGAToolbox,
+  survival,
   TCGAbiolinks,
-  TCGAutils
+  TCGAutils,
+  TxDb.Hsapiens.UCSC.hg18.knownGene,
+  TxDb.Hsapiens.UCSC.hg19.knownGene
+VignetteBuilder:
+  knitr
+Encoding: UTF-8

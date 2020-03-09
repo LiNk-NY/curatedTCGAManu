@@ -17,6 +17,7 @@ library(curatedTCGAData)
 library(TCGAutils)
 library(EnrichmentBrowser)
 library(GSEABenchmarkeR)
+library(RTCGAToolbox)
 library(BiocParallel)
 library(ComplexHeatmap)
 library(ggpubr)
@@ -41,7 +42,6 @@ First, download the 'master' branch of RTCGAToolbox.
 
 ```{r}
 ## remotes::install_github("LiNk-NY/RTCGAToolbox")
-library(RTCGAToolbox)
 dl <- c("COAD", "READ", "UCEC")
 redl <- lapply(setNames(dl, dl), function(x) {
     tx <- getFirehoseData(x, RNASeq2GeneNorm = TRUE, clinical = FALSE)
@@ -291,7 +291,7 @@ extractTitle <- function(n)
     paste(spl, collapse = " ")
 }
 go.i2n <- vapply(names(go.gs), extractTitle, character(1))
-names(go.i2n) <- ids 
+names(go.i2n) <- ids
 ```
 
 Execute ORA (has been pre-computed on a cluster, skip this step):
@@ -333,7 +333,7 @@ rownames(go.ora)[4] <- extract(rownames(go.ora)[4], 1:2)
 rownames(go.ora)[10] <- extract(rownames(go.ora)[10], c(1, 3:4))
 rownames(go.ora)[11] <- extract(rownames(go.ora)[11], 1:2)
 rownames(go.ora)[15] <- extract(rownames(go.ora)[15], 1:5)
- 
+
 rownames(go.padog) <- rownames(go.ora)
 
 h1 <- Heatmap(go.ora, cluster_rows=FALSE, cluster_columns=FALSE,

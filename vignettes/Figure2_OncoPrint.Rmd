@@ -16,7 +16,9 @@ library(curatedTCGAData)
 library(TCGAutils)
 library(ComplexHeatmap)
 library(RColorBrewer)
+library(TxDb.Hsapiens.UCSC.hg18.knownGene)
 library(TxDb.Hsapiens.UCSC.hg19.knownGene)
+library(BiocFileCache)
 library(org.Hs.eg.db)
 library(GenomeInfoDb)
 ```
@@ -29,14 +31,20 @@ sampleTables(pancanmut)
 pancanmut <- TCGAprimaryTumors(pancanmut)
 
 datafolder <- "~/data"
-# save(pancanmut, file = file.path(datafolder, "primarypancanmutations.rda"))
+```
+
+Checkpoint
+
+```{r,eval=FALSE}
+save(pancanmut, file = file.path(datafolder, "primarypancanmutations.rda"))
 load(file.path(datafolder, "primarypancanmutations.rda"))
 ```
+
+32 types of cancer -- MESO does not have a mutation dataset
 
 ```{r}
 mutnames <-
     grep(glob2rx("*_Mutation-*"), names(pancanmut), value = TRUE)
-## 32 types of cancer MESO does not have a mutation dataset?
 
 mutlist <- experiments(pancanmut)
 
@@ -69,14 +77,18 @@ varikeep <- muttable / sum(muttable) > 0.001
 cbind.data.frame(muttable, keep = varikeep, row.names = NULL)
 validvariants <- names(muttable)[varikeep]
 validvariants <- setNames(validvariants, validvariants)
-# save(validvariants, file = file.path(datafolder, "validvariants.rda"))
+```
+
+Checkpoint
+
+```{r,eval=FALSE}
+save(validvariants, file = file.path(datafolder, "validvariants.rda"))
 load(file.path(datafolder, "validvariants.rda"))
 ```
 
-LiftOver for Hg18 genomes
+LiftOver for hg18 genomes
 
 ```{r}
-library(BiocFileCache)
 lifturl <-
 "http://hgdownload.cse.ucsc.edu/goldenpath/hg18/liftOver/hg18ToHg19.over.chain.gz"
 bfc <- BiocFileCache()
@@ -106,7 +118,6 @@ mutlift <- lapply(mutlist, function(mutassay) {
 ```
 
 ```{r}
-library(TxDb.Hsapiens.UCSC.hg18.knownGene)
 gn18 <- genes(TxDb.Hsapiens.UCSC.hg18.knownGene)
 gn18 <- keepStandardChromosomes(granges(gn18), pruning.mode="coarse")
 seqlevelsStyle(gn18) <- "NCBI"
@@ -115,7 +126,6 @@ names(gn18) <- AnnotationDbi::mapIds(org.Hs.eg.db::org.Hs.eg.db, names(gn18),
 gn18 <- sort(gn18)
 gn18 <- unstrand(gn18)
 
-library(TxDb.Hsapiens.UCSC.hg19.knownGene)
 gn19 <- genes(TxDb.Hsapiens.UCSC.hg19.knownGene)
 gn19 <- keepStandardChromosomes(granges(gn19), pruning.mode="coarse")
 seqlevelsStyle(gn19) <- "NCBI"
@@ -129,9 +139,11 @@ mutlist2 <- lapply(mutlist, function(ragex) {
     seqlevelsStyle(ragex) <- "NCBI"
     ragex
 })
+```
 
-## combine all cancers
+## Combine all cancers
 
+```{r}
 variant_fun <- function(scores, ranges, qranges) {
     as.numeric(any(scores != "Silent"))
 }
@@ -158,9 +170,12 @@ mut4 <- lapply(mut3, function(mutmat) {
     mutmat[allgenes, ]
 })
 
-# save(mut4, file = file.path(datafolder, "mutationspancan.rda"))
-# load(file.path(datafolder, "mutationspancan.rda"))
+```{r, eval=FALSE}
+save(mut4, file = file.path(datafolder, "mutationspancan.rda"))
+load(file.path(datafolder, "mutationspancan.rda"))
+```
 
+```{r}
 mut18 <- mut4[genomut == "hg18"]
 mut19 <- mut4[genomut == "hg19"]
 
@@ -179,10 +194,14 @@ topgenes <- head(sort(allsums, decreasing = TRUE), 25)
 genesoi <- c("CASP8", "CDKN1A", "EP300", "CREBBP", "ARID1A", "ARID2", "KDM6A",
 "TP53", "NF1", "NF2", "CDH1", "APC", "PIK3R1", "IDH1", "IDH2", "GNA11", "GNAQ",
 "GNAS", "EGFR", "ERBB2", "ERBB4", "KRAS", "PIK3CA", "RHOA", "AKT1", "CTNNB1")
+```
 
-# save(genesoi, file = file.path(datafolder, "genesoi.rda"))
-# load(file.path(datafolder, "genesoi.rda"))
+```{r,eval=FALSE}
+save(genesoi, file = file.path(datafolder, "genesoi.rda"))
+load(file.path(datafolder, "genesoi.rda"))
+```
 
+```{r}
 mutlist18 <- mutlist2[genomut == "hg18"]
 mutlist19 <- mutlist2[genomut == "hg19"]
 
@@ -201,7 +220,8 @@ simplify_funs <- lapply(validvariants,
 simpres18 <- lapply(simplify_funs, function(variant_fun) {
     lapply(mutlist18, function(mutmat) {
         gn <- gn18[match(genesoi, names(gn18))]
-        res <- qreduceAssay(mutmat, gn, variant_fun, "Variant_Classification", background = 0)
+        res <- qreduceAssay(mutmat, gn, variant_fun, "Variant_Classification",
+            background = 0)
         rownames(res) <- names(gn)
         res[!is.na(rownames(res)), ]
     })
@@ -212,7 +232,8 @@ simps18 <- lapply(simpres18, function(x) do.call(cbind.data.frame, x))
 simpres19 <- lapply(simplify_funs, function(variant_fun) {
     lapply(mutlist19, function(mutmat) {
         gn <- gn19[match(genesoi, names(gn19))]
-        res <- qreduceAssay(mutmat, gn, variant_fun, "Variant_Classification", background = 0)
+        res <- qreduceAssay(mutmat, gn, variant_fun, "Variant_Classification",
+            background = 0)
         rownames(res) <- names(gn)
         res[!is.na(rownames(res)), ]
     })
@@ -223,8 +244,14 @@ simps19 <- lapply(simpres19, function(x) do.call(cbind.data.frame, x))
 list_mats <- Map(cbind, simps18, simps19)
 list_mats2 <- lapply(list_mats, data.matrix)
 
-load(file.path(datafolder, "validvariants.rda"))
+```
+Checkpoint - load variants
 
+```{r,eval=FALSE}
+load(file.path(datafolder, "validvariants.rda"))
+```
+
+```{r}
 qualcolors <- RColorBrewer::brewer.pal(n = length(validvariants), 'Set3')
 colors <- setNames(qualcolors, validvariants)
 
@@ -241,24 +268,39 @@ background <- function(x, y, w, h)
     grid::grid.rect(x, y, w, h,
         gp = grid::gpar(fill = "#FFFFFF", col = "#FFFFFF"))
 mutfuns2 <- c(background = background, mutfuns)
+```
 
-# save(list_mats2, file = file.path(datafolder, "list_mats2.rda"))
-# load(file.path(datafolder, "list_mats2.rda"))
+```{r,eval=FALSE}
+save(list_mats2, file = file.path(datafolder, "list_mats2.rda"))
+load(file.path(datafolder, "list_mats2.rda"))
 
+save(mutfuns2, file = file.path(datafolder, "mutfuns2.rda"))
+load(file.path(datafolder, "mutfuns2.rda"))
+```
+
+```{r}
 ll <- IRanges::LogicalList(lapply(list_mats2, function(y) colSums(y) == 0))
 matlog <- do.call(rbind, lapply(ll, unname))
 allzero <- apply(matlog, 2, all)
 list_mats3 <- lapply(list_mats2, function(x) x[, !allzero])
 
-save(mutfuns2, file = file.path(datafolder, "mutfuns2.rda"))
-load(file.path(datafolder, "mutfuns2.rda"))
+ComplexHeatmap::oncoPrint(
+    list_mats3, alter_fun = mutfuns2, col = colors, show_pct = FALSE,
+    use_raster = FALSE
+)
+```
 
+Saving to PDF format
+
+```{r,eval=FALSE}
 # png("PANCAN_Mutations-oncoprint.png", width = 12, height = 8, units = "in",
 #     res = 600)
-pdf("F2_PANCAN_Mutations-oncoprint.pdf", width = 12, height = 8, paper = "special")
+pdf("F2_PANCAN_Mutations-oncoprint.pdf", width = 12, height = 8,
+    paper = "special")
 
 ComplexHeatmap::oncoPrint(
-    list_mats3, alter_fun = mutfuns2, col = colors, show_pct = FALSE, use_raster = FALSE
+    list_mats3, alter_fun = mutfuns2, col = colors, show_pct = FALSE,
+    use_raster = FALSE
 )
 dev.off()
 ```

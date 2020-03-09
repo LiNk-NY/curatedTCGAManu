@@ -1,0 +1,18 @@
+title: curatedTCGAManu
+
+template:
+  bootswatch: flatly
+
+navbar:
+  title: ~
+  type: default
+  left:
+    - text: Articles
+      menu:
+      - text: PanCan OncoPrint
+        href: articles/Figure2_OncoPrint.html
+      - text: PanCan DE & GSEA
+        href: articles/Figures3n4_GSEA_PanCan.html
+      - text: Example Multi-omic Plots
+        href: articles/Figures5-6-S4.html
+

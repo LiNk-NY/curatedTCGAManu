@@ -1,0 +1,154 @@
+---
+output: github_document
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  cache = TRUE,
+  out.width = "100%"
+)
+```
+
+# curatedTCGAManu
+
+## Multi-omic integration of public oncology databases in Bioconductor
+
+This repository contains scripts and datasets for the
+curatedTCGAData manuscript.
+
+GitHub Repository: https://doi.org/XXX
+
+## Overview
+
+We provide several examples to demonstrate the powerful and flexible analysis
+environment provided. These analyses, previously only achievable through a
+significant investment of time and bioinformatic training, become straight-
+forward analysis exercises provided as vignettes.
+
+## Key Points
+
+* Key objective: To provide flexible, integrated multi-omic representations
+of public oncology databases in R/Bioconductor with grealy reduced data
+management overhead.
+
+* Knowledge generated: Our Bioconductor software packages provide a novel
+approach to lower barriers to analysis and tool development for the TCGA and
+cBioPortal databases.
+
+* Relevance: Our tools provide flexible, programmatic analysis of hundreds of
+fully integrated multi’omic oncology datasets within an ecosystem of multi-omic
+analysis tools.
+
+## Key Packages
+
+* [MultiAssayExperiment](http://waldronlab.io/MultiAssayExperiment/index.html)
+* [curatedTCGAData](https://bioconductor.org/packages/curatedTCGAData)
+* [TCGAutils](https://bioconductor.org/packages/TCGAutils)
+* [cBioPortalData](https://github.com/waldronlab/cBioPortalData)
+* [EnrichmentBrowser](https://bioconductor.org/packages/EnrichmentBrowser)
+* [GSEABenchmarkeR](https://bioconductor.org/packages/GSEABenchmarkeR)
+* [RTCGAToolbox](https://bioconductor.org/packages/RTCGAToolbox)
+
+## Installation
+
+To install Bioconductor, we first install the `BiocManager` package:
+
+```{r,eval=FALSE}
+if (!requireNamespace("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+```
+
+## Loading packages
+
+```{r load,include=TRUE,results="hide",message=FALSE,warning=FALSE}
+library(curatedTCGAData)
+library(cBioPortalData)
+library(TCGAutils)
+library(GenomicDataCommons)
+library(rtracklayer)
+```
+
+_Note_. For clarity, we include `library` commands within the supplemental code
+chunks.
+
+# Supplement Reference
+
+## Figure S1
+
+<a href="https://github.com/waldronlab/schematics/"><img src="https://raw.githubusercontent.com/waldronlab/schematics/master/pngs/TCGAMAEPipelineSchematic.png" width="989" height="1091"/></a>
+
+## Figure S2A
+
+### Example code for installing and downloading TCGA data using curatedTCGAData.
+
+```{r cTDexample}
+if (!requireNamespace("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+
+# BiocManager::install("curatedTCGAData")
+
+library(curatedTCGAData)
+
+## Glioblastoma Multiforme (GBM)
+
+curatedTCGAData(diseaseCode = "GBM", assays = "*", dry.run = FALSE)
+```
+
+## Figure S2B
+### Example cBioPortalData code for downloading TCGA data from cBioPortal.org and via the cBioPortal API
+
+```{r cbioportal}
+## installation
+# BiocManager::install("WaldronLab/cBioPortalData")
+
+library(cBioPortalData)
+
+## https://cbioportal.org/datasets (Bulk data method)
+gbm <- cBioDataPack("gbm_tcga")
+
+## https://cBioPortal.org/api (API method)
+cBio <- cBioPortal()
+cBioPortalData(cBio, studyId = "gbm_tcga", genePanelId = "IMPACT341")
+```
+
+## Figure S2C
+### Example hg19 to hg38 liftover procedure using Bioconductor tools
+
+```{r liftover}
+liftchain <- "http://hgdownload.cse.ucsc.edu/goldenpath/hg19/liftOver/hg19ToHg38.over.chain.gz"
+cloc38 <- file.path(tempdir(), gsub("\\.gz", "", basename(liftchain)))
+dfile <- tempfile(fileext = ".gz")
+download.file(liftchain, dfile)
+R.utils::gunzip(dfile, destname = cloc38, remove = FALSE)
+
+library(rtracklayer)
+chain38 <- suppressMessages(
+    import.chain(cloc38)
+)
+## Note. Run bulk data download example (in S2B) first
+mutations <- gbm[["mutations_extended"]]
+seqlevelsStyle(mutations) <- "UCSC"
+
+ranges38 <- liftOver(rowRanges(mutations), chain38)
+```
+
+## Figure S3
+### Example code for downloading data via GenomicDataCommons and loading with TCGAutils
+
+```{r GDCexample}
+library(TCGAutils)
+library(GenomicDataCommons)
+
+query <- files(legacy = TRUE) %>%
+    filter( ~ cases.project.project_id == "TCGA-COAD" &
+        data_category == "Gene expression" &
+        data_type == "Exon quantification" )
+
+fileids <- manifest(query)$id[1:4]
+exonfiles <- gdcdata(fileids)
+
+makeGRangesListFromExonFiles(exonfiles, nrows = 4)
+```
+

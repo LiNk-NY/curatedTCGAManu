@@ -13,8 +13,11 @@ Load packages:
 ```{r,results="hide",include=TRUE,message=FALSE,warning=FALSE}
 library(MultiAssayExperiment)
 library(curatedTCGAData)
+library(RColorBrewer)
 library(TCGAutils)
 library(survival)
+library(ggplot2)
+library(ggpubr)
 ```
 # Using ACC
 
@@ -79,11 +82,9 @@ and copy number alteration in adrenocortical carcinoma (ACC). An integrative
 representaiton readily allows comparison and correlation of multi-omics experiments.
 
 ```{r}
-library(ggplot2)
 diagvals <- diag(corres)
 diagframe <- data.frame(genename = names(diagvals), value = diagvals)
 
-library(ggpubr)
 jco <- get_palette(palette = "jco", 1)
 
 # png("rnaseq-cn-correl.png", width = 8, height = 6, units = "in", res = 300)
@@ -254,7 +255,6 @@ has.high.cor <- apply(mycors, 2, max, na.rm=TRUE) > 0.5
 mycors <- mycors[has.high.cor, has.high.cor]
 
 # colors
-library(RColorBrewer)
 mycolors <- colorRampPalette(brewer.pal(n = 7, name = "Oranges"))(100)
 
 # png("FS4_pca_correls.png", width = 9, height = 8, units = "in", res = 300)
