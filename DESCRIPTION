@@ -2,7 +2,7 @@ Type: Package
 Package: curatedTCGAManu
 Title: Presents example analyses using curatedTCGAData, MultiAssayExperiment,
   and TCGAutils
-Version: 0.0.1
+Version: 0.0.2
 Authors@R: c(
     person("Marcel", "Ramos", role = c("aut", "cre"),
         email = "marcel.ramos@roswellpark.org",
