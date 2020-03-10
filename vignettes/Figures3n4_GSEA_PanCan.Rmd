@@ -6,7 +6,7 @@ output: html_document
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = TRUE, cache = TRUE)
 ```
 
 Load packages:
@@ -38,10 +38,9 @@ datasets being produced by RTCGAToolbox.
 Upon further inspection, TCGA provides 'illuminaga' and 'illumina HiSeq'
 datasets.
 
-First, download the 'master' branch of RTCGAToolbox.
+Note. First, download RTCGAToolbox from Bioc-devel.
 
 ```{r}
-## remotes::install_github("LiNk-NY/RTCGAToolbox")
 dl <- c("COAD", "READ", "UCEC")
 redl <- lapply(setNames(dl, dl), function(x) {
     tx <- getFirehoseData(x, RNASeq2GeneNorm = TRUE, clinical = FALSE)
@@ -251,7 +250,9 @@ fcs <- extractFC(exp.list, top.wfcs.genes)
 # pdf("log2fc.pdf", paper = "special", width = 8, height = 12)
 Heatmap(fcs, name="log2FC", show_row_names=TRUE)
 # dev.off()
+```
 
+```{r}
 # Boxplot
 top.wfcs.genes <- names(c(wfcs[wfcs > 0][1:8], wfcs[wfcs < 0][1:8]))
 fcs <- extractFC(exp.list, top.wfcs.genes)
@@ -263,7 +264,12 @@ p <- ggboxplot(df, x = "Var1", y = "value", width = 0.8,
 p <- ggpar(p, x.text.angle=45, palette = "simpsons", legend="none")
 gg <- p + geom_hline(yintercept=0, linetype="dashed", color = "darkgrey") +
     geom_vline(xintercept=8.5, linetype="dashed", color = "darkgrey")
+gg
+```
 
+ggsaving...
+
+```{r,eval=FALSE}
 ggsave("boxplot_pancan.svg", gg, device = "svg")
 
 ## pdf
@@ -302,6 +308,7 @@ res <- runEA(exp.list, methods=c("ora", "padog"),
 ```
 
 Read pre-computed results for ORA and PADOG for GO-BP gene sets
+
 ```{r}
 res <- readResults(data.dir="../data", data.ids=names(exp.list),
                     methods=c("ora", "padog"), type="ranking")
@@ -345,7 +352,12 @@ h2 <- Heatmap(go.padog, cluster_rows=FALSE, cluster_columns=FALSE,
                 col=c("white", "black"), column_title="PADOG p < 0.05",
                 row_names_gp = gpar(fontsize = 11))
 hl <- h1 + h2
+draw(hl, ht_gap = unit(1, "cm"))
+```
 
+Code for saving to PDF:
+
+```{r,eval=FALSE}
 pdf("orapadog.pdf", paper = "special", width = 12, height = 8)
 draw(hl, ht_gap = unit(1, "cm"))
 dev.off()
