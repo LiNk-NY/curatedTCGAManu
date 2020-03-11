@@ -38,13 +38,24 @@ datasets being produced by RTCGAToolbox.
 Upon further inspection, TCGA provides 'illuminaga' and 'illumina HiSeq'
 datasets.
 
-Note. First, download RTCGAToolbox from Bioc-devel.
+Note. First, download RTCGAToolbox from Bioc-devel and obtain correlations
+for samples that are in both platforms in "COAD", "READ", and "UCEC".
 
 ```{r}
 dl <- c("COAD", "READ", "UCEC")
 redl <- lapply(setNames(dl, dl), function(x) {
     tx <- getFirehoseData(x, RNASeq2GeneNorm = TRUE, clinical = FALSE)
     txl <- biocExtract(tx, "RNASeq2GeneNorm")
+    sameSamps <- Reduce(intersect, lapply(txl, colnames))
+
+    # correlation between platforms 'illuminaga' and 'illuminahiseq'
+    message(x)
+    datm <- do.call(cbind.data.frame,
+        lapply(txl, function(g) { assay(g[,sameSamps]) })
+    )
+    if (length(datm))
+        print(cor(datm[,1], datm[,2]))
+
     newassay <- cbind(assay(txl[[1]]), assay(txl[[2]]))
     newassay <- data.matrix(newassay[, !duplicated(colnames(newassay))])
     newmeta <- c(metadata(txl[[1]]), metadata(txl[[2]]))
@@ -57,38 +68,15 @@ exper <- as(redl, "ExperimentList")
 sampleTables(MultiAssayExperiment(exper))
 ```
 
-```{r, eval = FALSE}
-source("../data/ids.R")
-ccids$sample %in% colnames(exper[[1]])
-reids$sample %in% colnames(exper[[2]])
-ceids$sample %in% colnames(exper[[3]])
-```
-
 Create a pseduo clinical DataFrame for new samples
 
 ```{r}
 allSamps <- unlist(colnames(exper))
 clinphone <- DataFrame(patientID = TCGAbarcode(allSamps))
 rownames(clinphone) <- clinphone[["patientID"]]
+sum(duplicated(rownames(clinphone)))
+## [1] 77
 clinphone <- clinphone[!duplicated(rownames(clinphone)), , drop = FALSE]
-```
-
-Check the correlation between platforms 'illuminaga' and 'illuminahiseq':
-
-```{r}
-lapply(1:3, function(i) {
-    dfx <- data.frame(idx = seq(1, 6), place = rep(1:3, each= 2))
-    ind <- dfx[dfx[["place"]] == i, "idx"]
-    sameSamp <- Reduce(intersect, colnames(exper[ind]))
-
-    cor(
-        cbind.data.frame(
-            assay(exper[[ind[1]]][, sameSamp]),
-            assay(exper[[ind[2]]][, sameSamp])
-        )
-    )
-})
-## 0.8698399 for intersecting sample in UCEC
 ```
 
 ```{r}
