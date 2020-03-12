@@ -2,7 +2,7 @@ Type: Package
 Package: curatedTCGAManu
 Title: Presents example analyses using curatedTCGAData, MultiAssayExperiment,
   and TCGAutils
-Version: 0.0.2
+Version: 0.0.3
 Authors@R: c(
     person("Marcel", "Ramos", role = c("aut", "cre"),
         email = "marcel.ramos@roswellpark.org",
@@ -36,6 +36,8 @@ Imports:
   TCGAutils,
   TxDb.Hsapiens.UCSC.hg18.knownGene,
   TxDb.Hsapiens.UCSC.hg19.knownGene
+Suggests:
+  knitr
 VignetteBuilder:
   knitr
 Encoding: UTF-8
