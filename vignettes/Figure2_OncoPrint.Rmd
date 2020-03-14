@@ -69,6 +69,8 @@ mutlist <- lapply(mutlist, function(mutassay) {
 })
 ```
 
+Filter variants that are low in counts
+
 ```{r}
 muttable <- table(unlist(
     lapply(mutlist, function(x) mcols(x)$Variant_Classification)
@@ -86,7 +88,7 @@ save(validvariants, file = file.path(datafolder, "validvariants.rda"))
 load(file.path(datafolder, "validvariants.rda"))
 ```
 
-LiftOver for hg18 genomes
+LiftOver genomes from hg18 to hg19
 
 ```{r}
 lifturl <-
@@ -117,6 +119,8 @@ mutlift <- lapply(mutlist, function(mutassay) {
 })
 ```
 
+Generate references from respective annotation packages
+
 ```{r}
 gn18 <- genes(TxDb.Hsapiens.UCSC.hg18.knownGene)
 gn18 <- keepStandardChromosomes(granges(gn18), pruning.mode="coarse")
@@ -142,6 +146,10 @@ mutlist2 <- lapply(mutlist, function(ragex) {
 ```
 
 ## Combine all cancers
+
+The variant function tallies the number of non-silent mutations.
+We use `qreduceAssay` to perform the reduction and calculation of
+non-silent mutations based on the gene regions in the genome.
 
 ```{r}
 variant_fun <- function(scores, ranges, qranges) {
@@ -169,11 +177,14 @@ genomut <- vapply(mutlist2, function(x) unique(genome(x)), character(1))
 mut4 <- lapply(mut3, function(mutmat) {
     mutmat[allgenes, ]
 })
+```
 
 ```{r, eval=FALSE}
 save(mut4, file = file.path(datafolder, "mutationspancan.rda"))
 load(file.path(datafolder, "mutationspancan.rda"))
 ```
+
+Find the top genes where we get the most non-silent mutations.
 
 ```{r}
 mut18 <- mut4[genomut == "hg18"]
@@ -200,6 +211,10 @@ genesoi <- c("CASP8", "CDKN1A", "EP300", "CREBBP", "ARID1A", "ARID2", "KDM6A",
 save(genesoi, file = file.path(datafolder, "genesoi.rda"))
 load(file.path(datafolder, "genesoi.rda"))
 ```
+
+Generate a list of funcitons that target each mutation variant.
+Use the list of functions to tally up the number of variants
+per gene.
 
 ```{r}
 mutlist18 <- mutlist2[genomut == "hg18"]
@@ -251,6 +266,8 @@ Checkpoint - load variants
 load(file.path(datafolder, "validvariants.rda"))
 ```
 
+Create a list of functions for input for the `ComplexHeatmap` plotting function.
+
 ```{r}
 qualcolors <- RColorBrewer::brewer.pal(n = length(validvariants), 'Set3')
 colors <- setNames(qualcolors, validvariants)
@@ -277,6 +294,8 @@ load(file.path(datafolder, "list_mats2.rda"))
 save(mutfuns2, file = file.path(datafolder, "mutfuns2.rda"))
 load(file.path(datafolder, "mutfuns2.rda"))
 ```
+
+Plot the oncoPrint function:
 
 ```{r}
 ll <- IRanges::LogicalList(lapply(list_mats2, function(y) colSums(y) == 0))

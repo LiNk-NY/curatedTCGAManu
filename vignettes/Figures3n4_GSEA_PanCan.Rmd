@@ -79,6 +79,8 @@ sum(duplicated(rownames(clinphone)))
 clinphone <- clinphone[!duplicated(rownames(clinphone)), , drop = FALSE]
 ```
 
+Combine cancer datasets into one `MultiAssayExperiment`:
+
 ```{r}
 outAssays <- c("COAD_RNASeq2GeneNorm-20160128",
     "READ_RNASeq2GeneNorm-20160128", "UCEC_RNASeq2GeneNorm-20160128")
@@ -98,6 +100,8 @@ Obtain the RNAseq data from `curatedTCGAData`:
 ```{r}
 rnacomp <- curatedTCGAData("*", "RNASeq2*", FALSE)
 ```
+
+Replace above processed datasets in the full RNASeq `MultiAssayExperiment`:
 
 ```{r}
 rnacopy <- rnacomp
@@ -192,7 +196,7 @@ rnacomp6 <- BiocGenerics:::replaceSlots(rnacomp5,
 )
 ```
 
-Share data with collaborators:
+Save point:
 
 ```{r}
 saveRDS(experiments(rnacomp6), file = "pancan_exprs.rds")

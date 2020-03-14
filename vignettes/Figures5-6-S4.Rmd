@@ -54,6 +54,7 @@ acc.mats <- assays(subacc)
 
 
 Log-transform the RNA-seq assay:
+
 ```{r}
 acc.mats[["ACC_RNASeq2GeneNorm-20160128"]] <-
     log2(acc.mats[["ACC_RNASeq2GeneNorm-20160128"]] + 1)
@@ -67,7 +68,6 @@ subacc.list <- lapply(acc.mats, t)
 
 Calculate the correlation between columns in the first matrix and columns in the
 second matrix:
-
 
 ```{r}
 corres <- cor(subacc.list[[1]], subacc.list[[2]])
@@ -222,6 +222,8 @@ getLoadings <- function(x, ncomp=10, dolog=FALSE, center=TRUE, scale.=TRUE) {
 }
 ```
 
+Take only samples that match accross assays:
+
 ```{r}
 acc2 <- intersectColumns(acc_full)
 ```
@@ -233,6 +235,8 @@ mut <- assay(acc2[["ACC_Mutation-20160128"]], i = "Variant_Classification")
 mut <- ifelse(is.na(mut) | mut == "Silent", 0, 1)
 acc2[["ACC_Mutation-20160128"]] <- mut
 ```
+
+Add loadings as a separate assay for each:
 
 ```{r}
 acc2 <- c(acc2,
