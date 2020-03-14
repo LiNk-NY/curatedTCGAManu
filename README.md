@@ -3,8 +3,8 @@
 
 ## Multi-omic integration of public oncology databases in Bioconductor
 
-This repository contains scripts and datasets for the curatedTCGAData
-manuscript.
+This repository contains scripts and datasets for the curatedTCGAData +
+cBioPortalData manuscript.
 
 GitHub Repository: <https://doi.org/XXX>
 
@@ -42,11 +42,20 @@ vignettes.
 
 ## Installation
 
-To install Bioconductor, we first install the `BiocManager` package:
+Until the release of Bioconductor 3.11 (scheduled for April 28, 2020),
+running the code in this repository requires the *devel* version of
+Bioconductor. This can be installed the [traditional
+way](https://bioconductor.org/developers/how-to/useDevel/) or by using
+the [Docker container](https://bioconductor.org/help/docker/).
+
+Additionally until the release of Bioconductor 3.11, cBioPortalData must
+be installed from GitHub as shown in the following code chunk which
+installs all necessary packages either directly or as dependencies. Note
+that this code chunk is not evaluated, because installation only needs
+to be performed once.
 
 ``` r
-if (!requireNamespace("BiocManager", quietly = TRUE))
-    install.packages("BiocManager")
+BiocManager::install(c("waldronlab/cBioPortalData", "LiNk-NY/curatedTCGAManu"))
 ```
 
 ## Loading packages
@@ -83,7 +92,7 @@ library(curatedTCGAData)
 ## Glioblastoma Multiforme (GBM)
 
 curatedTCGAData(diseaseCode = "GBM", assays = "*", dry.run = FALSE)
-#> snapshotDate(): 2020-03-09
+#> snapshotDate(): 2020-03-12
 #> # [truncated...]
 #> loading from cache
 #> A MultiAssayExperiment object of 18 listed
