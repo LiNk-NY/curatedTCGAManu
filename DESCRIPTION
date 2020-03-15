@@ -2,7 +2,8 @@ Type: Package
 Package: curatedTCGAManu
 Title: Presents example analyses using curatedTCGAData, MultiAssayExperiment,
   and TCGAutils
-Version: 0.0.4
+URL: https://github.com/LiNk-NY/curatedTCGAManu
+Version: 0.0.5
 Authors@R: c(
     person("Marcel", "Ramos", role = c("aut", "cre"),
         email = "marcel.ramos@roswellpark.org",
@@ -12,8 +13,8 @@ Authors@R: c(
     person("Levi", "Waldron", role = "aut",
         email = "lwaldron.research@gmail.com")
     )
-Description: Shows a step by step tutorial for running analyses using the
-  MultiAssayExperiment data structure
+Description: This package reproduces all results presented in the manuscript 
+  "Multi-omic integration of public oncology databases in Bioconductor." 
 License: Artistic-2.0
 BugReports: https://github.com/LiNk-NY/curatedTCGAManu/issues
 Depends: R (>= 3.6.0)
@@ -21,6 +22,7 @@ Imports:
   BiocFileCache,
   BiocParallel,
   ComplexHeatmap,
+  pheatmap,
   curatedTCGAData,
   EnrichmentBrowser,
   GenomeInfoDb,
