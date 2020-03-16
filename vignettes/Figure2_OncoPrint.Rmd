@@ -33,7 +33,7 @@ library(GenomeInfoDb)
 # PANCAN Mutations
 
 ```{r,results="hide",include=TRUE,message=FALSE,warning=FALSE, cache=FALSE}
-pancanmut <- curatedTCGAData("*", "Mutation", dry.run = FALSE)
+pancanmut <- curatedTCGAData::curatedTCGAData("*", "Mutation", dry.run = FALSE)
 sampleTables(pancanmut)
 pancanmut <- TCGAprimaryTumors(pancanmut)
 
