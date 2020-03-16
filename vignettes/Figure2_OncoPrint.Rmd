@@ -1,8 +1,15 @@
 ---
 title: "Figure 2 - OncoPrint PANCAN"
 author: "Waldron Lab"
-date: "September 18, 2019"
-output: html_document
+date: "`r format(Sys.time(), '%B %d, %Y')`"
+vignette: >
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteIndexEntry{OncoPrint of PanCancer Data}
+  %\VignetteEncoding{UTF-8}
+output:
+  BiocStyle::html_document:
+    number_sections: yes
+    toc: true
 ---
 
 ```{r setup, include=FALSE}
@@ -30,7 +37,7 @@ pancanmut <- curatedTCGAData("*", "Mutation", dry.run = FALSE)
 sampleTables(pancanmut)
 pancanmut <- TCGAprimaryTumors(pancanmut)
 
-datafolder <- "~/data"
+datafolder <- "../inst/data"
 ```
 
 Checkpoint

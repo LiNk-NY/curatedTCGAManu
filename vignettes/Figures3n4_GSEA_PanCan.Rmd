@@ -1,8 +1,15 @@
 ---
 title: "Figure 3 and 4 - DE / GSEA PanCan"
 author: "Waldron Lab"
-date: "May 10, 2019"
-output: html_document
+date: "`r format(Sys.time(), '%B %d, %Y')`"
+vignette: >
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteIndexEntry{Multi-omic GSEA and PanCan}
+  %\VignetteEncoding{UTF-8}
+output:
+  BiocStyle::html_document:
+    number_sections: yes
+    toc: true
 ---
 
 ```{r setup, include=FALSE}
@@ -198,9 +205,9 @@ rnacomp6 <- BiocGenerics:::replaceSlots(rnacomp5,
 
 Save point:
 
-```{r}
-saveRDS(experiments(rnacomp6), file = "pancan_exprs.rds")
-# r6ex <- loadRDS(file = "pancan_exprs.rds")
+```{r,eval=FALSE}
+saveRDS(experiments(rnacomp6), file = "../inst/data/pancan_exprs.rds")
+r6ex <- loadRDS(file = "../inst/data/pancan_exprs.rds")
 ```
 
 Differential Expression analysis:
@@ -296,13 +303,13 @@ Execute ORA (has been pre-computed on a cluster, skip this step):
 
 ```{r, eval=FALSE}
 res <- runEA(exp.list, methods=c("ora", "padog"),
-                gs=go.gs, perm=c(0, 1000), save2file=TRUE, out.dir="../data")
+                gs=go.gs, perm=c(0, 1000), save2file=TRUE, out.dir="../inst/data")
 ```
 
 Read pre-computed results for ORA and PADOG for GO-BP gene sets
 
 ```{r}
-res <- readResults(data.dir="../data", data.ids=names(exp.list),
+res <- readResults(data.dir="../inst/data", data.ids=names(exp.list),
                     methods=c("ora", "padog"), type="ranking")
 ```
 

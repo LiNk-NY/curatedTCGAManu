@@ -1,8 +1,15 @@
 ---
 title: "Figures 5, 6, and S4"
 author: "Waldron Lab"
-date: "July 23, 2019"
-output: html_document
+date: "`r format(Sys.time(), '%B %d, %Y')`"
+vignette: >
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteIndexEntry{Example Multi-omic Analyses}
+  %\VignetteEncoding{UTF-8}
+output:
+  BiocStyle::html_document:
+    number_sections: yes
+    toc: true
 ---
 
 ```{r setup, include=FALSE}
