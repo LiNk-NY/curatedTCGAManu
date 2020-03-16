@@ -21,6 +21,7 @@ Depends: R (>= 3.6.0)
 Imports:
   BiocFileCache,
   BiocParallel,
+  Cairo,
   ComplexHeatmap,
   pheatmap,
   curatedTCGAData,
