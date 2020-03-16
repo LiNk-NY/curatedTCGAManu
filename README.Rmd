@@ -174,7 +174,7 @@ query <- files(legacy = TRUE) %>%
         data_type == "Exon quantification" )
 
 fileids <- manifest(query)$id[1:4]
-exonfiles <- gdcdata(fileids)
+exonfiles <- gdcdata(fileids, use_cached = FALSE)
 
 makeGRangesListFromExonFiles(exonfiles, nrows = 4)
 ```
