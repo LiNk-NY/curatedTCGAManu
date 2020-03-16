@@ -43,20 +43,39 @@ vignettes.
 ## Installation
 
 Until the release of Bioconductor 3.11 (scheduled for April 28, 2020),
-running the code in this repository requires the *devel* version of
-Bioconductor. This can be installed the [traditional
+it is strongly recommended to use the *devel* version of Bioconductor.
+That version can be installed the [traditional
 way](https://bioconductor.org/developers/how-to/useDevel/) or by using
 the [Docker container](https://bioconductor.org/help/docker/).
 
-Additionally until the release of Bioconductor 3.11, cBioPortalData must
-be installed from GitHub as shown in the following code chunk which
+Additionally until the release of Bioconductor 3.11, `cBioPortalData`
+must be installed from GitHub as shown in the following code chunk which
 installs all necessary packages either directly or as dependencies. Note
 that this code chunk is not evaluated, because installation only needs
 to be performed once.
 
 ``` r
-BiocManager::install(c("waldronlab/cBioPortalData", "LiNk-NY/curatedTCGAManu"))
+BiocManager::install(c("waldronlab/cBioPortalData", "LiNk-NY/curatedTCGAManu")) 
 ```
+
+## Vignette Build
+
+Because of the size of the data, it is recommended that the vignettes be
+built individually. If using RStudio, the user can simply open the
+vignette and press the `knit` button. Otherwise, the package can be
+built completely with vignettes by doing:
+
+``` 
+    R CMD build curatedTCGAManu
+```
+
+in the command line or
+
+``` r
+BiocManager::install("Link-NY/curatedTCGAManu", build_vignettes = TRUE)
+```
+
+in R.
 
 ## Loading packages
 
@@ -92,9 +111,6 @@ library(curatedTCGAData)
 ## Glioblastoma Multiforme (GBM)
 
 curatedTCGAData(diseaseCode = "GBM", assays = "*", dry.run = FALSE)
-#> snapshotDate(): 2020-03-12
-#> # [truncated...]
-#> loading from cache
 #> A MultiAssayExperiment object of 18 listed
 #>  experiments with user-defined names and respective classes.
 #>  Containing an ExperimentList class object of length 18:
@@ -137,16 +153,10 @@ library(cBioPortalData)
 
 ## https://cbioportal.org/datasets (Bulk data method)
 gbm <- cBioDataPack("gbm_tcga")
-#> Study file in cache: gbm_tcga
-#> # [truncated...]
-#> harmonizing input:
-#>   removing 7 colData rownames not in sampleMap 'primary'
 
 ## https://cBioPortal.org/api (API method)
 cBio <- cBioPortal()
 cBioPortalData(cBio, studyId = "gbm_tcga", genePanelId = "IMPACT341")
-#> harmonizing input:
-#>   removing 7 colData rownames not in sampleMap 'primary'
 #> A MultiAssayExperiment object of 13 listed
 #>  experiments with user-defined names and respective classes.
 #>  Containing an ExperimentList class object of length 13:
@@ -244,53 +254,53 @@ makeGRangesListFromExonFiles(exonfiles, nrows = 4)
 #> GRanges object with 4 ranges and 3 metadata columns:
 #>       seqnames      ranges strand | raw_counts median_length_normalized
 #>          <Rle>   <IRanges>  <Rle> |  <numeric>                <numeric>
-#>   [1]     chr1 11874-12227      + |          1                 0.135977
+#>   [1]     chr1 11874-12227      + |          1                0.1359773
 #>   [2]     chr1 12595-12721      + |          2                 0.547619
-#>   [3]     chr1 12613-12721      + |          2                 0.472222
-#>   [4]     chr1 12646-12697      + |          1                 0.529412
-#>            RPKM
-#>       <numeric>
-#>   [1] 0.0228442
-#>   [2] 0.1273517
-#>   [3] 0.1483822
-#>   [4] 0.1555160
+#>   [3]     chr1 12613-12721      + |          2                0.4722222
+#>   [4]     chr1 12646-12697      + |          1                0.5294118
+#>                     RPKM
+#>                <numeric>
+#>   [1] 0.0228441576458164
+#>   [2]     0.127351681994
+#>   [3]  0.148382234983835
+#>   [4]  0.155515996281135
 #>   -------
 #>   seqinfo: 1 sequence from an unspecified genome; no seqlengths
-#>
+#> 
 #> $`TCGA-A6-6782-01A-11R-1839-07`
 #> GRanges object with 4 ranges and 3 metadata columns:
 #>       seqnames      ranges strand | raw_counts median_length_normalized
 #>          <Rle>   <IRanges>  <Rle> |  <numeric>                <numeric>
-#>   [1]     chr1 11874-12227      + |         35                 0.784702
-#>   [2]     chr1 12595-12721      + |          9                 0.873016
-#>   [3]     chr1 12613-12721      + |          9                 0.851852
-#>   [4]     chr1 12646-12697      + |          8                 0.843137
-#>            RPKM
-#>       <numeric>
-#>   [1]  0.691243
-#>   [2]  0.495456
-#>   [3]  0.577274
-#>   [4]  1.075605
+#>   [1]     chr1 11874-12227      + |         35                0.7847025
+#>   [2]     chr1 12595-12721      + |          9                0.8730159
+#>   [3]     chr1 12613-12721      + |          9                0.8518519
+#>   [4]     chr1 12646-12697      + |          8                0.8431373
+#>                    RPKM
+#>               <numeric>
+#>   [1]  0.69124304141909
+#>   [2] 0.495455642285989
+#>   [3] 0.577274005232299
+#>   [4]  1.07560455675762
 #>   -------
 #>   seqinfo: 1 sequence from an unspecified genome; no seqlengths
-#>
+#> 
 #> $`TCGA-AA-3678-01A-01R-0905-07`
 #> GRanges object with 4 ranges and 3 metadata columns:
 #>       seqnames      ranges strand | raw_counts median_length_normalized
 #>          <Rle>   <IRanges>  <Rle> |  <numeric>                <numeric>
-#>   [1]     chr1 11874-12227      + |          4                 0.492918
-#>   [2]     chr1 12595-12721      + |          2                 0.341270
-#>   [3]     chr1 12613-12721      + |          2                 0.398148
+#>   [1]     chr1 11874-12227      + |          4                0.4929178
+#>   [2]     chr1 12595-12721      + |          2                0.3412699
+#>   [3]     chr1 12613-12721      + |          2                0.3981481
 #>   [4]     chr1 12646-12697      + |          2                 0.372549
-#>            RPKM
-#>       <numeric>
-#>   [1]  0.322477
-#>   [2]  0.449436
-#>   [3]  0.523655
-#>   [4]  1.097661
+#>                    RPKM
+#>               <numeric>
+#>   [1] 0.322476823123937
+#>   [2] 0.449436202306589
+#>   [3] 0.523655024705842
+#>   [4]  1.09766149409494
 #>   -------
 #>   seqinfo: 1 sequence from an unspecified genome; no seqlengths
-#>
+#> 
 #> $`TCGA-AA-3955-01A-02R-1022-07`
 #> GRanges object with 4 ranges and 3 metadata columns:
 #>       seqnames      ranges strand | raw_counts median_length_normalized
