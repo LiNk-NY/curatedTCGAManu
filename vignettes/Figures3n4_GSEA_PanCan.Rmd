@@ -18,7 +18,7 @@ knitr::opts_chunk$set(echo = TRUE, cache = TRUE)
 
 Load packages:
 
-```{r, echo = FALSE, warning = FALSE, error = FALSE, results = "hide"}
+```{r,results="hide",include=TRUE,message=FALSE,warning=FALSE}
 library(MultiAssayExperiment)
 library(curatedTCGAData)
 library(TCGAutils)
@@ -48,7 +48,7 @@ datasets.
 Note. First, download RTCGAToolbox from Bioc-devel and obtain correlations
 for samples that are in both platforms in "COAD", "READ", and "UCEC".
 
-```{r}
+```{r,message=FALSE}
 dl <- c("COAD", "READ", "UCEC")
 redl <- lapply(setNames(dl, dl), function(x) {
     tx <- getFirehoseData(x, RNASeq2GeneNorm = TRUE, clinical = FALSE)
@@ -104,8 +104,9 @@ coremae <-
 
 Obtain the RNAseq data from `curatedTCGAData`:
 
-```{r}
+```{r,message=FALSE}
 rnacomp <- curatedTCGAData("*", "RNASeq2*", FALSE)
+rnacomp
 ```
 
 Replace above processed datasets in the full RNASeq `MultiAssayExperiment`:
@@ -185,7 +186,7 @@ table(rnacomp5[[1L]]$GROUP)
 Split, create matched tumors and normals, and then recombine into a
 single `MultiAssayExperiment`:
 
-```{r}
+```{r,message=FALSE}
 matchlist <- lapply(setNames(seq_along(rnacomp5), names(rnacomp5)),
     function(idx) {
         as(splitAssays(rnacomp5[, , idx]), "MatchedAssayExperiment")
@@ -259,7 +260,7 @@ df <- reshape2::melt(fcs)
 medians <- apply(fcs, 1, median, na.rm=TRUE)
 o <- names(sort(medians))
 p <- ggboxplot(df, x = "Var1", y = "value", width = 0.8,
-                ylab="log2 fold change", xlab="", order=o, color="Var1", add ="jitter")
+    ylab="log2 fold change", xlab="", order=o, color="Var1", add ="jitter")
 p <- ggpar(p, x.text.angle=45, palette = "simpsons", legend="none")
 gg <- p + geom_hline(yintercept=0, linetype="dashed", color = "darkgrey") +
     geom_vline(xintercept=8.5, linetype="dashed", color = "darkgrey")
@@ -279,7 +280,7 @@ ggsave("boxplot_pancan.pdf", gg, device = "pdf")
 
 ID mapping
 
-```{r}
+```{r,message=FALSE}
 exp.list <- lapply(exp.list,
     function(se) idMap(se, org="hsa", from="SYMBOL", to="ENTREZID"))
 ```
@@ -303,14 +304,14 @@ Execute ORA (has been pre-computed on a cluster, skip this step):
 
 ```{r, eval=FALSE}
 res <- runEA(exp.list, methods=c("ora", "padog"),
-                gs=go.gs, perm=c(0, 1000), save2file=TRUE, out.dir="../inst/data")
+    gs=go.gs, perm=c(0, 1000), save2file=TRUE, out.dir="../inst/data")
 ```
 
 Read pre-computed results for ORA and PADOG for GO-BP gene sets
 
-```{r}
+```{r,warning=FALSE}
 res <- readResults(data.dir="../inst/data", data.ids=names(exp.list),
-                    methods=c("ora", "padog"), type="ranking")
+    methods=c("ora", "padog"), type="ranking")
 ```
 
 Determine enrichment across datasets:
@@ -343,13 +344,13 @@ rownames(go.ora)[15] <- extract(rownames(go.ora)[15], 1:5)
 rownames(go.padog) <- rownames(go.ora)
 
 h1 <- Heatmap(go.ora, cluster_rows=FALSE, cluster_columns=FALSE,
-                show_row_names=FALSE, show_heatmap_legend = FALSE,
-                col=c("white", "black"), column_title="ORA p < 0.05",
-                row_names_gp = gpar(fontsize = 11))
+    show_row_names=FALSE, show_heatmap_legend = FALSE,
+    col=c("white", "black"), column_title="ORA p < 0.05",
+    row_names_gp = gpar(fontsize = 11))
 h2 <- Heatmap(go.padog, cluster_rows=FALSE, cluster_columns=FALSE,
-                show_row_names=TRUE, show_heatmap_legend = FALSE,
-                col=c("white", "black"), column_title="PADOG p < 0.05",
-                row_names_gp = gpar(fontsize = 11))
+    show_row_names=TRUE, show_heatmap_legend = FALSE,
+    col=c("white", "black"), column_title="PADOG p < 0.05",
+    row_names_gp = gpar(fontsize = 11))
 hl <- h1 + h2
 draw(hl, ht_gap = unit(1, "cm"))
 ```

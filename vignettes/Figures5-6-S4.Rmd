@@ -88,7 +88,7 @@ Histogram of the distribution of Pearson correlation coefficients between RNA-Se
 and copy number alteration in adrenocortical carcinoma (ACC). An integrative
 representaiton readily allows comparison and correlation of multi-omics experiments.
 
-```{r}
+```{r,warning=FALSE}
 diagvals <- diag(corres)
 diagframe <- data.frame(genename = names(diagvals), value = diagvals)
 
@@ -98,7 +98,6 @@ ggplot(diagframe, aes(x = value)) + geom_histogram(color = "black",
     fill = jco, binwidth = 0.082, alpha = 0.25) + theme_bw() +
     xlab(expression(paste("Pearson coefficient (", rho, ")"))) +
     ylab("Frequency")
-
 ```
 
 Code for saving as PDF:
@@ -117,7 +116,7 @@ dev.off()
 
 ### Figure 5: `gghistogram` version
 
-```{r}
+```{r,warning=FALSE}
 jco <- get_palette(palette = "jco", 1)
 
 gghistogram(diagframe, x = "value", color = jco, fill = jco, ylab = "Frequency",
@@ -213,10 +212,11 @@ available on each assay, log-transforming RNA-seq data first.  Using the first
 10 components, calculate Pearson correlation between all scores and plot these
 correlations as a heatmap to identify correlated components across assays.
 
-```{r}
+```{r,message=FALSE}
 acc_full <- curatedTCGAData("ACC",
     assays = c("RNASeq2*", "GISTIC_T*", "RPPA*", "Mutation", "miRNASeqGene"),
     dry.run = FALSE)
+acc_full
 ```
 
 ```{r}
@@ -245,7 +245,7 @@ acc2[["ACC_Mutation-20160128"]] <- mut
 
 Add loadings as a separate assay for each:
 
-```{r}
+```{r,warning=FALSE}
 acc2 <- c(acc2,
     `RNA-Seq` = getLoadings(assays(acc2)[["ACC_RNASeq2GeneNorm-20160128"]],
         dolog=TRUE), mapFrom=1L
