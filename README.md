@@ -321,5 +321,4 @@ makeGRangesListFromExonFiles(exonfiles, nrows = 4)
 
 ### Correlated principal components across experimental assays in adrenocortical carcinoma (ACC)
 
-[Figure
-S4](articles/Figures5-6-S4.html#supplemental-figure-4-identifying-correlated-principal-components)
+[Figure S4](articles/Figures5-6-S4.html#supplemental-figure-4)
