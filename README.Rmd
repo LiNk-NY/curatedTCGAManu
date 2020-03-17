@@ -100,11 +100,33 @@ library(rtracklayer)
 _Note_. For clarity, we include `library` commands within the supplemental code
 chunks.
 
+# Figures
+
+## Figure 1
+
+<a href="https://github.com/waldronlab/schematics/"><img src="https://raw.githubusercontent.com/waldronlab/schematics/master/pngs/F1_curatedTCGAData.png"/></a>
+
+## Figure 2
+
+[Figure 2](articles/Figure2_OncoPrint.html)
+
+## Figures 3 and 4
+
+### Differential Expression and GSEA PanCan
+
+[Figures 3 and 4](articles/Figures3n4_GSEA_PanCan.html)
+
+## Figures 5 and 6
+
+### Example Multi-omic Analyses
+
+[Figures 5 and 6](articles/Figures5-6-S4.html)
+
 # Supplement Reference
 
 ## Figure S1
 
-<a href="https://github.com/waldronlab/schematics/"><img src="https://raw.githubusercontent.com/waldronlab/schematics/master/pngs/TCGAMAEPipelineSchematic.png" width="989" height="1091"/></a>
+<a href="https://github.com/waldronlab/schematics/"><img src="https://raw.githubusercontent.com/waldronlab/schematics/master/pngs/TCGAMAEPipelineSchematic.png"/></a>
 
 ## Figure S2A
 
@@ -179,3 +201,7 @@ exonfiles <- gdcdata(fileids, use_cached = FALSE)
 makeGRangesListFromExonFiles(exonfiles, nrows = 4)
 ```
 
+## Figure S4
+### Correlated principal components across experimental assays in adrenocortical carcinoma (ACC)
+
+[Figure S4](articles/Figures5-6-S4.html#supplemental-figure-4)

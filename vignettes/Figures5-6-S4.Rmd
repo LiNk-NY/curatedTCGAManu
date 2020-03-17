@@ -80,9 +80,10 @@ second matrix:
 corres <- cor(subacc.list[[1]], subacc.list[[2]])
 ```
 
-And finally, create the histograms:
+And finally, create the histogram:
 
 ## Figure 5
+### Histogram of the distribution of Pearson correlation coefficients between gene copy number and RNA-seq gene expression in adrenocortical carcinoma (ACC)
 
 Histogram of the distribution of Pearson correlation coefficients between RNA-Seq
 and copy number alteration in adrenocortical carcinoma (ACC). An integrative
@@ -94,31 +95,6 @@ diagframe <- data.frame(genename = names(diagvals), value = diagvals)
 
 jco <- get_palette(palette = "jco", 1)
 
-ggplot(diagframe, aes(x = value)) + geom_histogram(color = "black",
-    fill = jco, binwidth = 0.082, alpha = 0.25) + theme_bw() +
-    xlab(expression(paste("Pearson coefficient (", rho, ")"))) +
-    ylab("Frequency")
-```
-
-Code for saving as PDF:
-
-```{r,eval=FALSE}
-# png("rnaseq-cn-correl.png", width = 8, height = 6, units = "in", res = 300)
-pdf("rnaseq-cn-correl.pdf", width = 8, height = 6, paper = "special")
-
-ggplot(diagframe, aes(x = value)) + geom_histogram(color = "black",
-    fill = jco, binwidth = 0.082, alpha = 0.25) + theme_bw() +
-    xlab(expression(paste("Pearson coefficient (", rho, ")"))) +
-    ylab("Frequency")
-
-dev.off()
-```
-
-### Figure 5: `gghistogram` version
-
-```{r,warning=FALSE}
-jco <- get_palette(palette = "jco", 1)
-
 gghistogram(diagframe, x = "value", color = jco, fill = jco, ylab = "Frequency",
     xlab = expression(paste("Pearson coefficient (", rho, ")")), alpha = 0.25,
     ggtheme = theme_bw(), rug = TRUE, bins = 45, add = "mean")
@@ -127,7 +103,7 @@ gghistogram(diagframe, x = "value", color = jco, fill = jco, ylab = "Frequency",
 Code for saving as PDF:
 
 ```{r,eval=FALSE}
-# png("rnaseq-cn-correl_ggpubr.png", width = 8, height = 6, units = "in",
+# png("F5_rnaseq-cn-correl_ggpubr.png", width = 8, height = 6, units = "in",
 #    res = 300)
 pdf("F5_rnaseq-cn-correl_ggpubr.pdf", width = 8, height = 6, paper = "special")
 
@@ -142,7 +118,8 @@ dev.off()
 hist(corres[upper.tri(corres)])
 ```
 
-## Figure 6: Violin plots
+## Figure 6
+### Violin plots
 
 Log 2 expression values by copy number alteration for the highly correlated
 SNRPB2 gene in adrenocortical carcinoma tumors. Violin plots show differences in
@@ -199,7 +176,8 @@ ggplot(snpexp, aes(CopyNumber, Log2Exp, fill = CopyNumber)) +
 dev.off()
 ```
 
-## Supplemental Figure 4: Identifying correlated principal components
+## Supplemental Figure 4
+### Identifying correlated principal components
 
 Correlated Principal Components across experimental assays in Adrenocortical
 carcinoma (ACC) from The Cancer Genome Atlas (TCGA). Plot identifies correlated

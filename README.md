@@ -90,11 +90,33 @@ library(rtracklayer)
 *Note*. For clarity, we include `library` commands within the
 supplemental code chunks.
 
+# Figures
+
+## Figure 1
+
+<a href="https://github.com/waldronlab/schematics/"><img src="https://raw.githubusercontent.com/waldronlab/schematics/master/pngs/F1_curatedTCGAData.png"/></a>
+
+## Figure 2
+
+[Figure 2](articles/Figure2_OncoPrint.html)
+
+## Figures 3 and 4
+
+### Differential Expression and GSEA PanCan
+
+[Figures 3 and 4](articles/Figures3n4_GSEA_PanCan.html)
+
+## Figures 5 and 6
+
+### Example Multi-omic Analyses
+
+[Figures 5 and 6](articles/Figures5-6-S4.html)
+
 # Supplement Reference
 
 ## Figure S1
 
-<a href="https://github.com/waldronlab/schematics/"><img src="https://raw.githubusercontent.com/waldronlab/schematics/master/pngs/TCGAMAEPipelineSchematic.png" width="989" height="1091"/></a>
+<a href="https://github.com/waldronlab/schematics/"><img src="https://raw.githubusercontent.com/waldronlab/schematics/master/pngs/TCGAMAEPipelineSchematic.png"/></a>
 
 ## Figure S2A
 
@@ -218,7 +240,7 @@ query <- files(legacy = TRUE) %>%
         data_type == "Exon quantification" )
 
 fileids <- manifest(query)$id[1:4]
-exonfiles <- gdcdata(fileids)
+exonfiles <- gdcdata(fileids, use_cached = FALSE)
 
 makeGRangesListFromExonFiles(exonfiles, nrows = 4)
 #> Parsed with column specification:
@@ -252,69 +274,52 @@ makeGRangesListFromExonFiles(exonfiles, nrows = 4)
 #> GRangesList object of length 4:
 #> $`TCGA-5M-AAT4-01A-11R-A41B-07`
 #> GRanges object with 4 ranges and 3 metadata columns:
-#>       seqnames      ranges strand | raw_counts median_length_normalized
-#>          <Rle>   <IRanges>  <Rle> |  <numeric>                <numeric>
-#>   [1]     chr1 11874-12227      + |          1                0.1359773
-#>   [2]     chr1 12595-12721      + |          2                 0.547619
-#>   [3]     chr1 12613-12721      + |          2                0.4722222
-#>   [4]     chr1 12646-12697      + |          1                0.5294118
-#>                     RPKM
-#>                <numeric>
-#>   [1] 0.0228441576458164
-#>   [2]     0.127351681994
-#>   [3]  0.148382234983835
-#>   [4]  0.155515996281135
+#>       seqnames      ranges strand | raw_counts median_length_normalized               RPKM
+#>          <Rle>   <IRanges>  <Rle> |  <numeric>                <numeric>          <numeric>
+#>   [1]     chr1 11874-12227      + |          1                0.1359773 0.0228441576458164
+#>   [2]     chr1 12595-12721      + |          2                 0.547619     0.127351681994
+#>   [3]     chr1 12613-12721      + |          2                0.4722222  0.148382234983835
+#>   [4]     chr1 12646-12697      + |          1                0.5294118  0.155515996281135
 #>   -------
 #>   seqinfo: 1 sequence from an unspecified genome; no seqlengths
 #> 
 #> $`TCGA-A6-6782-01A-11R-1839-07`
 #> GRanges object with 4 ranges and 3 metadata columns:
-#>       seqnames      ranges strand | raw_counts median_length_normalized
-#>          <Rle>   <IRanges>  <Rle> |  <numeric>                <numeric>
-#>   [1]     chr1 11874-12227      + |         35                0.7847025
-#>   [2]     chr1 12595-12721      + |          9                0.8730159
-#>   [3]     chr1 12613-12721      + |          9                0.8518519
-#>   [4]     chr1 12646-12697      + |          8                0.8431373
-#>                    RPKM
-#>               <numeric>
-#>   [1]  0.69124304141909
-#>   [2] 0.495455642285989
-#>   [3] 0.577274005232299
-#>   [4]  1.07560455675762
+#>       seqnames      ranges strand | raw_counts median_length_normalized              RPKM
+#>          <Rle>   <IRanges>  <Rle> |  <numeric>                <numeric>         <numeric>
+#>   [1]     chr1 11874-12227      + |         35                0.7847025  0.69124304141909
+#>   [2]     chr1 12595-12721      + |          9                0.8730159 0.495455642285989
+#>   [3]     chr1 12613-12721      + |          9                0.8518519 0.577274005232299
+#>   [4]     chr1 12646-12697      + |          8                0.8431373  1.07560455675762
 #>   -------
 #>   seqinfo: 1 sequence from an unspecified genome; no seqlengths
 #> 
 #> $`TCGA-AA-3678-01A-01R-0905-07`
 #> GRanges object with 4 ranges and 3 metadata columns:
-#>       seqnames      ranges strand | raw_counts median_length_normalized
-#>          <Rle>   <IRanges>  <Rle> |  <numeric>                <numeric>
-#>   [1]     chr1 11874-12227      + |          4                0.4929178
-#>   [2]     chr1 12595-12721      + |          2                0.3412699
-#>   [3]     chr1 12613-12721      + |          2                0.3981481
-#>   [4]     chr1 12646-12697      + |          2                 0.372549
-#>                    RPKM
-#>               <numeric>
-#>   [1] 0.322476823123937
-#>   [2] 0.449436202306589
-#>   [3] 0.523655024705842
-#>   [4]  1.09766149409494
+#>       seqnames      ranges strand | raw_counts median_length_normalized              RPKM
+#>          <Rle>   <IRanges>  <Rle> |  <numeric>                <numeric>         <numeric>
+#>   [1]     chr1 11874-12227      + |          4                0.4929178 0.322476823123937
+#>   [2]     chr1 12595-12721      + |          2                0.3412699 0.449436202306589
+#>   [3]     chr1 12613-12721      + |          2                0.3981481 0.523655024705842
+#>   [4]     chr1 12646-12697      + |          2                 0.372549  1.09766149409494
 #>   -------
 #>   seqinfo: 1 sequence from an unspecified genome; no seqlengths
 #> 
 #> $`TCGA-AA-3955-01A-02R-1022-07`
 #> GRanges object with 4 ranges and 3 metadata columns:
-#>       seqnames      ranges strand | raw_counts median_length_normalized
-#>          <Rle>   <IRanges>  <Rle> |  <numeric>                <numeric>
-#>   [1]     chr1 11874-12227      + |          0                        0
-#>   [2]     chr1 12595-12721      + |          0                        0
-#>   [3]     chr1 12613-12721      + |          0                        0
-#>   [4]     chr1 12646-12697      + |          0                        0
-#>            RPKM
-#>       <numeric>
-#>   [1]         0
-#>   [2]         0
-#>   [3]         0
-#>   [4]         0
+#>       seqnames      ranges strand | raw_counts median_length_normalized      RPKM
+#>          <Rle>   <IRanges>  <Rle> |  <numeric>                <numeric> <numeric>
+#>   [1]     chr1 11874-12227      + |          0                        0         0
+#>   [2]     chr1 12595-12721      + |          0                        0         0
+#>   [3]     chr1 12613-12721      + |          0                        0         0
+#>   [4]     chr1 12646-12697      + |          0                        0         0
 #>   -------
 #>   seqinfo: 1 sequence from an unspecified genome; no seqlengths
 ```
+
+## Figure S4
+
+### Correlated principal components across experimental assays in adrenocortical carcinoma (ACC)
+
+[Figure
+S4](articles/Figures5-6-S4.html#supplemental-figure-4-identifying-correlated-principal-components)

@@ -16,7 +16,7 @@ output:
 knitr::opts_chunk$set(echo = TRUE, cache = TRUE)
 ```
 
-Load packages:
+## Dependencies
 
 ```{r,results="hide",include=TRUE,message=FALSE,warning=FALSE}
 library(MultiAssayExperiment)
@@ -75,7 +75,7 @@ exper <- as(redl, "ExperimentList")
 sampleTables(MultiAssayExperiment(exper))
 ```
 
-Create a pseduo clinical DataFrame for new samples
+### Create a pseduo clinical DataFrame for new samples
 
 ```{r}
 allSamps <- unlist(colnames(exper))
@@ -86,7 +86,7 @@ sum(duplicated(rownames(clinphone)))
 clinphone <- clinphone[!duplicated(rownames(clinphone)), , drop = FALSE]
 ```
 
-Combine cancer datasets into one `MultiAssayExperiment`:
+### Combine cancer datasets into one `MultiAssayExperiment`:
 
 ```{r}
 outAssays <- c("COAD_RNASeq2GeneNorm-20160128",
@@ -252,6 +252,9 @@ Heatmap(fcs, name="log2FC", show_row_names=TRUE)
 # dev.off()
 ```
 
+## Figure 3
+### Pan-cancer differential expression analysis
+
 ```{r}
 # Boxplot
 top.wfcs.genes <- names(c(wfcs[wfcs > 0][1:8], wfcs[wfcs < 0][1:8]))
@@ -342,7 +345,12 @@ rownames(go.ora)[11] <- extract(rownames(go.ora)[11], 1:2)
 rownames(go.ora)[15] <- extract(rownames(go.ora)[15], 1:5)
 
 rownames(go.padog) <- rownames(go.ora)
+```
 
+## Figure 4
+### Pan-cancer gene set enrichment analysis
+
+```{r}
 h1 <- Heatmap(go.ora, cluster_rows=FALSE, cluster_columns=FALSE,
     show_row_names=FALSE, show_heatmap_legend = FALSE,
     col=c("white", "black"), column_title="ORA p < 0.05",
