@@ -3,7 +3,7 @@ Package: curatedTCGAManu
 Title: Presents example analyses using curatedTCGAData, MultiAssayExperiment,
   and TCGAutils
 URL: https://github.com/LiNk-NY/curatedTCGAManu
-Version: 0.0.6
+Version: 0.0.7
 Authors@R: c(
     person("Marcel", "Ramos", role = c("aut", "cre"),
         email = "marcel.ramos@roswellpark.org",
