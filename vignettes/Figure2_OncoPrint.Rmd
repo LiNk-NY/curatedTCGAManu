@@ -32,19 +32,25 @@ library(GenomeInfoDb)
 
 # PANCAN Mutations
 
-```{r,results="hide",include=TRUE,message=FALSE,warning=FALSE, cache=FALSE}
+```{r,results="hide",include=TRUE,message=FALSE,warning=FALSE,cache=FALSE}
 pancanmut <- curatedTCGAData::curatedTCGAData("*", "Mutation", dry.run = FALSE)
 sampleTables(pancanmut)
 pancanmut <- TCGAprimaryTumors(pancanmut)
+```
 
+Set a data folder
+
+```{r}
 datafolder <- "../inst/data"
 ```
 
 Checkpoint
 
 ```{r,eval=FALSE}
-save(pancanmut, file = file.path(datafolder, "primarypancanmutations.rda"))
-load(file.path(datafolder, "primarypancanmutations.rda"))
+afile <- file.path(datafolder, "primarypancanmutations.rda")
+if (!file.exists(afile))
+  save(pancanmut, file = afile)
+load(afile)
 ```
 
 32 types of cancer -- MESO does not have a mutation dataset
@@ -90,9 +96,11 @@ validvariants <- setNames(validvariants, validvariants)
 
 Checkpoint
 
-```{r,eval=FALSE}
-save(validvariants, file = file.path(datafolder, "validvariants.rda"))
-load(file.path(datafolder, "validvariants.rda"))
+```{r}
+afile <- file.path(datafolder, "validvariants.rda")
+if (!file.exists(afile))
+  save(validvariants, file = afile)
+load(afile)
 ```
 
 LiftOver genomes from hg18 to hg19
@@ -186,9 +194,11 @@ mut4 <- lapply(mut3, function(mutmat) {
 })
 ```
 
-```{r, eval=FALSE}
-save(mut4, file = file.path(datafolder, "mutationspancan.rda"))
-load(file.path(datafolder, "mutationspancan.rda"))
+```{r,eval=FALSE}
+afile <- file.path(datafolder, "mutationspancan.rda")
+if (!file.exists(afile))
+  save(mut4, file = afile)
+load(afile)
 ```
 
 Find the top genes where we get the most non-silent mutations.
@@ -215,8 +225,10 @@ genesoi <- c("CASP8", "CDKN1A", "EP300", "CREBBP", "ARID1A", "ARID2", "KDM6A",
 ```
 
 ```{r,eval=FALSE}
-save(genesoi, file = file.path(datafolder, "genesoi.rda"))
-load(file.path(datafolder, "genesoi.rda"))
+afile <- file.path(datafolder, "genesoi.rda")
+if (!file.exists(afile))
+  save(genesoi, file = afile)
+load(afile)
 ```
 
 Generate a list of funcitons that target each mutation variant.
@@ -267,6 +279,14 @@ list_mats <- Map(cbind, simps18, simps19)
 list_mats2 <- lapply(list_mats, data.matrix)
 
 ```
+
+```{r,eval=FALSE}
+afile <- file.path(datafolder, "list_mats2.rda")
+if (!file.exists(afile))
+  save(list_mats2, file = afile)
+load(afile)
+```
+
 Checkpoint - load variants
 
 ```{r,eval=FALSE}
@@ -278,7 +298,10 @@ Create a list of functions for input for the `ComplexHeatmap` plotting function.
 ```{r}
 qualcolors <- RColorBrewer::brewer.pal(n = length(validvariants), 'Set3')
 colors <- setNames(qualcolors, validvariants)
+```
 
+
+```{r}
 mutfuns <- lapply(colors, function(couleur) {
     args <- alist(x =, y =, w =, h =)
     args <- as.pairlist(args)
@@ -295,11 +318,10 @@ mutfuns2 <- c(background = background, mutfuns)
 ```
 
 ```{r,eval=FALSE}
-save(list_mats2, file = file.path(datafolder, "list_mats2.rda"))
-load(file.path(datafolder, "list_mats2.rda"))
-
-save(mutfuns2, file = file.path(datafolder, "mutfuns2.rda"))
-load(file.path(datafolder, "mutfuns2.rda"))
+afile <- file.path(datafolder, "mutfuns2.rda")
+if (!file.exists(afile))
+  save(mutfuns2, file = afile)
+load(afile)
 ```
 
 Plot the oncoPrint function:
