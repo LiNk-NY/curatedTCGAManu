@@ -324,10 +324,10 @@ if (!file.exists(afile))
 load(afile)
 ```
 
-Plot the oncoPrint function:
-
 ## Figure 2
 ### OncoPrint plot of selected cancer driver genes frequently mutated across 33 TCGA cancer types
+
+Plot the oncoPrint function:
 
 ```{r}
 ll <- IRanges::LogicalList(lapply(list_mats2, function(y) colSums(y) == 0))
