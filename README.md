@@ -3,10 +3,10 @@
 
 ## Multi-omic integration of public oncology databases in Bioconductor
 
+[![DOI](https://zenodo.org/badge/166464362.svg)](https://zenodo.org/badge/latestdoi/166464362)
+
 This repository contains scripts and datasets for the curatedTCGAData +
 cBioPortalData manuscript.
-
-GitHub Repository: <https://doi.org/XXX>
 
 ## Overview
 
@@ -274,45 +274,69 @@ makeGRangesListFromExonFiles(exonfiles, nrows = 4)
 #> GRangesList object of length 4:
 #> $`TCGA-5M-AAT4-01A-11R-A41B-07`
 #> GRanges object with 4 ranges and 3 metadata columns:
-#>       seqnames      ranges strand | raw_counts median_length_normalized               RPKM
-#>          <Rle>   <IRanges>  <Rle> |  <numeric>                <numeric>          <numeric>
-#>   [1]     chr1 11874-12227      + |          1                0.1359773 0.0228441576458164
-#>   [2]     chr1 12595-12721      + |          2                 0.547619     0.127351681994
-#>   [3]     chr1 12613-12721      + |          2                0.4722222  0.148382234983835
-#>   [4]     chr1 12646-12697      + |          1                0.5294118  0.155515996281135
+#>       seqnames      ranges strand | raw_counts median_length_normalized
+#>          <Rle>   <IRanges>  <Rle> |  <numeric>                <numeric>
+#>   [1]     chr1 11874-12227      + |          1                0.1359773
+#>   [2]     chr1 12595-12721      + |          2                 0.547619
+#>   [3]     chr1 12613-12721      + |          2                0.4722222
+#>   [4]     chr1 12646-12697      + |          1                0.5294118
+#>                     RPKM
+#>                <numeric>
+#>   [1] 0.0228441576458164
+#>   [2]     0.127351681994
+#>   [3]  0.148382234983835
+#>   [4]  0.155515996281135
 #>   -------
 #>   seqinfo: 1 sequence from an unspecified genome; no seqlengths
 #> 
 #> $`TCGA-A6-6782-01A-11R-1839-07`
 #> GRanges object with 4 ranges and 3 metadata columns:
-#>       seqnames      ranges strand | raw_counts median_length_normalized              RPKM
-#>          <Rle>   <IRanges>  <Rle> |  <numeric>                <numeric>         <numeric>
-#>   [1]     chr1 11874-12227      + |         35                0.7847025  0.69124304141909
-#>   [2]     chr1 12595-12721      + |          9                0.8730159 0.495455642285989
-#>   [3]     chr1 12613-12721      + |          9                0.8518519 0.577274005232299
-#>   [4]     chr1 12646-12697      + |          8                0.8431373  1.07560455675762
+#>       seqnames      ranges strand | raw_counts median_length_normalized
+#>          <Rle>   <IRanges>  <Rle> |  <numeric>                <numeric>
+#>   [1]     chr1 11874-12227      + |         35                0.7847025
+#>   [2]     chr1 12595-12721      + |          9                0.8730159
+#>   [3]     chr1 12613-12721      + |          9                0.8518519
+#>   [4]     chr1 12646-12697      + |          8                0.8431373
+#>                    RPKM
+#>               <numeric>
+#>   [1]  0.69124304141909
+#>   [2] 0.495455642285989
+#>   [3] 0.577274005232299
+#>   [4]  1.07560455675762
 #>   -------
 #>   seqinfo: 1 sequence from an unspecified genome; no seqlengths
 #> 
 #> $`TCGA-AA-3678-01A-01R-0905-07`
 #> GRanges object with 4 ranges and 3 metadata columns:
-#>       seqnames      ranges strand | raw_counts median_length_normalized              RPKM
-#>          <Rle>   <IRanges>  <Rle> |  <numeric>                <numeric>         <numeric>
-#>   [1]     chr1 11874-12227      + |          4                0.4929178 0.322476823123937
-#>   [2]     chr1 12595-12721      + |          2                0.3412699 0.449436202306589
-#>   [3]     chr1 12613-12721      + |          2                0.3981481 0.523655024705842
-#>   [4]     chr1 12646-12697      + |          2                 0.372549  1.09766149409494
+#>       seqnames      ranges strand | raw_counts median_length_normalized
+#>          <Rle>   <IRanges>  <Rle> |  <numeric>                <numeric>
+#>   [1]     chr1 11874-12227      + |          4                0.4929178
+#>   [2]     chr1 12595-12721      + |          2                0.3412699
+#>   [3]     chr1 12613-12721      + |          2                0.3981481
+#>   [4]     chr1 12646-12697      + |          2                 0.372549
+#>                    RPKM
+#>               <numeric>
+#>   [1] 0.322476823123937
+#>   [2] 0.449436202306589
+#>   [3] 0.523655024705842
+#>   [4]  1.09766149409494
 #>   -------
 #>   seqinfo: 1 sequence from an unspecified genome; no seqlengths
 #> 
 #> $`TCGA-AA-3955-01A-02R-1022-07`
 #> GRanges object with 4 ranges and 3 metadata columns:
-#>       seqnames      ranges strand | raw_counts median_length_normalized      RPKM
-#>          <Rle>   <IRanges>  <Rle> |  <numeric>                <numeric> <numeric>
-#>   [1]     chr1 11874-12227      + |          0                        0         0
-#>   [2]     chr1 12595-12721      + |          0                        0         0
-#>   [3]     chr1 12613-12721      + |          0                        0         0
-#>   [4]     chr1 12646-12697      + |          0                        0         0
+#>       seqnames      ranges strand | raw_counts median_length_normalized
+#>          <Rle>   <IRanges>  <Rle> |  <numeric>                <numeric>
+#>   [1]     chr1 11874-12227      + |          0                        0
+#>   [2]     chr1 12595-12721      + |          0                        0
+#>   [3]     chr1 12613-12721      + |          0                        0
+#>   [4]     chr1 12646-12697      + |          0                        0
+#>            RPKM
+#>       <numeric>
+#>   [1]         0
+#>   [2]         0
+#>   [3]         0
+#>   [4]         0
 #>   -------
 #>   seqinfo: 1 sequence from an unspecified genome; no seqlengths
 ```
