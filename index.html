@@ -34,7 +34,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">curatedTCGAManu</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.7</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0</span>
       </span>
     </div>
 
@@ -76,8 +76,8 @@
 <div id="multi-omic-integration-of-public-oncology-databases-in-bioconductor" class="section level2">
 <h2 class="hasAnchor">
 <a href="#multi-omic-integration-of-public-oncology-databases-in-bioconductor" class="anchor"></a>Multi-omic integration of public oncology databases in Bioconductor</h2>
+
 <p>This repository contains scripts and datasets for the curatedTCGAData + cBioPortalData manuscript.</p>
-<p>GitHub Repository: <a href="https://doi.org/XXX" class="uri">https://doi.org/XXX</a></p>
 </div>
 <div id="overview" class="section level2">
 <h2 class="hasAnchor">
@@ -333,47 +333,71 @@
 <span id="cb8-41"><a href="#cb8-41"></a><span class="co">#&gt; GRangesList object of length 4:</span></span>
 <span id="cb8-42"><a href="#cb8-42"></a><span class="co">#&gt; $`TCGA-5M-AAT4-01A-11R-A41B-07`</span></span>
 <span id="cb8-43"><a href="#cb8-43"></a><span class="co">#&gt; GRanges object with 4 ranges and 3 metadata columns:</span></span>
-<span id="cb8-44"><a href="#cb8-44"></a><span class="co">#&gt;       seqnames      ranges strand | raw_counts median_length_normalized               RPKM</span></span>
-<span id="cb8-45"><a href="#cb8-45"></a><span class="co">#&gt;          &lt;Rle&gt;   &lt;IRanges&gt;  &lt;Rle&gt; |  &lt;numeric&gt;                &lt;numeric&gt;          &lt;numeric&gt;</span></span>
-<span id="cb8-46"><a href="#cb8-46"></a><span class="co">#&gt;   [1]     chr1 11874-12227      + |          1                0.1359773 0.0228441576458164</span></span>
-<span id="cb8-47"><a href="#cb8-47"></a><span class="co">#&gt;   [2]     chr1 12595-12721      + |          2                 0.547619     0.127351681994</span></span>
-<span id="cb8-48"><a href="#cb8-48"></a><span class="co">#&gt;   [3]     chr1 12613-12721      + |          2                0.4722222  0.148382234983835</span></span>
-<span id="cb8-49"><a href="#cb8-49"></a><span class="co">#&gt;   [4]     chr1 12646-12697      + |          1                0.5294118  0.155515996281135</span></span>
-<span id="cb8-50"><a href="#cb8-50"></a><span class="co">#&gt;   -------</span></span>
-<span id="cb8-51"><a href="#cb8-51"></a><span class="co">#&gt;   seqinfo: 1 sequence from an unspecified genome; no seqlengths</span></span>
-<span id="cb8-52"><a href="#cb8-52"></a><span class="co">#&gt; </span></span>
-<span id="cb8-53"><a href="#cb8-53"></a><span class="co">#&gt; $`TCGA-A6-6782-01A-11R-1839-07`</span></span>
-<span id="cb8-54"><a href="#cb8-54"></a><span class="co">#&gt; GRanges object with 4 ranges and 3 metadata columns:</span></span>
-<span id="cb8-55"><a href="#cb8-55"></a><span class="co">#&gt;       seqnames      ranges strand | raw_counts median_length_normalized              RPKM</span></span>
-<span id="cb8-56"><a href="#cb8-56"></a><span class="co">#&gt;          &lt;Rle&gt;   &lt;IRanges&gt;  &lt;Rle&gt; |  &lt;numeric&gt;                &lt;numeric&gt;         &lt;numeric&gt;</span></span>
-<span id="cb8-57"><a href="#cb8-57"></a><span class="co">#&gt;   [1]     chr1 11874-12227      + |         35                0.7847025  0.69124304141909</span></span>
-<span id="cb8-58"><a href="#cb8-58"></a><span class="co">#&gt;   [2]     chr1 12595-12721      + |          9                0.8730159 0.495455642285989</span></span>
-<span id="cb8-59"><a href="#cb8-59"></a><span class="co">#&gt;   [3]     chr1 12613-12721      + |          9                0.8518519 0.577274005232299</span></span>
-<span id="cb8-60"><a href="#cb8-60"></a><span class="co">#&gt;   [4]     chr1 12646-12697      + |          8                0.8431373  1.07560455675762</span></span>
-<span id="cb8-61"><a href="#cb8-61"></a><span class="co">#&gt;   -------</span></span>
-<span id="cb8-62"><a href="#cb8-62"></a><span class="co">#&gt;   seqinfo: 1 sequence from an unspecified genome; no seqlengths</span></span>
-<span id="cb8-63"><a href="#cb8-63"></a><span class="co">#&gt; </span></span>
-<span id="cb8-64"><a href="#cb8-64"></a><span class="co">#&gt; $`TCGA-AA-3678-01A-01R-0905-07`</span></span>
-<span id="cb8-65"><a href="#cb8-65"></a><span class="co">#&gt; GRanges object with 4 ranges and 3 metadata columns:</span></span>
-<span id="cb8-66"><a href="#cb8-66"></a><span class="co">#&gt;       seqnames      ranges strand | raw_counts median_length_normalized              RPKM</span></span>
-<span id="cb8-67"><a href="#cb8-67"></a><span class="co">#&gt;          &lt;Rle&gt;   &lt;IRanges&gt;  &lt;Rle&gt; |  &lt;numeric&gt;                &lt;numeric&gt;         &lt;numeric&gt;</span></span>
-<span id="cb8-68"><a href="#cb8-68"></a><span class="co">#&gt;   [1]     chr1 11874-12227      + |          4                0.4929178 0.322476823123937</span></span>
-<span id="cb8-69"><a href="#cb8-69"></a><span class="co">#&gt;   [2]     chr1 12595-12721      + |          2                0.3412699 0.449436202306589</span></span>
-<span id="cb8-70"><a href="#cb8-70"></a><span class="co">#&gt;   [3]     chr1 12613-12721      + |          2                0.3981481 0.523655024705842</span></span>
-<span id="cb8-71"><a href="#cb8-71"></a><span class="co">#&gt;   [4]     chr1 12646-12697      + |          2                 0.372549  1.09766149409494</span></span>
-<span id="cb8-72"><a href="#cb8-72"></a><span class="co">#&gt;   -------</span></span>
-<span id="cb8-73"><a href="#cb8-73"></a><span class="co">#&gt;   seqinfo: 1 sequence from an unspecified genome; no seqlengths</span></span>
-<span id="cb8-74"><a href="#cb8-74"></a><span class="co">#&gt; </span></span>
-<span id="cb8-75"><a href="#cb8-75"></a><span class="co">#&gt; $`TCGA-AA-3955-01A-02R-1022-07`</span></span>
-<span id="cb8-76"><a href="#cb8-76"></a><span class="co">#&gt; GRanges object with 4 ranges and 3 metadata columns:</span></span>
-<span id="cb8-77"><a href="#cb8-77"></a><span class="co">#&gt;       seqnames      ranges strand | raw_counts median_length_normalized      RPKM</span></span>
-<span id="cb8-78"><a href="#cb8-78"></a><span class="co">#&gt;          &lt;Rle&gt;   &lt;IRanges&gt;  &lt;Rle&gt; |  &lt;numeric&gt;                &lt;numeric&gt; &lt;numeric&gt;</span></span>
-<span id="cb8-79"><a href="#cb8-79"></a><span class="co">#&gt;   [1]     chr1 11874-12227      + |          0                        0         0</span></span>
-<span id="cb8-80"><a href="#cb8-80"></a><span class="co">#&gt;   [2]     chr1 12595-12721      + |          0                        0         0</span></span>
-<span id="cb8-81"><a href="#cb8-81"></a><span class="co">#&gt;   [3]     chr1 12613-12721      + |          0                        0         0</span></span>
-<span id="cb8-82"><a href="#cb8-82"></a><span class="co">#&gt;   [4]     chr1 12646-12697      + |          0                        0         0</span></span>
-<span id="cb8-83"><a href="#cb8-83"></a><span class="co">#&gt;   -------</span></span>
-<span id="cb8-84"><a href="#cb8-84"></a><span class="co">#&gt;   seqinfo: 1 sequence from an unspecified genome; no seqlengths</span></span></code></pre></div>
+<span id="cb8-44"><a href="#cb8-44"></a><span class="co">#&gt;       seqnames      ranges strand | raw_counts median_length_normalized</span></span>
+<span id="cb8-45"><a href="#cb8-45"></a><span class="co">#&gt;          &lt;Rle&gt;   &lt;IRanges&gt;  &lt;Rle&gt; |  &lt;numeric&gt;                &lt;numeric&gt;</span></span>
+<span id="cb8-46"><a href="#cb8-46"></a><span class="co">#&gt;   [1]     chr1 11874-12227      + |          1                0.1359773</span></span>
+<span id="cb8-47"><a href="#cb8-47"></a><span class="co">#&gt;   [2]     chr1 12595-12721      + |          2                 0.547619</span></span>
+<span id="cb8-48"><a href="#cb8-48"></a><span class="co">#&gt;   [3]     chr1 12613-12721      + |          2                0.4722222</span></span>
+<span id="cb8-49"><a href="#cb8-49"></a><span class="co">#&gt;   [4]     chr1 12646-12697      + |          1                0.5294118</span></span>
+<span id="cb8-50"><a href="#cb8-50"></a><span class="co">#&gt;                     RPKM</span></span>
+<span id="cb8-51"><a href="#cb8-51"></a><span class="co">#&gt;                &lt;numeric&gt;</span></span>
+<span id="cb8-52"><a href="#cb8-52"></a><span class="co">#&gt;   [1] 0.0228441576458164</span></span>
+<span id="cb8-53"><a href="#cb8-53"></a><span class="co">#&gt;   [2]     0.127351681994</span></span>
+<span id="cb8-54"><a href="#cb8-54"></a><span class="co">#&gt;   [3]  0.148382234983835</span></span>
+<span id="cb8-55"><a href="#cb8-55"></a><span class="co">#&gt;   [4]  0.155515996281135</span></span>
+<span id="cb8-56"><a href="#cb8-56"></a><span class="co">#&gt;   -------</span></span>
+<span id="cb8-57"><a href="#cb8-57"></a><span class="co">#&gt;   seqinfo: 1 sequence from an unspecified genome; no seqlengths</span></span>
+<span id="cb8-58"><a href="#cb8-58"></a><span class="co">#&gt; </span></span>
+<span id="cb8-59"><a href="#cb8-59"></a><span class="co">#&gt; $`TCGA-A6-6782-01A-11R-1839-07`</span></span>
+<span id="cb8-60"><a href="#cb8-60"></a><span class="co">#&gt; GRanges object with 4 ranges and 3 metadata columns:</span></span>
+<span id="cb8-61"><a href="#cb8-61"></a><span class="co">#&gt;       seqnames      ranges strand | raw_counts median_length_normalized</span></span>
+<span id="cb8-62"><a href="#cb8-62"></a><span class="co">#&gt;          &lt;Rle&gt;   &lt;IRanges&gt;  &lt;Rle&gt; |  &lt;numeric&gt;                &lt;numeric&gt;</span></span>
+<span id="cb8-63"><a href="#cb8-63"></a><span class="co">#&gt;   [1]     chr1 11874-12227      + |         35                0.7847025</span></span>
+<span id="cb8-64"><a href="#cb8-64"></a><span class="co">#&gt;   [2]     chr1 12595-12721      + |          9                0.8730159</span></span>
+<span id="cb8-65"><a href="#cb8-65"></a><span class="co">#&gt;   [3]     chr1 12613-12721      + |          9                0.8518519</span></span>
+<span id="cb8-66"><a href="#cb8-66"></a><span class="co">#&gt;   [4]     chr1 12646-12697      + |          8                0.8431373</span></span>
+<span id="cb8-67"><a href="#cb8-67"></a><span class="co">#&gt;                    RPKM</span></span>
+<span id="cb8-68"><a href="#cb8-68"></a><span class="co">#&gt;               &lt;numeric&gt;</span></span>
+<span id="cb8-69"><a href="#cb8-69"></a><span class="co">#&gt;   [1]  0.69124304141909</span></span>
+<span id="cb8-70"><a href="#cb8-70"></a><span class="co">#&gt;   [2] 0.495455642285989</span></span>
+<span id="cb8-71"><a href="#cb8-71"></a><span class="co">#&gt;   [3] 0.577274005232299</span></span>
+<span id="cb8-72"><a href="#cb8-72"></a><span class="co">#&gt;   [4]  1.07560455675762</span></span>
+<span id="cb8-73"><a href="#cb8-73"></a><span class="co">#&gt;   -------</span></span>
+<span id="cb8-74"><a href="#cb8-74"></a><span class="co">#&gt;   seqinfo: 1 sequence from an unspecified genome; no seqlengths</span></span>
+<span id="cb8-75"><a href="#cb8-75"></a><span class="co">#&gt; </span></span>
+<span id="cb8-76"><a href="#cb8-76"></a><span class="co">#&gt; $`TCGA-AA-3678-01A-01R-0905-07`</span></span>
+<span id="cb8-77"><a href="#cb8-77"></a><span class="co">#&gt; GRanges object with 4 ranges and 3 metadata columns:</span></span>
+<span id="cb8-78"><a href="#cb8-78"></a><span class="co">#&gt;       seqnames      ranges strand | raw_counts median_length_normalized</span></span>
+<span id="cb8-79"><a href="#cb8-79"></a><span class="co">#&gt;          &lt;Rle&gt;   &lt;IRanges&gt;  &lt;Rle&gt; |  &lt;numeric&gt;                &lt;numeric&gt;</span></span>
+<span id="cb8-80"><a href="#cb8-80"></a><span class="co">#&gt;   [1]     chr1 11874-12227      + |          4                0.4929178</span></span>
+<span id="cb8-81"><a href="#cb8-81"></a><span class="co">#&gt;   [2]     chr1 12595-12721      + |          2                0.3412699</span></span>
+<span id="cb8-82"><a href="#cb8-82"></a><span class="co">#&gt;   [3]     chr1 12613-12721      + |          2                0.3981481</span></span>
+<span id="cb8-83"><a href="#cb8-83"></a><span class="co">#&gt;   [4]     chr1 12646-12697      + |          2                 0.372549</span></span>
+<span id="cb8-84"><a href="#cb8-84"></a><span class="co">#&gt;                    RPKM</span></span>
+<span id="cb8-85"><a href="#cb8-85"></a><span class="co">#&gt;               &lt;numeric&gt;</span></span>
+<span id="cb8-86"><a href="#cb8-86"></a><span class="co">#&gt;   [1] 0.322476823123937</span></span>
+<span id="cb8-87"><a href="#cb8-87"></a><span class="co">#&gt;   [2] 0.449436202306589</span></span>
+<span id="cb8-88"><a href="#cb8-88"></a><span class="co">#&gt;   [3] 0.523655024705842</span></span>
+<span id="cb8-89"><a href="#cb8-89"></a><span class="co">#&gt;   [4]  1.09766149409494</span></span>
+<span id="cb8-90"><a href="#cb8-90"></a><span class="co">#&gt;   -------</span></span>
+<span id="cb8-91"><a href="#cb8-91"></a><span class="co">#&gt;   seqinfo: 1 sequence from an unspecified genome; no seqlengths</span></span>
+<span id="cb8-92"><a href="#cb8-92"></a><span class="co">#&gt; </span></span>
+<span id="cb8-93"><a href="#cb8-93"></a><span class="co">#&gt; $`TCGA-AA-3955-01A-02R-1022-07`</span></span>
+<span id="cb8-94"><a href="#cb8-94"></a><span class="co">#&gt; GRanges object with 4 ranges and 3 metadata columns:</span></span>
+<span id="cb8-95"><a href="#cb8-95"></a><span class="co">#&gt;       seqnames      ranges strand | raw_counts median_length_normalized</span></span>
+<span id="cb8-96"><a href="#cb8-96"></a><span class="co">#&gt;          &lt;Rle&gt;   &lt;IRanges&gt;  &lt;Rle&gt; |  &lt;numeric&gt;                &lt;numeric&gt;</span></span>
+<span id="cb8-97"><a href="#cb8-97"></a><span class="co">#&gt;   [1]     chr1 11874-12227      + |          0                        0</span></span>
+<span id="cb8-98"><a href="#cb8-98"></a><span class="co">#&gt;   [2]     chr1 12595-12721      + |          0                        0</span></span>
+<span id="cb8-99"><a href="#cb8-99"></a><span class="co">#&gt;   [3]     chr1 12613-12721      + |          0                        0</span></span>
+<span id="cb8-100"><a href="#cb8-100"></a><span class="co">#&gt;   [4]     chr1 12646-12697      + |          0                        0</span></span>
+<span id="cb8-101"><a href="#cb8-101"></a><span class="co">#&gt;            RPKM</span></span>
+<span id="cb8-102"><a href="#cb8-102"></a><span class="co">#&gt;       &lt;numeric&gt;</span></span>
+<span id="cb8-103"><a href="#cb8-103"></a><span class="co">#&gt;   [1]         0</span></span>
+<span id="cb8-104"><a href="#cb8-104"></a><span class="co">#&gt;   [2]         0</span></span>
+<span id="cb8-105"><a href="#cb8-105"></a><span class="co">#&gt;   [3]         0</span></span>
+<span id="cb8-106"><a href="#cb8-106"></a><span class="co">#&gt;   [4]         0</span></span>
+<span id="cb8-107"><a href="#cb8-107"></a><span class="co">#&gt;   -------</span></span>
+<span id="cb8-108"><a href="#cb8-108"></a><span class="co">#&gt;   seqinfo: 1 sequence from an unspecified genome; no seqlengths</span></span></code></pre></div>
 </div>
 </div>
 <div id="figure-s4" class="section level2">
@@ -414,7 +438,13 @@
 </ul>
 </div>
 
-  </div>
+  <div class="dev-status">
+<h2>Dev status</h2>
+<ul class="list-unstyled">
+<li><a href="https://zenodo.org/badge/latestdoi/166464362"><img src="https://zenodo.org/badge/166464362.svg" alt="DOI"></a></li>
+</ul>
+</div>
+</div>
 </div>
 
 
