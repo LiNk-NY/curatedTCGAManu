@@ -31,32 +31,30 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">curatedTCGAManu</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.7</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-<li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    Articles
-     
-    <span class="caret"></span>
-  </a>
-  <ul class="dropdown-menu" role="menu">
 <li>
-      <a href="../articles/Figure2_OncoPrint.html">PanCan OncoPrint</a>
-    </li>
-    <li>
-      <a href="../articles/Figures3n4_GSEA_PanCan.html">PanCan DE &amp; GSEA</a>
-    </li>
-    <li>
-      <a href="../articles/Figures5-6-S4.html">Example Multi-omic Plots</a>
-    </li>
-  </ul>
+  <a href="../articles/Figure2_OncoPrint.html">PanCan OncoPrint</a>
+</li>
+<li>
+  <a href="../articles/Figures3n4_GSEA_PanCan.html">PanCan DE &amp; GSEA</a>
+</li>
+<li>
+  <a href="../articles/Figures5-6-S4.html">Multi-omic Plots</a>
 </li>
       </ul>
-<ul class="nav navbar-nav navbar-right"></ul>
+<ul class="nav navbar-nav navbar-right">
+<li>
+  <a href="https://github.com/LiNk-NY/curatedTCGAManu">
+    <span class="fab fa fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
+      </ul>
 </div>
 <!--/.nav-collapse -->
   </div>
@@ -72,22 +70,34 @@
       <h1>Figure 3 and 4 - DE / GSEA PanCan</h1>
                         <h4 class="author">Waldron Lab</h4>
             
-            <h4 class="date">May 10, 2019</h4>
+            <h4 class="date">March 19, 2020</h4>
       
-      
+      <small class="dont-index">Source: <a href="https://github.com/LiNk-NY/curatedTCGAManu/blob/master/vignettes/Figures3n4_GSEA_PanCan.Rmd"><code>vignettes/Figures3n4_GSEA_PanCan.Rmd</code></a></small>
       <div class="hidden name"><code>Figures3n4_GSEA_PanCan.Rmd</code></div>
 
     </div>
 
     
     
-<p>Load packages:</p>
+<div id="dependencies" class="section level2">
+<h2 class="hasAnchor">
+<a href="#dependencies" class="anchor"></a>Dependencies</h2>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(MultiAssayExperiment)</span>
+<span id="cb1-2"><a href="#cb1-2"></a><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(curatedTCGAData)</span>
+<span id="cb1-3"><a href="#cb1-3"></a><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(TCGAutils)</span>
+<span id="cb1-4"><a href="#cb1-4"></a><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(EnrichmentBrowser)</span>
+<span id="cb1-5"><a href="#cb1-5"></a><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(GSEABenchmarkeR)</span>
+<span id="cb1-6"><a href="#cb1-6"></a><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(RTCGAToolbox)</span>
+<span id="cb1-7"><a href="#cb1-7"></a><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(BiocParallel)</span>
+<span id="cb1-8"><a href="#cb1-8"></a><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(ComplexHeatmap)</span>
+<span id="cb1-9"><a href="#cb1-9"></a><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(ggpubr)</span></code></pre></div>
+</div>
 <div id="obtain-acc-data-from-curatedtcgadata" class="section level2">
 <h2 class="hasAnchor">
 <a href="#obtain-acc-data-from-curatedtcgadata" class="anchor"></a>Obtain ACC data from curatedTCGAData:</h2>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw"><a href="https://rdrr.io/r/utils/data.html">data</a></span>(<span class="st">"diseaseCodes"</span>)</span>
-<span id="cb1-2"><a href="#cb1-2"></a><span class="kw"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(avail &lt;-<span class="st"> </span>diseaseCodes[</span>
-<span id="cb1-3"><a href="#cb1-3"></a>    diseaseCodes[[<span class="st">"Available"</span>]] <span class="op">==</span><span class="st"> "Yes"</span>, <span class="st">"Study.Abbreviation"</span>])</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a><span class="kw"><a href="https://rdrr.io/r/utils/data.html">data</a></span>(<span class="st">"diseaseCodes"</span>)</span>
+<span id="cb2-2"><a href="#cb2-2"></a><span class="kw"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(avail &lt;-<span class="st"> </span>diseaseCodes[</span>
+<span id="cb2-3"><a href="#cb2-3"></a>    diseaseCodes[[<span class="st">"Available"</span>]] <span class="op">==</span><span class="st"> "Yes"</span>, <span class="st">"Study.Abbreviation"</span>])</span></code></pre></div>
 <pre><code>## [1] "ACC"  "BLCA" "BRCA" "CESC" "CHOL" "COAD"</code></pre>
 </div>
 <div id="download-and-reshape-data" class="section level2">
@@ -95,71 +105,32 @@
 <a href="#download-and-reshape-data" class="anchor"></a>Download and reshape data</h2>
 <p>Some datasets were missing normals and we suspected that there were different datasets being produced by RTCGAToolbox. Upon further inspection, TCGA provides ‘illuminaga’ and ‘illumina HiSeq’ datasets.</p>
 <p>Note. First, download RTCGAToolbox from Bioc-devel and obtain correlations for samples that are in both platforms in “COAD”, “READ”, and “UCEC”.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a>dl &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"COAD"</span>, <span class="st">"READ"</span>, <span class="st">"UCEC"</span>)</span>
-<span id="cb3-2"><a href="#cb3-2"></a>redl &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span>(<span class="kw"><a href="https://rdrr.io/r/stats/setNames.html">setNames</a></span>(dl, dl), <span class="cf">function</span>(x) {</span>
-<span id="cb3-3"><a href="#cb3-3"></a>    tx &lt;-<span class="st"> </span><span class="kw">getFirehoseData</span>(x, <span class="dt">RNASeq2GeneNorm =</span> <span class="ot">TRUE</span>, <span class="dt">clinical =</span> <span class="ot">FALSE</span>)</span>
-<span id="cb3-4"><a href="#cb3-4"></a>    txl &lt;-<span class="st"> </span><span class="kw">biocExtract</span>(tx, <span class="st">"RNASeq2GeneNorm"</span>)</span>
-<span id="cb3-5"><a href="#cb3-5"></a>    sameSamps &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/funprog.html">Reduce</a></span>(intersect, <span class="kw"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span>(txl, colnames))</span>
-<span id="cb3-6"><a href="#cb3-6"></a></span>
-<span id="cb3-7"><a href="#cb3-7"></a>    <span class="co"># correlation between platforms 'illuminaga' and 'illuminahiseq'</span></span>
-<span id="cb3-8"><a href="#cb3-8"></a>    <span class="kw"><a href="https://rdrr.io/r/base/message.html">message</a></span>(x)</span>
-<span id="cb3-9"><a href="#cb3-9"></a>    datm &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/do.call.html">do.call</a></span>(cbind.data.frame,</span>
-<span id="cb3-10"><a href="#cb3-10"></a>        <span class="kw"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span>(txl, <span class="cf">function</span>(g) { <span class="kw">assay</span>(g[,sameSamps]) })</span>
-<span id="cb3-11"><a href="#cb3-11"></a>    )</span>
-<span id="cb3-12"><a href="#cb3-12"></a>    <span class="cf">if</span> (<span class="kw"><a href="https://rdrr.io/r/base/length.html">length</a></span>(datm))</span>
-<span id="cb3-13"><a href="#cb3-13"></a>        <span class="kw"><a href="https://rdrr.io/r/base/print.html">print</a></span>(<span class="kw"><a href="https://rdrr.io/r/stats/cor.html">cor</a></span>(datm[,<span class="dv">1</span>], datm[,<span class="dv">2</span>]))</span>
-<span id="cb3-14"><a href="#cb3-14"></a></span>
-<span id="cb3-15"><a href="#cb3-15"></a>    newassay &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/cbind.html">cbind</a></span>(<span class="kw">assay</span>(txl[[<span class="dv">1</span>]]), <span class="kw">assay</span>(txl[[<span class="dv">2</span>]]))</span>
-<span id="cb3-16"><a href="#cb3-16"></a>    newassay &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/data.matrix.html">data.matrix</a></span>(newassay[, <span class="op">!</span><span class="kw"><a href="https://rdrr.io/r/base/duplicated.html">duplicated</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span>(newassay))])</span>
-<span id="cb3-17"><a href="#cb3-17"></a>    newmeta &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="kw">metadata</span>(txl[[<span class="dv">1</span>]]), <span class="kw">metadata</span>(txl[[<span class="dv">2</span>]]))</span>
-<span id="cb3-18"><a href="#cb3-18"></a>    newColData &lt;-<span class="st"> </span><span class="kw">DataFrame</span>(<span class="dt">row.names =</span> <span class="kw"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span>(newassay))</span>
-<span id="cb3-19"><a href="#cb3-19"></a>    <span class="kw">SummarizedExperiment</span>(<span class="dt">assays =</span> <span class="kw"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="dt">TPM =</span> newassay),</span>
-<span id="cb3-20"><a href="#cb3-20"></a>        <span class="dt">metadata =</span> newmeta, <span class="dt">colData =</span> newColData)</span>
-<span id="cb3-21"><a href="#cb3-21"></a>    }</span>
-<span id="cb3-22"><a href="#cb3-22"></a>)</span></code></pre></div>
-<pre><code>## gdac.broadinstitute.org_COAD.Merge_rnaseqv2__illuminaga_rnaseqv2__unc_edu__Level_3__RSEM_genes_normalized__data.Level_3.2016012800.0.0.tar.gzgdac.broadinstitute.org_COAD.Merge_rnaseqv2__illuminahiseq_rnaseqv2__unc_edu__Level_3__RSEM_genes_normalized__data.Level_3.2016012800.0.0.tar.gz</code></pre>
-<pre><code>## gdac.broadinstitute.org_COAD.Merge_rnaseqv2__illuminaga_rnaseqv2__unc_edu__Level_3__RSEM_genes_normalized__data.Level_3.2016012800.0.0</code></pre>
-<pre><code>## RNAseq2 data will be imported! This may take a while!</code></pre>
-<pre><code>## Start: 2020-03-11 15:56:04</code></pre>
-<pre><code>## Done: 2020-03-11 15:56:08</code></pre>
-<pre><code>## gdac.broadinstitute.org_COAD.Merge_rnaseqv2__illuminahiseq_rnaseqv2__unc_edu__Level_3__RSEM_genes_normalized__data.Level_3.2016012800.0.0</code></pre>
-<pre><code>## RNAseq2 data will be imported! This may take a while!</code></pre>
-<pre><code>## Start: 2020-03-11 15:56:21</code></pre>
-<pre><code>## Done: 2020-03-11 15:56:27</code></pre>
-<pre><code>## working on: RNASeq2GeneNorm
-## working on: RNASeq2GeneNorm
-## working on: RNASeq2GeneNorm</code></pre>
-<pre><code>## COAD</code></pre>
-<pre><code>## [1] 0.927677</code></pre>
-<pre><code>## gdac.broadinstitute.org_READ.Merge_rnaseqv2__illuminaga_rnaseqv2__unc_edu__Level_3__RSEM_genes_normalized__data.Level_3.2016012800.0.0.tar.gzgdac.broadinstitute.org_READ.Merge_rnaseqv2__illuminahiseq_rnaseqv2__unc_edu__Level_3__RSEM_genes_normalized__data.Level_3.2016012800.0.0.tar.gz</code></pre>
-<pre><code>## gdac.broadinstitute.org_READ.Merge_rnaseqv2__illuminaga_rnaseqv2__unc_edu__Level_3__RSEM_genes_normalized__data.Level_3.2016012800.0.0</code></pre>
-<pre><code>## RNAseq2 data will be imported! This may take a while!</code></pre>
-<pre><code>## Start: 2020-03-11 15:56:42</code></pre>
-<pre><code>## Done: 2020-03-11 15:56:42</code></pre>
-<pre><code>## gdac.broadinstitute.org_READ.Merge_rnaseqv2__illuminahiseq_rnaseqv2__unc_edu__Level_3__RSEM_genes_normalized__data.Level_3.2016012800.0.0</code></pre>
-<pre><code>## RNAseq2 data will be imported! This may take a while!</code></pre>
-<pre><code>## Start: 2020-03-11 15:56:45</code></pre>
-<pre><code>## Done: 2020-03-11 15:56:46</code></pre>
-<pre><code>## working on: RNASeq2GeneNorm
-## working on: RNASeq2GeneNorm
-## working on: RNASeq2GeneNorm</code></pre>
-<pre><code>## READ</code></pre>
-<pre><code>## gdac.broadinstitute.org_UCEC.Merge_rnaseqv2__illuminaga_rnaseqv2__unc_edu__Level_3__RSEM_genes_normalized__data.Level_3.2016012800.0.0.tar.gzgdac.broadinstitute.org_UCEC.Merge_rnaseqv2__illuminahiseq_rnaseqv2__unc_edu__Level_3__RSEM_genes_normalized__data.Level_3.2016012800.0.0.tar.gz</code></pre>
-<pre><code>## gdac.broadinstitute.org_UCEC.Merge_rnaseqv2__illuminaga_rnaseqv2__unc_edu__Level_3__RSEM_genes_normalized__data.Level_3.2016012800.0.0</code></pre>
-<pre><code>## RNAseq2 data will be imported! This may take a while!</code></pre>
-<pre><code>## Start: 2020-03-11 15:56:53</code></pre>
-<pre><code>## Done: 2020-03-11 15:56:57</code></pre>
-<pre><code>## gdac.broadinstitute.org_UCEC.Merge_rnaseqv2__illuminahiseq_rnaseqv2__unc_edu__Level_3__RSEM_genes_normalized__data.Level_3.2016012800.0.0</code></pre>
-<pre><code>## RNAseq2 data will be imported! This may take a while!</code></pre>
-<pre><code>## Start: 2020-03-11 15:57:13</code></pre>
-<pre><code>## Done: 2020-03-11 15:57:15</code></pre>
-<pre><code>## working on: RNASeq2GeneNorm
-## working on: RNASeq2GeneNorm
-## working on: RNASeq2GeneNorm</code></pre>
-<pre><code>## UCEC</code></pre>
-<pre><code>## [1] 0.8698399</code></pre>
-<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1"></a>exper &lt;-<span class="st"> </span><span class="kw">as</span>(redl, <span class="st">"ExperimentList"</span>)</span>
-<span id="cb39-2"><a href="#cb39-2"></a><span class="kw">sampleTables</span>(<span class="kw">MultiAssayExperiment</span>(exper))</span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a>dl &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"COAD"</span>, <span class="st">"READ"</span>, <span class="st">"UCEC"</span>)</span>
+<span id="cb4-2"><a href="#cb4-2"></a>redl &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span>(<span class="kw"><a href="https://rdrr.io/r/stats/setNames.html">setNames</a></span>(dl, dl), <span class="cf">function</span>(x) {</span>
+<span id="cb4-3"><a href="#cb4-3"></a>    tx &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/pkg/RTCGAToolbox/man/getFirehoseData.html">getFirehoseData</a></span>(x, <span class="dt">RNASeq2GeneNorm =</span> <span class="ot">TRUE</span>, <span class="dt">clinical =</span> <span class="ot">FALSE</span>)</span>
+<span id="cb4-4"><a href="#cb4-4"></a>    txl &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/pkg/RTCGAToolbox/man/biocExtract.html">biocExtract</a></span>(tx, <span class="st">"RNASeq2GeneNorm"</span>)</span>
+<span id="cb4-5"><a href="#cb4-5"></a>    sameSamps &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/funprog.html">Reduce</a></span>(intersect, <span class="kw"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span>(txl, colnames))</span>
+<span id="cb4-6"><a href="#cb4-6"></a></span>
+<span id="cb4-7"><a href="#cb4-7"></a>    <span class="co"># correlation between platforms 'illuminaga' and 'illuminahiseq'</span></span>
+<span id="cb4-8"><a href="#cb4-8"></a>    <span class="kw"><a href="https://rdrr.io/r/base/message.html">message</a></span>(x)</span>
+<span id="cb4-9"><a href="#cb4-9"></a>    datm &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/do.call.html">do.call</a></span>(cbind.data.frame,</span>
+<span id="cb4-10"><a href="#cb4-10"></a>        <span class="kw"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span>(txl, <span class="cf">function</span>(g) { <span class="kw">assay</span>(g[,sameSamps]) })</span>
+<span id="cb4-11"><a href="#cb4-11"></a>    )</span>
+<span id="cb4-12"><a href="#cb4-12"></a>    <span class="cf">if</span> (<span class="kw"><a href="https://rdrr.io/r/base/length.html">length</a></span>(datm))</span>
+<span id="cb4-13"><a href="#cb4-13"></a>        <span class="kw"><a href="https://rdrr.io/r/base/print.html">print</a></span>(<span class="kw"><a href="https://rdrr.io/r/stats/cor.html">cor</a></span>(datm[,<span class="dv">1</span>], datm[,<span class="dv">2</span>]))</span>
+<span id="cb4-14"><a href="#cb4-14"></a></span>
+<span id="cb4-15"><a href="#cb4-15"></a>    newassay &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/cbind.html">cbind</a></span>(<span class="kw">assay</span>(txl[[<span class="dv">1</span>]]), <span class="kw">assay</span>(txl[[<span class="dv">2</span>]]))</span>
+<span id="cb4-16"><a href="#cb4-16"></a>    newassay &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/data.matrix.html">data.matrix</a></span>(newassay[, <span class="op">!</span><span class="kw"><a href="https://rdrr.io/r/base/duplicated.html">duplicated</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span>(newassay))])</span>
+<span id="cb4-17"><a href="#cb4-17"></a>    newmeta &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="kw">metadata</span>(txl[[<span class="dv">1</span>]]), <span class="kw">metadata</span>(txl[[<span class="dv">2</span>]]))</span>
+<span id="cb4-18"><a href="#cb4-18"></a>    newColData &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/pkg/MultiAssayExperiment/man/reexports.html">DataFrame</a></span>(<span class="dt">row.names =</span> <span class="kw"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span>(newassay))</span>
+<span id="cb4-19"><a href="#cb4-19"></a>    <span class="kw">SummarizedExperiment</span>(<span class="dt">assays =</span> <span class="kw"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="dt">TPM =</span> newassay),</span>
+<span id="cb4-20"><a href="#cb4-20"></a>        <span class="dt">metadata =</span> newmeta, <span class="dt">colData =</span> newColData)</span>
+<span id="cb4-21"><a href="#cb4-21"></a>    }</span>
+<span id="cb4-22"><a href="#cb4-22"></a>)</span></code></pre></div>
+<pre><code>## [1] 0.927677
+## [1] 0.8698399</code></pre>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a>exper &lt;-<span class="st"> </span><span class="kw">as</span>(redl, <span class="st">"ExperimentList"</span>)</span>
+<span id="cb6-2"><a href="#cb6-2"></a><span class="kw"><a href="https://rdrr.io/pkg/TCGAutils/man/curatedTCGAData-helpers.html">sampleTables</a></span>(<span class="kw"><a href="https://rdrr.io/pkg/MultiAssayExperiment/man/MultiAssayExperiment.html">MultiAssayExperiment</a></span>(exper))</span></code></pre></div>
 <pre><code>## $COAD
 ## 
 ##  01  02  06  11 
@@ -174,437 +145,89 @@
 ## 
 ##  01  02  11 
 ## 545   1  35</code></pre>
-<p>Create a pseduo clinical DataFrame for new samples</p>
-<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1"></a>allSamps &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/unlist.html">unlist</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span>(exper))</span>
-<span id="cb41-2"><a href="#cb41-2"></a>clinphone &lt;-<span class="st"> </span><span class="kw">DataFrame</span>(<span class="dt">patientID =</span> <span class="kw">TCGAbarcode</span>(allSamps))</span>
-<span id="cb41-3"><a href="#cb41-3"></a><span class="kw"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span>(clinphone) &lt;-<span class="st"> </span>clinphone[[<span class="st">"patientID"</span>]]</span>
-<span id="cb41-4"><a href="#cb41-4"></a><span class="kw"><a href="https://rdrr.io/r/base/sum.html">sum</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/duplicated.html">duplicated</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span>(clinphone)))</span></code></pre></div>
+<div id="create-a-pseduo-clinical-dataframe-for-new-samples" class="section level3">
+<h3 class="hasAnchor">
+<a href="#create-a-pseduo-clinical-dataframe-for-new-samples" class="anchor"></a>Create a pseduo clinical DataFrame for new samples</h3>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a>allSamps &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/unlist.html">unlist</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span>(exper))</span>
+<span id="cb8-2"><a href="#cb8-2"></a>clinphone &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/pkg/MultiAssayExperiment/man/reexports.html">DataFrame</a></span>(<span class="dt">patientID =</span> <span class="kw"><a href="https://rdrr.io/pkg/TCGAutils/man/TCGAbarcode.html">TCGAbarcode</a></span>(allSamps))</span>
+<span id="cb8-3"><a href="#cb8-3"></a><span class="kw"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span>(clinphone) &lt;-<span class="st"> </span>clinphone[[<span class="st">"patientID"</span>]]</span>
+<span id="cb8-4"><a href="#cb8-4"></a><span class="kw"><a href="https://rdrr.io/r/base/sum.html">sum</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/duplicated.html">duplicated</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span>(clinphone)))</span></code></pre></div>
 <pre><code>## [1] 77</code></pre>
-<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1"></a><span class="co">## [1] 77</span></span>
-<span id="cb43-2"><a href="#cb43-2"></a>clinphone &lt;-<span class="st"> </span>clinphone[<span class="op">!</span><span class="kw"><a href="https://rdrr.io/r/base/duplicated.html">duplicated</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span>(clinphone)), , drop =<span class="st"> </span><span class="ot">FALSE</span>]</span></code></pre></div>
-<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1"></a>outAssays &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"COAD_RNASeq2GeneNorm-20160128"</span>,</span>
-<span id="cb44-2"><a href="#cb44-2"></a>    <span class="st">"READ_RNASeq2GeneNorm-20160128"</span>, <span class="st">"UCEC_RNASeq2GeneNorm-20160128"</span>)</span>
-<span id="cb44-3"><a href="#cb44-3"></a>core &lt;-<span class="st"> </span>exper[ <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"COAD"</span>, <span class="st">"READ"</span>, <span class="st">"UCEC"</span>) ]</span>
-<span id="cb44-4"><a href="#cb44-4"></a><span class="kw"><a href="https://rdrr.io/r/base/names.html">names</a></span>(core) &lt;-<span class="st"> </span>outAssays</span>
-<span id="cb44-5"><a href="#cb44-5"></a>mapper &lt;-<span class="st"> </span><span class="kw">generateMap</span>(core, clinphone, <span class="dt">idConverter =</span> TCGAbarcode)</span>
-<span id="cb44-6"><a href="#cb44-6"></a>coremae &lt;-</span>
-<span id="cb44-7"><a href="#cb44-7"></a><span class="st">    </span><span class="kw">MultiAssayExperiment</span>(</span>
-<span id="cb44-8"><a href="#cb44-8"></a>        <span class="dt">experiments =</span> core, <span class="dt">sampleMap =</span> mapper, <span class="dt">colData =</span> clinphone</span>
-<span id="cb44-9"><a href="#cb44-9"></a>    )</span></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a><span class="co">## [1] 77</span></span>
+<span id="cb10-2"><a href="#cb10-2"></a>clinphone &lt;-<span class="st"> </span>clinphone[<span class="op">!</span><span class="kw"><a href="https://rdrr.io/r/base/duplicated.html">duplicated</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span>(clinphone)), , drop =<span class="st"> </span><span class="ot">FALSE</span>]</span></code></pre></div>
+</div>
+<div id="combine-cancer-datasets-into-one-multiassayexperiment" class="section level3">
+<h3 class="hasAnchor">
+<a href="#combine-cancer-datasets-into-one-multiassayexperiment" class="anchor"></a>Combine cancer datasets into one <code>MultiAssayExperiment</code>:</h3>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a>outAssays &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"COAD_RNASeq2GeneNorm-20160128"</span>,</span>
+<span id="cb11-2"><a href="#cb11-2"></a>    <span class="st">"READ_RNASeq2GeneNorm-20160128"</span>, <span class="st">"UCEC_RNASeq2GeneNorm-20160128"</span>)</span>
+<span id="cb11-3"><a href="#cb11-3"></a>core &lt;-<span class="st"> </span>exper[ <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"COAD"</span>, <span class="st">"READ"</span>, <span class="st">"UCEC"</span>) ]</span>
+<span id="cb11-4"><a href="#cb11-4"></a><span class="kw"><a href="https://rdrr.io/r/base/names.html">names</a></span>(core) &lt;-<span class="st"> </span>outAssays</span>
+<span id="cb11-5"><a href="#cb11-5"></a>mapper &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/pkg/TCGAutils/man/generateMap.html">generateMap</a></span>(core, clinphone, <span class="dt">idConverter =</span> TCGAbarcode)</span>
+<span id="cb11-6"><a href="#cb11-6"></a>coremae &lt;-</span>
+<span id="cb11-7"><a href="#cb11-7"></a><span class="st">    </span><span class="kw"><a href="https://rdrr.io/pkg/MultiAssayExperiment/man/MultiAssayExperiment.html">MultiAssayExperiment</a></span>(</span>
+<span id="cb11-8"><a href="#cb11-8"></a>        <span class="dt">experiments =</span> core, <span class="dt">sampleMap =</span> mapper, <span class="dt">colData =</span> clinphone</span>
+<span id="cb11-9"><a href="#cb11-9"></a>    )</span></code></pre></div>
+</div>
 </div>
 <div id="pancan-rnaseq2" class="section level2">
 <h2 class="hasAnchor">
 <a href="#pancan-rnaseq2" class="anchor"></a>PanCan RNASeq2*</h2>
 <p>Obtain the RNAseq data from <code>curatedTCGAData</code>:</p>
-<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1"></a>rnacomp &lt;-<span class="st"> </span><span class="kw">curatedTCGAData</span>(<span class="st">"*"</span>, <span class="st">"RNASeq2*"</span>, <span class="ot">FALSE</span>)</span></code></pre></div>
-<pre><code>## snapshotDate(): 2020-03-09</code></pre>
-<pre><code>## Working on: ACC_RNASeq2GeneNorm-20160128</code></pre>
-<pre><code>## see ?curatedTCGAData and browseVignettes('curatedTCGAData') for documentation</code></pre>
-<pre><code>## loading from cache</code></pre>
-<pre><code>## Working on: BLCA_RNASeq2GeneNorm-20160128</code></pre>
-<pre><code>## see ?curatedTCGAData and browseVignettes('curatedTCGAData') for documentation</code></pre>
-<pre><code>## loading from cache</code></pre>
-<pre><code>## Working on: BRCA_RNASeq2GeneNorm-20160128</code></pre>
-<pre><code>## see ?curatedTCGAData and browseVignettes('curatedTCGAData') for documentation</code></pre>
-<pre><code>## loading from cache</code></pre>
-<pre><code>## Working on: CESC_RNASeq2GeneNorm-20160128</code></pre>
-<pre><code>## see ?curatedTCGAData and browseVignettes('curatedTCGAData') for documentation</code></pre>
-<pre><code>## loading from cache</code></pre>
-<pre><code>## Working on: CHOL_RNASeq2GeneNorm-20160128</code></pre>
-<pre><code>## see ?curatedTCGAData and browseVignettes('curatedTCGAData') for documentation</code></pre>
-<pre><code>## loading from cache</code></pre>
-<pre><code>## Working on: COAD_RNASeq2GeneNorm-20160128</code></pre>
-<pre><code>## see ?curatedTCGAData and browseVignettes('curatedTCGAData') for documentation</code></pre>
-<pre><code>## loading from cache</code></pre>
-<pre><code>## Working on: DLBC_RNASeq2GeneNorm-20160128</code></pre>
-<pre><code>## see ?curatedTCGAData and browseVignettes('curatedTCGAData') for documentation</code></pre>
-<pre><code>## loading from cache</code></pre>
-<pre><code>## Working on: ESCA_RNASeq2GeneNorm-20160128</code></pre>
-<pre><code>## see ?curatedTCGAData and browseVignettes('curatedTCGAData') for documentation</code></pre>
-<pre><code>## loading from cache</code></pre>
-<pre><code>## Working on: GBM_RNASeq2GeneNorm-20160128</code></pre>
-<pre><code>## see ?curatedTCGAData and browseVignettes('curatedTCGAData') for documentation</code></pre>
-<pre><code>## loading from cache</code></pre>
-<pre><code>## Working on: HNSC_RNASeq2GeneNorm-20160128</code></pre>
-<pre><code>## see ?curatedTCGAData and browseVignettes('curatedTCGAData') for documentation</code></pre>
-<pre><code>## loading from cache</code></pre>
-<pre><code>## Working on: KICH_RNASeq2GeneNorm-20160128</code></pre>
-<pre><code>## see ?curatedTCGAData and browseVignettes('curatedTCGAData') for documentation</code></pre>
-<pre><code>## loading from cache</code></pre>
-<pre><code>## Working on: KIRC_RNASeq2GeneNorm-20160128</code></pre>
-<pre><code>## see ?curatedTCGAData and browseVignettes('curatedTCGAData') for documentation</code></pre>
-<pre><code>## loading from cache</code></pre>
-<pre><code>## Working on: KIRP_RNASeq2GeneNorm-20160128</code></pre>
-<pre><code>## see ?curatedTCGAData and browseVignettes('curatedTCGAData') for documentation</code></pre>
-<pre><code>## loading from cache</code></pre>
-<pre><code>## Working on: LAML_RNASeq2GeneNorm-20160128</code></pre>
-<pre><code>## see ?curatedTCGAData and browseVignettes('curatedTCGAData') for documentation</code></pre>
-<pre><code>## loading from cache</code></pre>
-<pre><code>## Working on: LGG_RNASeq2GeneNorm-20160128</code></pre>
-<pre><code>## see ?curatedTCGAData and browseVignettes('curatedTCGAData') for documentation</code></pre>
-<pre><code>## loading from cache</code></pre>
-<pre><code>## Working on: LIHC_RNASeq2GeneNorm-20160128</code></pre>
-<pre><code>## see ?curatedTCGAData and browseVignettes('curatedTCGAData') for documentation</code></pre>
-<pre><code>## loading from cache</code></pre>
-<pre><code>## Working on: LUAD_RNASeq2GeneNorm-20160128</code></pre>
-<pre><code>## see ?curatedTCGAData and browseVignettes('curatedTCGAData') for documentation</code></pre>
-<pre><code>## loading from cache</code></pre>
-<pre><code>## Working on: LUSC_RNASeq2GeneNorm-20160128</code></pre>
-<pre><code>## see ?curatedTCGAData and browseVignettes('curatedTCGAData') for documentation</code></pre>
-<pre><code>## loading from cache</code></pre>
-<pre><code>## Working on: MESO_RNASeq2GeneNorm-20160128</code></pre>
-<pre><code>## see ?curatedTCGAData and browseVignettes('curatedTCGAData') for documentation</code></pre>
-<pre><code>## loading from cache</code></pre>
-<pre><code>## Working on: OV_RNASeq2GeneNorm-20160128</code></pre>
-<pre><code>## see ?curatedTCGAData and browseVignettes('curatedTCGAData') for documentation</code></pre>
-<pre><code>## loading from cache</code></pre>
-<pre><code>## Working on: PAAD_RNASeq2GeneNorm-20160128</code></pre>
-<pre><code>## see ?curatedTCGAData and browseVignettes('curatedTCGAData') for documentation</code></pre>
-<pre><code>## loading from cache</code></pre>
-<pre><code>## Working on: PCPG_RNASeq2GeneNorm-20160128</code></pre>
-<pre><code>## see ?curatedTCGAData and browseVignettes('curatedTCGAData') for documentation</code></pre>
-<pre><code>## loading from cache</code></pre>
-<pre><code>## Working on: PRAD_RNASeq2GeneNorm-20160128</code></pre>
-<pre><code>## see ?curatedTCGAData and browseVignettes('curatedTCGAData') for documentation</code></pre>
-<pre><code>## loading from cache</code></pre>
-<pre><code>## Working on: READ_RNASeq2GeneNorm-20160128</code></pre>
-<pre><code>## see ?curatedTCGAData and browseVignettes('curatedTCGAData') for documentation</code></pre>
-<pre><code>## loading from cache</code></pre>
-<pre><code>## Working on: SARC_RNASeq2GeneNorm-20160128</code></pre>
-<pre><code>## see ?curatedTCGAData and browseVignettes('curatedTCGAData') for documentation</code></pre>
-<pre><code>## loading from cache</code></pre>
-<pre><code>## Working on: SKCM_RNASeq2GeneNorm-20160128</code></pre>
-<pre><code>## see ?curatedTCGAData and browseVignettes('curatedTCGAData') for documentation</code></pre>
-<pre><code>## loading from cache</code></pre>
-<pre><code>## Working on: STAD_RNASeq2GeneNorm-20160128</code></pre>
-<pre><code>## see ?curatedTCGAData and browseVignettes('curatedTCGAData') for documentation</code></pre>
-<pre><code>## loading from cache</code></pre>
-<pre><code>## Working on: TGCT_RNASeq2GeneNorm-20160128</code></pre>
-<pre><code>## see ?curatedTCGAData and browseVignettes('curatedTCGAData') for documentation</code></pre>
-<pre><code>## loading from cache</code></pre>
-<pre><code>## Working on: THCA_RNASeq2GeneNorm-20160128</code></pre>
-<pre><code>## see ?curatedTCGAData and browseVignettes('curatedTCGAData') for documentation</code></pre>
-<pre><code>## loading from cache</code></pre>
-<pre><code>## Working on: THYM_RNASeq2GeneNorm-20160128</code></pre>
-<pre><code>## see ?curatedTCGAData and browseVignettes('curatedTCGAData') for documentation</code></pre>
-<pre><code>## loading from cache</code></pre>
-<pre><code>## Working on: UCEC_RNASeq2GeneNorm-20160128</code></pre>
-<pre><code>## see ?curatedTCGAData and browseVignettes('curatedTCGAData') for documentation</code></pre>
-<pre><code>## loading from cache</code></pre>
-<pre><code>## Working on: UCS_RNASeq2GeneNorm-20160128</code></pre>
-<pre><code>## see ?curatedTCGAData and browseVignettes('curatedTCGAData') for documentation</code></pre>
-<pre><code>## loading from cache</code></pre>
-<pre><code>## Working on: UVM_RNASeq2GeneNorm-20160128</code></pre>
-<pre><code>## see ?curatedTCGAData and browseVignettes('curatedTCGAData') for documentation</code></pre>
-<pre><code>## loading from cache</code></pre>
-<pre><code>## Working on: ACC_colData-20160128</code></pre>
-<pre><code>## see ?curatedTCGAData and browseVignettes('curatedTCGAData') for documentation</code></pre>
-<pre><code>## loading from cache</code></pre>
-<pre><code>## Working on: ACC_metadata-20160128</code></pre>
-<pre><code>## see ?curatedTCGAData and browseVignettes('curatedTCGAData') for documentation</code></pre>
-<pre><code>## loading from cache</code></pre>
-<pre><code>## Working on: ACC_sampleMap-20160128</code></pre>
-<pre><code>## see ?curatedTCGAData and browseVignettes('curatedTCGAData') for documentation</code></pre>
-<pre><code>## loading from cache</code></pre>
-<pre><code>## Working on: BLCA_colData-20160128</code></pre>
-<pre><code>## see ?curatedTCGAData and browseVignettes('curatedTCGAData') for documentation</code></pre>
-<pre><code>## loading from cache</code></pre>
-<pre><code>## Working on: BLCA_metadata-20160128</code></pre>
-<pre><code>## see ?curatedTCGAData and browseVignettes('curatedTCGAData') for documentation</code></pre>
-<pre><code>## loading from cache</code></pre>
-<pre><code>## Working on: BLCA_sampleMap-20160128</code></pre>
-<pre><code>## see ?curatedTCGAData and browseVignettes('curatedTCGAData') for documentation</code></pre>
-<pre><code>## loading from cache</code></pre>
-<pre><code>## Working on: BRCA_colData-20160128</code></pre>
-<pre><code>## see ?curatedTCGAData and browseVignettes('curatedTCGAData') for documentation</code></pre>
-<pre><code>## loading from cache</code></pre>
-<pre><code>## Working on: BRCA_metadata-20160128</code></pre>
-<pre><code>## see ?curatedTCGAData and browseVignettes('curatedTCGAData') for documentation</code></pre>
-<pre><code>## loading from cache</code></pre>
-<pre><code>## Working on: BRCA_sampleMap-20160128</code></pre>
-<pre><code>## see ?curatedTCGAData and browseVignettes('curatedTCGAData') for documentation</code></pre>
-<pre><code>## loading from cache</code></pre>
-<pre><code>## Working on: CESC_colData-20160128</code></pre>
-<pre><code>## see ?curatedTCGAData and browseVignettes('curatedTCGAData') for documentation</code></pre>
-<pre><code>## loading from cache</code></pre>
-<pre><code>## Working on: CESC_metadata-20160128</code></pre>
-<pre><code>## see ?curatedTCGAData and browseVignettes('curatedTCGAData') for documentation</code></pre>
-<pre><code>## loading from cache</code></pre>
-<pre><code>## Working on: CESC_sampleMap-20160128</code></pre>
-<pre><code>## see ?curatedTCGAData and browseVignettes('curatedTCGAData') for documentation</code></pre>
-<pre><code>## loading from cache</code></pre>
-<pre><code>## Working on: CHOL_colData-20160128</code></pre>
-<pre><code>## see ?curatedTCGAData and browseVignettes('curatedTCGAData') for documentation</code></pre>
-<pre><code>## loading from cache</code></pre>
-<pre><code>## Working on: CHOL_metadata-20160128</code></pre>
-<pre><code>## see ?curatedTCGAData and browseVignettes('curatedTCGAData') for documentation</code></pre>
-<pre><code>## loading from cache</code></pre>
-<pre><code>## Working on: CHOL_sampleMap-20160128</code></pre>
-<pre><code>## see ?curatedTCGAData and browseVignettes('curatedTCGAData') for documentation</code></pre>
-<pre><code>## loading from cache</code></pre>
-<pre><code>## Working on: COAD_colData-20160128</code></pre>
-<pre><code>## see ?curatedTCGAData and browseVignettes('curatedTCGAData') for documentation</code></pre>
-<pre><code>## loading from cache</code></pre>
-<pre><code>## Working on: COAD_metadata-20160128</code></pre>
-<pre><code>## see ?curatedTCGAData and browseVignettes('curatedTCGAData') for documentation</code></pre>
-<pre><code>## loading from cache</code></pre>
-<pre><code>## Working on: COAD_sampleMap-20160128</code></pre>
-<pre><code>## see ?curatedTCGAData and browseVignettes('curatedTCGAData') for documentation</code></pre>
-<pre><code>## loading from cache</code></pre>
-<pre><code>## Working on: DLBC_colData-20160128</code></pre>
-<pre><code>## see ?curatedTCGAData and browseVignettes('curatedTCGAData') for documentation</code></pre>
-<pre><code>## loading from cache</code></pre>
-<pre><code>## Working on: DLBC_metadata-20160128</code></pre>
-<pre><code>## see ?curatedTCGAData and browseVignettes('curatedTCGAData') for documentation</code></pre>
-<pre><code>## loading from cache</code></pre>
-<pre><code>## Working on: DLBC_sampleMap-20160128</code></pre>
-<pre><code>## see ?curatedTCGAData and browseVignettes('curatedTCGAData') for documentation</code></pre>
-<pre><code>## loading from cache</code></pre>
-<pre><code>## Working on: ESCA_colData-20160128</code></pre>
-<pre><code>## see ?curatedTCGAData and browseVignettes('curatedTCGAData') for documentation</code></pre>
-<pre><code>## loading from cache</code></pre>
-<pre><code>## Working on: ESCA_metadata-20160128</code></pre>
-<pre><code>## see ?curatedTCGAData and browseVignettes('curatedTCGAData') for documentation</code></pre>
-<pre><code>## loading from cache</code></pre>
-<pre><code>## Working on: ESCA_sampleMap-20160128</code></pre>
-<pre><code>## see ?curatedTCGAData and browseVignettes('curatedTCGAData') for documentation</code></pre>
-<pre><code>## loading from cache</code></pre>
-<pre><code>## Working on: GBM_colData-20160128</code></pre>
-<pre><code>## see ?curatedTCGAData and browseVignettes('curatedTCGAData') for documentation</code></pre>
-<pre><code>## loading from cache</code></pre>
-<pre><code>## Working on: GBM_metadata-20160128</code></pre>
-<pre><code>## see ?curatedTCGAData and browseVignettes('curatedTCGAData') for documentation</code></pre>
-<pre><code>## loading from cache</code></pre>
-<pre><code>## Working on: GBM_sampleMap-20160128</code></pre>
-<pre><code>## see ?curatedTCGAData and browseVignettes('curatedTCGAData') for documentation</code></pre>
-<pre><code>## loading from cache</code></pre>
-<pre><code>## Working on: HNSC_colData-20160128</code></pre>
-<pre><code>## see ?curatedTCGAData and browseVignettes('curatedTCGAData') for documentation</code></pre>
-<pre><code>## loading from cache</code></pre>
-<pre><code>## Working on: HNSC_metadata-20160128</code></pre>
-<pre><code>## see ?curatedTCGAData and browseVignettes('curatedTCGAData') for documentation</code></pre>
-<pre><code>## loading from cache</code></pre>
-<pre><code>## Working on: HNSC_sampleMap-20160128</code></pre>
-<pre><code>## see ?curatedTCGAData and browseVignettes('curatedTCGAData') for documentation</code></pre>
-<pre><code>## loading from cache</code></pre>
-<pre><code>## Working on: KICH_colData-20160128</code></pre>
-<pre><code>## see ?curatedTCGAData and browseVignettes('curatedTCGAData') for documentation</code></pre>
-<pre><code>## loading from cache</code></pre>
-<pre><code>## Working on: KICH_metadata-20160128</code></pre>
-<pre><code>## see ?curatedTCGAData and browseVignettes('curatedTCGAData') for documentation</code></pre>
-<pre><code>## loading from cache</code></pre>
-<pre><code>## Working on: KICH_sampleMap-20160128</code></pre>
-<pre><code>## see ?curatedTCGAData and browseVignettes('curatedTCGAData') for documentation</code></pre>
-<pre><code>## loading from cache</code></pre>
-<pre><code>## Working on: KIRC_colData-20160128</code></pre>
-<pre><code>## see ?curatedTCGAData and browseVignettes('curatedTCGAData') for documentation</code></pre>
-<pre><code>## loading from cache</code></pre>
-<pre><code>## Working on: KIRC_metadata-20160128</code></pre>
-<pre><code>## see ?curatedTCGAData and browseVignettes('curatedTCGAData') for documentation</code></pre>
-<pre><code>## loading from cache</code></pre>
-<pre><code>## Working on: KIRC_sampleMap-20160128</code></pre>
-<pre><code>## see ?curatedTCGAData and browseVignettes('curatedTCGAData') for documentation</code></pre>
-<pre><code>## loading from cache</code></pre>
-<pre><code>## Working on: KIRP_colData-20160128</code></pre>
-<pre><code>## see ?curatedTCGAData and browseVignettes('curatedTCGAData') for documentation</code></pre>
-<pre><code>## loading from cache</code></pre>
-<pre><code>## Working on: KIRP_metadata-20160128</code></pre>
-<pre><code>## see ?curatedTCGAData and browseVignettes('curatedTCGAData') for documentation</code></pre>
-<pre><code>## loading from cache</code></pre>
-<pre><code>## Working on: KIRP_sampleMap-20160128</code></pre>
-<pre><code>## see ?curatedTCGAData and browseVignettes('curatedTCGAData') for documentation</code></pre>
-<pre><code>## loading from cache</code></pre>
-<pre><code>## Working on: LAML_colData-20160128</code></pre>
-<pre><code>## see ?curatedTCGAData and browseVignettes('curatedTCGAData') for documentation</code></pre>
-<pre><code>## loading from cache</code></pre>
-<pre><code>## Working on: LAML_metadata-20160128</code></pre>
-<pre><code>## see ?curatedTCGAData and browseVignettes('curatedTCGAData') for documentation</code></pre>
-<pre><code>## loading from cache</code></pre>
-<pre><code>## Working on: LAML_sampleMap-20160128</code></pre>
-<pre><code>## see ?curatedTCGAData and browseVignettes('curatedTCGAData') for documentation</code></pre>
-<pre><code>## loading from cache</code></pre>
-<pre><code>## Working on: LGG_colData-20160128</code></pre>
-<pre><code>## see ?curatedTCGAData and browseVignettes('curatedTCGAData') for documentation</code></pre>
-<pre><code>## loading from cache</code></pre>
-<pre><code>## Working on: LGG_metadata-20160128</code></pre>
-<pre><code>## see ?curatedTCGAData and browseVignettes('curatedTCGAData') for documentation</code></pre>
-<pre><code>## loading from cache</code></pre>
-<pre><code>## Working on: LGG_sampleMap-20160128</code></pre>
-<pre><code>## see ?curatedTCGAData and browseVignettes('curatedTCGAData') for documentation</code></pre>
-<pre><code>## loading from cache</code></pre>
-<pre><code>## Working on: LIHC_colData-20160128</code></pre>
-<pre><code>## see ?curatedTCGAData and browseVignettes('curatedTCGAData') for documentation</code></pre>
-<pre><code>## loading from cache</code></pre>
-<pre><code>## Working on: LIHC_metadata-20160128</code></pre>
-<pre><code>## see ?curatedTCGAData and browseVignettes('curatedTCGAData') for documentation</code></pre>
-<pre><code>## loading from cache</code></pre>
-<pre><code>## Working on: LIHC_sampleMap-20160128</code></pre>
-<pre><code>## see ?curatedTCGAData and browseVignettes('curatedTCGAData') for documentation</code></pre>
-<pre><code>## loading from cache</code></pre>
-<pre><code>## Working on: LUAD_colData-20160128</code></pre>
-<pre><code>## see ?curatedTCGAData and browseVignettes('curatedTCGAData') for documentation</code></pre>
-<pre><code>## loading from cache</code></pre>
-<pre><code>## Working on: LUAD_metadata-20160128</code></pre>
-<pre><code>## see ?curatedTCGAData and browseVignettes('curatedTCGAData') for documentation</code></pre>
-<pre><code>## loading from cache</code></pre>
-<pre><code>## Working on: LUAD_sampleMap-20160128</code></pre>
-<pre><code>## see ?curatedTCGAData and browseVignettes('curatedTCGAData') for documentation</code></pre>
-<pre><code>## loading from cache</code></pre>
-<pre><code>## Working on: LUSC_colData-20160128</code></pre>
-<pre><code>## see ?curatedTCGAData and browseVignettes('curatedTCGAData') for documentation</code></pre>
-<pre><code>## loading from cache</code></pre>
-<pre><code>## Working on: LUSC_metadata-20160128</code></pre>
-<pre><code>## see ?curatedTCGAData and browseVignettes('curatedTCGAData') for documentation</code></pre>
-<pre><code>## loading from cache</code></pre>
-<pre><code>## Working on: LUSC_sampleMap-20160128</code></pre>
-<pre><code>## see ?curatedTCGAData and browseVignettes('curatedTCGAData') for documentation</code></pre>
-<pre><code>## loading from cache</code></pre>
-<pre><code>## Working on: MESO_colData-20160128</code></pre>
-<pre><code>## see ?curatedTCGAData and browseVignettes('curatedTCGAData') for documentation</code></pre>
-<pre><code>## loading from cache</code></pre>
-<pre><code>## Working on: MESO_metadata-20160128</code></pre>
-<pre><code>## see ?curatedTCGAData and browseVignettes('curatedTCGAData') for documentation</code></pre>
-<pre><code>## loading from cache</code></pre>
-<pre><code>## Working on: MESO_sampleMap-20160128</code></pre>
-<pre><code>## see ?curatedTCGAData and browseVignettes('curatedTCGAData') for documentation</code></pre>
-<pre><code>## loading from cache</code></pre>
-<pre><code>## Working on: OV_colData-20160128</code></pre>
-<pre><code>## see ?curatedTCGAData and browseVignettes('curatedTCGAData') for documentation</code></pre>
-<pre><code>## loading from cache</code></pre>
-<pre><code>## Working on: OV_metadata-20160128</code></pre>
-<pre><code>## see ?curatedTCGAData and browseVignettes('curatedTCGAData') for documentation</code></pre>
-<pre><code>## loading from cache</code></pre>
-<pre><code>## Working on: OV_sampleMap-20160128</code></pre>
-<pre><code>## see ?curatedTCGAData and browseVignettes('curatedTCGAData') for documentation</code></pre>
-<pre><code>## loading from cache</code></pre>
-<pre><code>## Working on: PAAD_colData-20160128</code></pre>
-<pre><code>## see ?curatedTCGAData and browseVignettes('curatedTCGAData') for documentation</code></pre>
-<pre><code>## loading from cache</code></pre>
-<pre><code>## Working on: PAAD_metadata-20160128</code></pre>
-<pre><code>## see ?curatedTCGAData and browseVignettes('curatedTCGAData') for documentation</code></pre>
-<pre><code>## loading from cache</code></pre>
-<pre><code>## Working on: PAAD_sampleMap-20160128</code></pre>
-<pre><code>## see ?curatedTCGAData and browseVignettes('curatedTCGAData') for documentation</code></pre>
-<pre><code>## loading from cache</code></pre>
-<pre><code>## Working on: PCPG_colData-20160128</code></pre>
-<pre><code>## see ?curatedTCGAData and browseVignettes('curatedTCGAData') for documentation</code></pre>
-<pre><code>## loading from cache</code></pre>
-<pre><code>## Working on: PCPG_metadata-20160128</code></pre>
-<pre><code>## see ?curatedTCGAData and browseVignettes('curatedTCGAData') for documentation</code></pre>
-<pre><code>## loading from cache</code></pre>
-<pre><code>## Working on: PCPG_sampleMap-20160128</code></pre>
-<pre><code>## see ?curatedTCGAData and browseVignettes('curatedTCGAData') for documentation</code></pre>
-<pre><code>## loading from cache</code></pre>
-<pre><code>## Working on: PRAD_colData-20160128</code></pre>
-<pre><code>## see ?curatedTCGAData and browseVignettes('curatedTCGAData') for documentation</code></pre>
-<pre><code>## loading from cache</code></pre>
-<pre><code>## Working on: PRAD_metadata-20160128</code></pre>
-<pre><code>## see ?curatedTCGAData and browseVignettes('curatedTCGAData') for documentation</code></pre>
-<pre><code>## loading from cache</code></pre>
-<pre><code>## Working on: PRAD_sampleMap-20160128</code></pre>
-<pre><code>## see ?curatedTCGAData and browseVignettes('curatedTCGAData') for documentation</code></pre>
-<pre><code>## loading from cache</code></pre>
-<pre><code>## Working on: READ_colData-20160128</code></pre>
-<pre><code>## see ?curatedTCGAData and browseVignettes('curatedTCGAData') for documentation</code></pre>
-<pre><code>## loading from cache</code></pre>
-<pre><code>## Working on: READ_metadata-20160128</code></pre>
-<pre><code>## see ?curatedTCGAData and browseVignettes('curatedTCGAData') for documentation</code></pre>
-<pre><code>## loading from cache</code></pre>
-<pre><code>## Working on: READ_sampleMap-20160128</code></pre>
-<pre><code>## see ?curatedTCGAData and browseVignettes('curatedTCGAData') for documentation</code></pre>
-<pre><code>## loading from cache</code></pre>
-<pre><code>## Working on: SARC_colData-20160128</code></pre>
-<pre><code>## see ?curatedTCGAData and browseVignettes('curatedTCGAData') for documentation</code></pre>
-<pre><code>## loading from cache</code></pre>
-<pre><code>## Working on: SARC_metadata-20160128</code></pre>
-<pre><code>## see ?curatedTCGAData and browseVignettes('curatedTCGAData') for documentation</code></pre>
-<pre><code>## loading from cache</code></pre>
-<pre><code>## Working on: SARC_sampleMap-20160128</code></pre>
-<pre><code>## see ?curatedTCGAData and browseVignettes('curatedTCGAData') for documentation</code></pre>
-<pre><code>## loading from cache</code></pre>
-<pre><code>## Working on: SKCM_colData-20160128</code></pre>
-<pre><code>## see ?curatedTCGAData and browseVignettes('curatedTCGAData') for documentation</code></pre>
-<pre><code>## loading from cache</code></pre>
-<pre><code>## Working on: SKCM_metadata-20160128</code></pre>
-<pre><code>## see ?curatedTCGAData and browseVignettes('curatedTCGAData') for documentation</code></pre>
-<pre><code>## loading from cache</code></pre>
-<pre><code>## Working on: SKCM_sampleMap-20160128</code></pre>
-<pre><code>## see ?curatedTCGAData and browseVignettes('curatedTCGAData') for documentation</code></pre>
-<pre><code>## loading from cache</code></pre>
-<pre><code>## Working on: STAD_colData-20160128</code></pre>
-<pre><code>## see ?curatedTCGAData and browseVignettes('curatedTCGAData') for documentation</code></pre>
-<pre><code>## loading from cache</code></pre>
-<pre><code>## Working on: STAD_metadata-20160128</code></pre>
-<pre><code>## see ?curatedTCGAData and browseVignettes('curatedTCGAData') for documentation</code></pre>
-<pre><code>## loading from cache</code></pre>
-<pre><code>## Working on: STAD_sampleMap-20160128</code></pre>
-<pre><code>## see ?curatedTCGAData and browseVignettes('curatedTCGAData') for documentation</code></pre>
-<pre><code>## loading from cache</code></pre>
-<pre><code>## Working on: TGCT_colData-20160128</code></pre>
-<pre><code>## see ?curatedTCGAData and browseVignettes('curatedTCGAData') for documentation</code></pre>
-<pre><code>## loading from cache</code></pre>
-<pre><code>## Working on: TGCT_metadata-20160128</code></pre>
-<pre><code>## see ?curatedTCGAData and browseVignettes('curatedTCGAData') for documentation</code></pre>
-<pre><code>## loading from cache</code></pre>
-<pre><code>## Working on: TGCT_sampleMap-20160128</code></pre>
-<pre><code>## see ?curatedTCGAData and browseVignettes('curatedTCGAData') for documentation</code></pre>
-<pre><code>## loading from cache</code></pre>
-<pre><code>## Working on: THCA_colData-20160128</code></pre>
-<pre><code>## see ?curatedTCGAData and browseVignettes('curatedTCGAData') for documentation</code></pre>
-<pre><code>## loading from cache</code></pre>
-<pre><code>## Working on: THCA_metadata-20160128</code></pre>
-<pre><code>## see ?curatedTCGAData and browseVignettes('curatedTCGAData') for documentation</code></pre>
-<pre><code>## loading from cache</code></pre>
-<pre><code>## Working on: THCA_sampleMap-20160128</code></pre>
-<pre><code>## see ?curatedTCGAData and browseVignettes('curatedTCGAData') for documentation</code></pre>
-<pre><code>## loading from cache</code></pre>
-<pre><code>## Working on: THYM_colData-20160128</code></pre>
-<pre><code>## see ?curatedTCGAData and browseVignettes('curatedTCGAData') for documentation</code></pre>
-<pre><code>## loading from cache</code></pre>
-<pre><code>## Working on: THYM_metadata-20160128</code></pre>
-<pre><code>## see ?curatedTCGAData and browseVignettes('curatedTCGAData') for documentation</code></pre>
-<pre><code>## loading from cache</code></pre>
-<pre><code>## Working on: THYM_sampleMap-20160128</code></pre>
-<pre><code>## see ?curatedTCGAData and browseVignettes('curatedTCGAData') for documentation</code></pre>
-<pre><code>## loading from cache</code></pre>
-<pre><code>## Working on: UCEC_colData-20160128</code></pre>
-<pre><code>## see ?curatedTCGAData and browseVignettes('curatedTCGAData') for documentation</code></pre>
-<pre><code>## loading from cache</code></pre>
-<pre><code>## Working on: UCEC_metadata-20160128</code></pre>
-<pre><code>## see ?curatedTCGAData and browseVignettes('curatedTCGAData') for documentation</code></pre>
-<pre><code>## loading from cache</code></pre>
-<pre><code>## Working on: UCEC_sampleMap-20160128</code></pre>
-<pre><code>## see ?curatedTCGAData and browseVignettes('curatedTCGAData') for documentation</code></pre>
-<pre><code>## loading from cache</code></pre>
-<pre><code>## Working on: UCS_colData-20160128</code></pre>
-<pre><code>## see ?curatedTCGAData and browseVignettes('curatedTCGAData') for documentation</code></pre>
-<pre><code>## loading from cache</code></pre>
-<pre><code>## Working on: UCS_metadata-20160128</code></pre>
-<pre><code>## see ?curatedTCGAData and browseVignettes('curatedTCGAData') for documentation</code></pre>
-<pre><code>## loading from cache</code></pre>
-<pre><code>## Working on: UCS_sampleMap-20160128</code></pre>
-<pre><code>## see ?curatedTCGAData and browseVignettes('curatedTCGAData') for documentation</code></pre>
-<pre><code>## loading from cache</code></pre>
-<pre><code>## Working on: UVM_colData-20160128</code></pre>
-<pre><code>## see ?curatedTCGAData and browseVignettes('curatedTCGAData') for documentation</code></pre>
-<pre><code>## loading from cache</code></pre>
-<pre><code>## Working on: UVM_metadata-20160128</code></pre>
-<pre><code>## see ?curatedTCGAData and browseVignettes('curatedTCGAData') for documentation</code></pre>
-<pre><code>## loading from cache</code></pre>
-<pre><code>## Working on: UVM_sampleMap-20160128</code></pre>
-<pre><code>## see ?curatedTCGAData and browseVignettes('curatedTCGAData') for documentation</code></pre>
-<pre><code>## loading from cache</code></pre>
-<pre><code>## harmonizing input:
-##   removing 126884 sampleMap rows not in names(experiments)
-##   removing 1386 colData rownames not in sampleMap 'primary'</code></pre>
-<div class="sourceCode" id="cb444"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb444-1"><a href="#cb444-1"></a>rnacopy &lt;-<span class="st"> </span>rnacomp</span>
-<span id="cb444-2"><a href="#cb444-2"></a>rnacomp &lt;-<span class="st"> </span>rnacomp[, , <span class="op">!</span><span class="kw"><a href="https://rdrr.io/r/base/names.html">names</a></span>(rnacomp) <span class="op">%in%</span><span class="st"> </span>outAssays]</span></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a>rnacomp &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/pkg/curatedTCGAData/man/curatedTCGAData.html">curatedTCGAData</a></span>(<span class="st">"*"</span>, <span class="st">"RNASeq2*"</span>, <span class="ot">FALSE</span>)</span>
+<span id="cb12-2"><a href="#cb12-2"></a>rnacomp</span></code></pre></div>
+<pre><code>## A MultiAssayExperiment object of 33 listed
+##  experiments with user-defined names and respective classes.
+##  Containing an ExperimentList class object of length 33:
+##  [1] ACC_RNASeq2GeneNorm-20160128: SummarizedExperiment with 20501 rows and 79 columns
+##  [2] BLCA_RNASeq2GeneNorm-20160128: SummarizedExperiment with 20501 rows and 427 columns
+##  [3] BRCA_RNASeq2GeneNorm-20160128: SummarizedExperiment with 20501 rows and 1212 columns
+##  [4] CESC_RNASeq2GeneNorm-20160128: SummarizedExperiment with 20501 rows and 309 columns
+##  [5] CHOL_RNASeq2GeneNorm-20160128: SummarizedExperiment with 20501 rows and 45 columns
+##  [6] COAD_RNASeq2GeneNorm-20160128: SummarizedExperiment with 20501 rows and 191 columns
+##  [7] DLBC_RNASeq2GeneNorm-20160128: SummarizedExperiment with 20501 rows and 48 columns
+##  [8] ESCA_RNASeq2GeneNorm-20160128: SummarizedExperiment with 20501 rows and 196 columns
+##  [9] GBM_RNASeq2GeneNorm-20160128: SummarizedExperiment with 20501 rows and 166 columns
+##  [10] HNSC_RNASeq2GeneNorm-20160128: SummarizedExperiment with 20501 rows and 566 columns
+##  [11] KICH_RNASeq2GeneNorm-20160128: SummarizedExperiment with 20501 rows and 91 columns
+##  [12] KIRC_RNASeq2GeneNorm-20160128: SummarizedExperiment with 20501 rows and 606 columns
+##  [13] KIRP_RNASeq2GeneNorm-20160128: SummarizedExperiment with 20501 rows and 323 columns
+##  [14] LAML_RNASeq2GeneNorm-20160128: SummarizedExperiment with 20501 rows and 173 columns
+##  [15] LGG_RNASeq2GeneNorm-20160128: SummarizedExperiment with 20501 rows and 530 columns
+##  [16] LIHC_RNASeq2GeneNorm-20160128: SummarizedExperiment with 20501 rows and 423 columns
+##  [17] LUAD_RNASeq2GeneNorm-20160128: SummarizedExperiment with 20501 rows and 576 columns
+##  [18] LUSC_RNASeq2GeneNorm-20160128: SummarizedExperiment with 20501 rows and 552 columns
+##  [19] MESO_RNASeq2GeneNorm-20160128: SummarizedExperiment with 20501 rows and 87 columns
+##  [20] OV_RNASeq2GeneNorm-20160128: SummarizedExperiment with 20501 rows and 307 columns
+##  [21] PAAD_RNASeq2GeneNorm-20160128: SummarizedExperiment with 20501 rows and 183 columns
+##  [22] PCPG_RNASeq2GeneNorm-20160128: SummarizedExperiment with 20501 rows and 187 columns
+##  [23] PRAD_RNASeq2GeneNorm-20160128: SummarizedExperiment with 20501 rows and 550 columns
+##  [24] READ_RNASeq2GeneNorm-20160128: SummarizedExperiment with 20501 rows and 72 columns
+##  [25] SARC_RNASeq2GeneNorm-20160128: SummarizedExperiment with 20501 rows and 265 columns
+##  [26] SKCM_RNASeq2GeneNorm-20160128: SummarizedExperiment with 20501 rows and 473 columns
+##  [27] STAD_RNASeq2GeneNorm-20160128: SummarizedExperiment with 20501 rows and 450 columns
+##  [28] TGCT_RNASeq2GeneNorm-20160128: SummarizedExperiment with 20501 rows and 139 columns
+##  [29] THCA_RNASeq2GeneNorm-20160128: SummarizedExperiment with 20501 rows and 568 columns
+##  [30] THYM_RNASeq2GeneNorm-20160128: SummarizedExperiment with 20501 rows and 122 columns
+##  [31] UCEC_RNASeq2GeneNorm-20160128: SummarizedExperiment with 20501 rows and 380 columns
+##  [32] UCS_RNASeq2GeneNorm-20160128: SummarizedExperiment with 20501 rows and 57 columns
+##  [33] UVM_RNASeq2GeneNorm-20160128: SummarizedExperiment with 20501 rows and 80 columns
+## Features:
+##  experiments() - obtain the ExperimentList instance
+##  colData() - the primary/phenotype DFrame
+##  sampleMap() - the sample availability DFrame
+##  `$`, `[`, `[[` - extract colData columns, subset, or experiment
+##  *Format() - convert into a long or wide DFrame
+##  assays() - convert ExperimentList to a SimpleList of matrices</code></pre>
+<p>Replace above processed datasets in the full RNASeq <code>MultiAssayExperiment</code>:</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a>rnacopy &lt;-<span class="st"> </span>rnacomp</span>
+<span id="cb14-2"><a href="#cb14-2"></a>rnacomp &lt;-<span class="st"> </span>rnacomp[, , <span class="op">!</span><span class="kw"><a href="https://rdrr.io/r/base/names.html">names</a></span>(rnacomp) <span class="op">%in%</span><span class="st"> </span>outAssays]</span></code></pre></div>
 <pre><code>## harmonizing input:
 ##   removing 643 sampleMap rows not in names(experiments)
 ##   removing 633 colData rownames not in sampleMap 'primary'</code></pre>
-<div class="sourceCode" id="cb446"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb446-1"><a href="#cb446-1"></a>rnacomp &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(rnacomp, coremae)</span></code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1"></a>rnacomp &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(rnacomp, coremae)</span></code></pre></div>
 <p>Here we check for the samples of interest using <code>sampleTables</code>:</p>
-<div class="sourceCode" id="cb447"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb447-1"><a href="#cb447-1"></a><span class="kw">sampleTables</span>(rnacomp)</span></code></pre></div>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a><span class="kw"><a href="https://rdrr.io/pkg/TCGAutils/man/curatedTCGAData-helpers.html">sampleTables</a></span>(rnacomp)</span></code></pre></div>
 <pre><code>## $`ACC_RNASeq2GeneNorm-20160128`
 ## 
 ## 01 
@@ -770,43 +393,43 @@
 ##  01  02  11 
 ## 545   1  35</code></pre>
 <p>Which cancer codes have both tumors and normal samples?</p>
-<div class="sourceCode" id="cb449"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb449-1"><a href="#cb449-1"></a>okCA &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/lapply.html">vapply</a></span>(<span class="kw">sampleTables</span>(rnacomp),</span>
-<span id="cb449-2"><a href="#cb449-2"></a>    <span class="cf">function</span>(x) {</span>
-<span id="cb449-3"><a href="#cb449-3"></a>        <span class="kw"><a href="https://rdrr.io/r/base/all.html">all</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"01"</span>, <span class="st">"11"</span>) <span class="op">%in%</span><span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/names.html">names</a></span>(x))</span>
-<span id="cb449-4"><a href="#cb449-4"></a>    },</span>
-<span id="cb449-5"><a href="#cb449-5"></a>    <span class="kw"><a href="https://rdrr.io/r/base/logical.html">logical</a></span>(1L)</span>
-<span id="cb449-6"><a href="#cb449-6"></a>)</span>
-<span id="cb449-7"><a href="#cb449-7"></a></span>
-<span id="cb449-8"><a href="#cb449-8"></a>(</span>
-<span id="cb449-9"><a href="#cb449-9"></a>okCodes &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/lapply.html">vapply</a></span>(</span>
-<span id="cb449-10"><a href="#cb449-10"></a>    <span class="kw"><a href="https://rdrr.io/r/base/strsplit.html">strsplit</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/names.html">names</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/which.html">which</a></span>(okCA)), <span class="st">"_"</span>),</span>
-<span id="cb449-11"><a href="#cb449-11"></a>    <span class="st">`</span><span class="dt">[</span><span class="st">`</span>,</span>
-<span id="cb449-12"><a href="#cb449-12"></a>    <span class="kw"><a href="https://rdrr.io/r/base/character.html">character</a></span>(1L),</span>
-<span id="cb449-13"><a href="#cb449-13"></a>    1L)</span>
-<span id="cb449-14"><a href="#cb449-14"></a>)</span></code></pre></div>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1"></a>okCA &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/lapply.html">vapply</a></span>(<span class="kw"><a href="https://rdrr.io/pkg/TCGAutils/man/curatedTCGAData-helpers.html">sampleTables</a></span>(rnacomp),</span>
+<span id="cb19-2"><a href="#cb19-2"></a>    <span class="cf">function</span>(x) {</span>
+<span id="cb19-3"><a href="#cb19-3"></a>        <span class="kw"><a href="https://rdrr.io/r/base/all.html">all</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"01"</span>, <span class="st">"11"</span>) <span class="op">%in%</span><span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/names.html">names</a></span>(x))</span>
+<span id="cb19-4"><a href="#cb19-4"></a>    },</span>
+<span id="cb19-5"><a href="#cb19-5"></a>    <span class="kw"><a href="https://rdrr.io/r/base/logical.html">logical</a></span>(1L)</span>
+<span id="cb19-6"><a href="#cb19-6"></a>)</span>
+<span id="cb19-7"><a href="#cb19-7"></a></span>
+<span id="cb19-8"><a href="#cb19-8"></a>(</span>
+<span id="cb19-9"><a href="#cb19-9"></a>okCodes &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/lapply.html">vapply</a></span>(</span>
+<span id="cb19-10"><a href="#cb19-10"></a>    <span class="kw"><a href="https://rdrr.io/r/base/strsplit.html">strsplit</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/names.html">names</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/which.html">which</a></span>(okCA)), <span class="st">"_"</span>),</span>
+<span id="cb19-11"><a href="#cb19-11"></a>    <span class="st">`</span><span class="dt">[</span><span class="st">`</span>,</span>
+<span id="cb19-12"><a href="#cb19-12"></a>    <span class="kw"><a href="https://rdrr.io/r/base/character.html">character</a></span>(1L),</span>
+<span id="cb19-13"><a href="#cb19-13"></a>    1L)</span>
+<span id="cb19-14"><a href="#cb19-14"></a>)</span></code></pre></div>
 <pre><code>##  [1] "BLCA" "BRCA" "CESC" "CHOL" "ESCA" "HNSC" "KICH" "KIRC" "KIRP" "LIHC"
 ## [11] "LUAD" "LUSC" "PAAD" "PCPG" "PRAD" "SARC" "SKCM" "STAD" "THCA" "THYM"
 ## [21] "COAD" "READ" "UCEC"</code></pre>
 <p>Assemble appropriate <code>MultiAssayExperiment</code> object with cancer codes that have both tumors and normals.</p>
-<div class="sourceCode" id="cb451"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb451-1"><a href="#cb451-1"></a>rnacomp2 &lt;-<span class="st"> </span>rnacomp[ , , okCA]</span></code></pre></div>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1"></a>rnacomp2 &lt;-<span class="st"> </span>rnacomp[ , , okCA]</span></code></pre></div>
 <pre><code>## harmonizing input:
 ##   removing 1666 sampleMap rows not in names(experiments)
 ##   removing 1638 colData rownames not in sampleMap 'primary'</code></pre>
 <p>Isolate tumor and normal samples for each cancer that have more than 10 samples of each:</p>
-<div class="sourceCode" id="cb453"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb453-1"><a href="#cb453-1"></a>selects &lt;-<span class="st"> </span><span class="kw">TCGAsampleSelect</span>(<span class="kw"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span>(rnacomp2), <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"01"</span>, <span class="st">"11"</span>))</span>
-<span id="cb453-2"><a href="#cb453-2"></a></span>
-<span id="cb453-3"><a href="#cb453-3"></a>rnacomp3 &lt;-<span class="st"> </span>rnacomp2[, selects]</span></code></pre></div>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1"></a>selects &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/pkg/TCGAutils/man/TCGAsampleSelect.html">TCGAsampleSelect</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span>(rnacomp2), <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"01"</span>, <span class="st">"11"</span>))</span>
+<span id="cb23-2"><a href="#cb23-2"></a></span>
+<span id="cb23-3"><a href="#cb23-3"></a>rnacomp3 &lt;-<span class="st"> </span>rnacomp2[, selects]</span></code></pre></div>
 <pre><code>## harmonizing input:
 ##   removing 410 sampleMap rows with 'colname' not in colnames of experiments
 ##   removing 365 colData rownames not in sampleMap 'primary'</code></pre>
-<div class="sourceCode" id="cb455"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb455-1"><a href="#cb455-1"></a>enoughNorm &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/lapply.html">vapply</a></span>(<span class="kw">sampleTables</span>(rnacomp3),</span>
-<span id="cb455-2"><a href="#cb455-2"></a>    <span class="cf">function</span>(samp) { samp[<span class="st">"11"</span>] <span class="op">&gt;=</span><span class="st"> </span>10L }, <span class="kw"><a href="https://rdrr.io/r/base/logical.html">logical</a></span>(1L))</span>
-<span id="cb455-3"><a href="#cb455-3"></a></span>
-<span id="cb455-4"><a href="#cb455-4"></a>rnacomp4 &lt;-<span class="st"> </span>rnacomp3[, , enoughNorm]</span></code></pre></div>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1"></a>enoughNorm &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/lapply.html">vapply</a></span>(<span class="kw"><a href="https://rdrr.io/pkg/TCGAutils/man/curatedTCGAData-helpers.html">sampleTables</a></span>(rnacomp3),</span>
+<span id="cb25-2"><a href="#cb25-2"></a>    <span class="cf">function</span>(samp) { samp[<span class="st">"11"</span>] <span class="op">&gt;=</span><span class="st"> </span>10L }, <span class="kw"><a href="https://rdrr.io/r/base/logical.html">logical</a></span>(1L))</span>
+<span id="cb25-3"><a href="#cb25-3"></a></span>
+<span id="cb25-4"><a href="#cb25-4"></a>rnacomp4 &lt;-<span class="st"> </span>rnacomp3[, , enoughNorm]</span></code></pre></div>
 <pre><code>## harmonizing input:
 ##   removing 1203 sampleMap rows not in names(experiments)
 ##   removing 1180 colData rownames not in sampleMap 'primary'</code></pre>
-<div class="sourceCode" id="cb457"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb457-1"><a href="#cb457-1"></a><span class="kw">sampleTables</span>(rnacomp4)</span></code></pre></div>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1"></a><span class="kw"><a href="https://rdrr.io/pkg/TCGAutils/man/curatedTCGAData-helpers.html">sampleTables</a></span>(rnacomp4)</span></code></pre></div>
 <pre><code>## $`BLCA_RNASeq2GeneNorm-20160128`
 ## 
 ##  01  11 
@@ -887,278 +510,177 @@
 ##  01  11 
 ## 545  35</code></pre>
 <p>Create an index to annotate each of the <code>SummarizedExperiment</code> objects contained in the <code>ExperimentList</code>:</p>
-<div class="sourceCode" id="cb459"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb459-1"><a href="#cb459-1"></a>tlogic &lt;-<span class="st"> </span><span class="kw">TCGAsampleSelect</span>(<span class="kw"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span>(rnacomp4), <span class="st">"01"</span>)</span>
-<span id="cb459-2"><a href="#cb459-2"></a>sampIndx &lt;-<span class="st"> </span><span class="kw">IntegerList</span>(<span class="kw"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span>(tlogic, ifelse, 1L, 0L))</span>
-<span id="cb459-3"><a href="#cb459-3"></a></span>
-<span id="cb459-4"><a href="#cb459-4"></a>naks &lt;-<span class="st"> </span><span class="kw">mendoapply</span>(<span class="cf">function</span>(x, y) {</span>
-<span id="cb459-5"><a href="#cb459-5"></a>    <span class="kw">colData</span>(x)[[<span class="st">"GROUP"</span>]] &lt;-<span class="st"> </span>y</span>
-<span id="cb459-6"><a href="#cb459-6"></a>    <span class="kw">colData</span>(x)[[<span class="st">"BLOCK"</span>]] &lt;-<span class="st"> </span><span class="kw">TCGAbarcode</span>(<span class="kw"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span>(<span class="kw">colData</span>(x)))</span>
-<span id="cb459-7"><a href="#cb459-7"></a>    x</span>
-<span id="cb459-8"><a href="#cb459-8"></a>}, <span class="dt">x =</span> <span class="kw">experiments</span>(rnacomp4), <span class="dt">y =</span> sampIndx)</span>
-<span id="cb459-9"><a href="#cb459-9"></a></span>
-<span id="cb459-10"><a href="#cb459-10"></a>rnacomp5 &lt;-<span class="st"> </span>BiocGenerics<span class="op">:::</span><span class="kw">replaceSlots</span>(rnacomp4,</span>
-<span id="cb459-11"><a href="#cb459-11"></a>    <span class="dt">ExperimentList =</span> naks,</span>
-<span id="cb459-12"><a href="#cb459-12"></a>    <span class="dt">check =</span> <span class="ot">FALSE</span>)</span>
-<span id="cb459-13"><a href="#cb459-13"></a></span>
-<span id="cb459-14"><a href="#cb459-14"></a><span class="kw"><a href="https://rdrr.io/r/base/table.html">table</a></span>(rnacomp5[[1L]]<span class="op">$</span>GROUP)</span></code></pre></div>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1"></a>tlogic &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/pkg/TCGAutils/man/TCGAsampleSelect.html">TCGAsampleSelect</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span>(rnacomp4), <span class="st">"01"</span>)</span>
+<span id="cb29-2"><a href="#cb29-2"></a>sampIndx &lt;-<span class="st"> </span><span class="kw">IntegerList</span>(<span class="kw"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span>(tlogic, ifelse, 1L, 0L))</span>
+<span id="cb29-3"><a href="#cb29-3"></a></span>
+<span id="cb29-4"><a href="#cb29-4"></a>naks &lt;-<span class="st"> </span><span class="kw">mendoapply</span>(<span class="cf">function</span>(x, y) {</span>
+<span id="cb29-5"><a href="#cb29-5"></a>    <span class="kw">colData</span>(x)[[<span class="st">"GROUP"</span>]] &lt;-<span class="st"> </span>y</span>
+<span id="cb29-6"><a href="#cb29-6"></a>    <span class="kw">colData</span>(x)[[<span class="st">"BLOCK"</span>]] &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/pkg/TCGAutils/man/TCGAbarcode.html">TCGAbarcode</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span>(<span class="kw">colData</span>(x)))</span>
+<span id="cb29-7"><a href="#cb29-7"></a>    x</span>
+<span id="cb29-8"><a href="#cb29-8"></a>}, <span class="dt">x =</span> <span class="kw"><a href="https://rdrr.io/pkg/MultiAssayExperiment/man/MultiAssayExperiment-methods.html">experiments</a></span>(rnacomp4), <span class="dt">y =</span> sampIndx)</span>
+<span id="cb29-9"><a href="#cb29-9"></a></span>
+<span id="cb29-10"><a href="#cb29-10"></a>rnacomp5 &lt;-<span class="st"> </span>BiocGenerics<span class="op">:::</span><span class="kw">replaceSlots</span>(rnacomp4,</span>
+<span id="cb29-11"><a href="#cb29-11"></a>    <span class="dt">ExperimentList =</span> naks,</span>
+<span id="cb29-12"><a href="#cb29-12"></a>    <span class="dt">check =</span> <span class="ot">FALSE</span>)</span>
+<span id="cb29-13"><a href="#cb29-13"></a></span>
+<span id="cb29-14"><a href="#cb29-14"></a><span class="kw"><a href="https://rdrr.io/r/base/table.html">table</a></span>(rnacomp5[[1L]]<span class="op">$</span>GROUP)</span></code></pre></div>
 <pre><code>## 
 ##   0   1 
 ##  19 408</code></pre>
 <p>Split, create matched tumors and normals, and then recombine into a single <code>MultiAssayExperiment</code>:</p>
-<div class="sourceCode" id="cb461"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb461-1"><a href="#cb461-1"></a>matchlist &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span>(<span class="kw"><a href="https://rdrr.io/r/stats/setNames.html">setNames</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/seq.html">seq_along</a></span>(rnacomp5), <span class="kw"><a href="https://rdrr.io/r/base/names.html">names</a></span>(rnacomp5)),</span>
-<span id="cb461-2"><a href="#cb461-2"></a>    <span class="cf">function</span>(idx) {</span>
-<span id="cb461-3"><a href="#cb461-3"></a>        <span class="kw">as</span>(<span class="kw">splitAssays</span>(rnacomp5[, , idx]), <span class="st">"MatchedAssayExperiment"</span>)</span>
-<span id="cb461-4"><a href="#cb461-4"></a>    }</span>
-<span id="cb461-5"><a href="#cb461-5"></a>)</span></code></pre></div>
-<pre><code>## harmonizing input:
-##   removing 7342 sampleMap rows not in names(experiments)
-##   removing 6672 colData rownames not in sampleMap 'primary'</code></pre>
-<pre><code>## harmonizing input:
-##   removing 6564 sampleMap rows not in names(experiments)
-##   removing 5987 colData rownames not in sampleMap 'primary'</code></pre>
-<pre><code>## harmonizing input:
-##   removing 7574 sampleMap rows not in names(experiments)
-##   removing 6896 colData rownames not in sampleMap 'primary'</code></pre>
-<pre><code>## harmonizing input:
-##   removing 7205 sampleMap rows not in names(experiments)
-##   removing 6559 colData rownames not in sampleMap 'primary'</code></pre>
-<pre><code>## harmonizing input:
-##   removing 7678 sampleMap rows not in names(experiments)
-##   removing 7014 colData rownames not in sampleMap 'primary'</code></pre>
-<pre><code>## harmonizing input:
-##   removing 7164 sampleMap rows not in names(experiments)
-##   removing 6547 colData rownames not in sampleMap 'primary'</code></pre>
-<pre><code>## harmonizing input:
-##   removing 7447 sampleMap rows not in names(experiments)
-##   removing 6790 colData rownames not in sampleMap 'primary'</code></pre>
-<pre><code>## harmonizing input:
-##   removing 7348 sampleMap rows not in names(experiments)
-##   removing 6709 colData rownames not in sampleMap 'primary'</code></pre>
-<pre><code>## harmonizing input:
-##   removing 7195 sampleMap rows not in names(experiments)
-##   removing 6564 colData rownames not in sampleMap 'primary'</code></pre>
-<pre><code>## harmonizing input:
-##   removing 7217 sampleMap rows not in names(experiments)
-##   removing 6579 colData rownames not in sampleMap 'primary'</code></pre>
-<pre><code>## harmonizing input:
-##   removing 7220 sampleMap rows not in names(experiments)
-##   removing 6583 colData rownames not in sampleMap 'primary'</code></pre>
-<pre><code>## harmonizing input:
-##   removing 7319 sampleMap rows not in names(experiments)
-##   removing 6662 colData rownames not in sampleMap 'primary'</code></pre>
-<pre><code>## harmonizing input:
-##   removing 7209 sampleMap rows not in names(experiments)
-##   removing 6579 colData rownames not in sampleMap 'primary'</code></pre>
-<pre><code>## harmonizing input:
-##   removing 7271 sampleMap rows not in names(experiments)
-##   removing 6623 colData rownames not in sampleMap 'primary'</code></pre>
-<pre><code>## harmonizing input:
-##   removing 7593 sampleMap rows not in names(experiments)
-##   removing 6913 colData rownames not in sampleMap 'primary'</code></pre>
-<pre><code>## harmonizing input:
-##   removing 7189 sampleMap rows not in names(experiments)
-##   removing 6523 colData rownames not in sampleMap 'primary'</code></pre>
-<div class="sourceCode" id="cb478"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb478-1"><a href="#cb478-1"></a>newEXPS &lt;-<span class="st"> </span><span class="kw">ExperimentList</span>(</span>
-<span id="cb478-2"><a href="#cb478-2"></a>    <span class="kw"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span>(matchlist, <span class="cf">function</span>(expr) {</span>
-<span id="cb478-3"><a href="#cb478-3"></a>        <span class="kw"><a href="https://rdrr.io/r/base/do.call.html">do.call</a></span>(cbind, <span class="kw">experiments</span>(expr))</span>
-<span id="cb478-4"><a href="#cb478-4"></a>    })</span>
-<span id="cb478-5"><a href="#cb478-5"></a>)</span>
-<span id="cb478-6"><a href="#cb478-6"></a></span>
-<span id="cb478-7"><a href="#cb478-7"></a>rnacomp6 &lt;-<span class="st"> </span>BiocGenerics<span class="op">:::</span><span class="kw">replaceSlots</span>(rnacomp5,</span>
-<span id="cb478-8"><a href="#cb478-8"></a>    <span class="dt">ExperimentList =</span> newEXPS,</span>
-<span id="cb478-9"><a href="#cb478-9"></a>    <span class="dt">check =</span> <span class="ot">FALSE</span></span>
-<span id="cb478-10"><a href="#cb478-10"></a>)</span></code></pre></div>
-<p>Share data with collaborators:</p>
-<div class="sourceCode" id="cb479"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb479-1"><a href="#cb479-1"></a><span class="kw"><a href="https://rdrr.io/r/base/readRDS.html">saveRDS</a></span>(<span class="kw">experiments</span>(rnacomp6), <span class="dt">file =</span> <span class="st">"pancan_exprs.rds"</span>)</span>
-<span id="cb479-2"><a href="#cb479-2"></a><span class="co"># r6ex &lt;- loadRDS(file = "pancan_exprs.rds")</span></span></code></pre></div>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1"></a>matchlist &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span>(<span class="kw"><a href="https://rdrr.io/r/stats/setNames.html">setNames</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/seq.html">seq_along</a></span>(rnacomp5), <span class="kw"><a href="https://rdrr.io/r/base/names.html">names</a></span>(rnacomp5)),</span>
+<span id="cb31-2"><a href="#cb31-2"></a>    <span class="cf">function</span>(idx) {</span>
+<span id="cb31-3"><a href="#cb31-3"></a>        <span class="kw">as</span>(<span class="kw"><a href="https://rdrr.io/pkg/TCGAutils/man/curatedTCGAData-helpers.html">splitAssays</a></span>(rnacomp5[, , idx]), <span class="st">"MatchedAssayExperiment"</span>)</span>
+<span id="cb31-4"><a href="#cb31-4"></a>    }</span>
+<span id="cb31-5"><a href="#cb31-5"></a>)</span>
+<span id="cb31-6"><a href="#cb31-6"></a>newEXPS &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/pkg/MultiAssayExperiment/man/ExperimentList.html">ExperimentList</a></span>(</span>
+<span id="cb31-7"><a href="#cb31-7"></a>    <span class="kw"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span>(matchlist, <span class="cf">function</span>(expr) {</span>
+<span id="cb31-8"><a href="#cb31-8"></a>        <span class="kw"><a href="https://rdrr.io/r/base/do.call.html">do.call</a></span>(cbind, <span class="kw"><a href="https://rdrr.io/pkg/MultiAssayExperiment/man/MultiAssayExperiment-methods.html">experiments</a></span>(expr))</span>
+<span id="cb31-9"><a href="#cb31-9"></a>    })</span>
+<span id="cb31-10"><a href="#cb31-10"></a>)</span>
+<span id="cb31-11"><a href="#cb31-11"></a></span>
+<span id="cb31-12"><a href="#cb31-12"></a>rnacomp6 &lt;-<span class="st"> </span>BiocGenerics<span class="op">:::</span><span class="kw">replaceSlots</span>(rnacomp5,</span>
+<span id="cb31-13"><a href="#cb31-13"></a>    <span class="dt">ExperimentList =</span> newEXPS,</span>
+<span id="cb31-14"><a href="#cb31-14"></a>    <span class="dt">check =</span> <span class="ot">FALSE</span></span>
+<span id="cb31-15"><a href="#cb31-15"></a>)</span></code></pre></div>
+<p>Save point:</p>
+<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1"></a><span class="kw"><a href="https://rdrr.io/r/base/readRDS.html">saveRDS</a></span>(<span class="kw"><a href="https://rdrr.io/pkg/MultiAssayExperiment/man/MultiAssayExperiment-methods.html">experiments</a></span>(rnacomp6), <span class="dt">file =</span> <span class="st">"../inst/data/pancan_exprs.rds"</span>)</span>
+<span id="cb32-2"><a href="#cb32-2"></a>r6ex &lt;-<span class="st"> </span><span class="kw">loadRDS</span>(<span class="dt">file =</span> <span class="st">"../inst/data/pancan_exprs.rds"</span>)</span></code></pre></div>
 <p>Differential Expression analysis:</p>
-<div class="sourceCode" id="cb480"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb480-1"><a href="#cb480-1"></a>exp.list &lt;-<span class="st"> </span><span class="kw">experiments</span>(rnacomp6)</span>
-<span id="cb480-2"><a href="#cb480-2"></a><span class="kw"><a href="https://rdrr.io/r/base/names.html">names</a></span>(exp.list) &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/substr.html">substring</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/names.html">names</a></span>(exp.list), <span class="dv">1</span>, <span class="dv">4</span>)</span>
-<span id="cb480-3"><a href="#cb480-3"></a>exp.list &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span>(exp.list,</span>
-<span id="cb480-4"><a href="#cb480-4"></a>    <span class="cf">function</span>(se)</span>
-<span id="cb480-5"><a href="#cb480-5"></a>    {</span>
-<span id="cb480-6"><a href="#cb480-6"></a>        <span class="co"># if assay is matrix: assay(se) &lt;- log(assay(se) + 1, base=2)</span></span>
-<span id="cb480-7"><a href="#cb480-7"></a>        <span class="kw">assays</span>(se) &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="dt">TPM=</span><span class="kw"><a href="https://rdrr.io/r/base/Log.html">log</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/matrix.html">as.matrix</a></span>(<span class="kw">assay</span>(se)) <span class="op">+</span><span class="st"> </span><span class="dv">1</span>, <span class="dt">base=</span><span class="dv">2</span>))</span>
-<span id="cb480-8"><a href="#cb480-8"></a>        <span class="kw"><a href="https://rdrr.io/r/base/function.html">return</a></span>(se)</span>
-<span id="cb480-9"><a href="#cb480-9"></a>    })</span>
-<span id="cb480-10"><a href="#cb480-10"></a>exp.list &lt;-<span class="st"> </span><span class="kw">runDE</span>(exp.list)</span>
-<span id="cb480-11"><a href="#cb480-11"></a><span class="co"># for(n in names(exp.list)) saveRDS(exp.list[[n]], file = paste(n, "rds", sep="."))</span></span></code></pre></div>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1"></a>exp.list &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/pkg/MultiAssayExperiment/man/MultiAssayExperiment-methods.html">experiments</a></span>(rnacomp6)</span>
+<span id="cb33-2"><a href="#cb33-2"></a><span class="kw"><a href="https://rdrr.io/r/base/names.html">names</a></span>(exp.list) &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/substr.html">substring</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/names.html">names</a></span>(exp.list), <span class="dv">1</span>, <span class="dv">4</span>)</span>
+<span id="cb33-3"><a href="#cb33-3"></a>exp.list &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span>(exp.list,</span>
+<span id="cb33-4"><a href="#cb33-4"></a>    <span class="cf">function</span>(se)</span>
+<span id="cb33-5"><a href="#cb33-5"></a>    {</span>
+<span id="cb33-6"><a href="#cb33-6"></a>        <span class="co"># if assay is matrix: assay(se) &lt;- log(assay(se) + 1, base=2)</span></span>
+<span id="cb33-7"><a href="#cb33-7"></a>        <span class="kw">assays</span>(se) &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="dt">TPM=</span><span class="kw"><a href="https://rdrr.io/r/base/Log.html">log</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/matrix.html">as.matrix</a></span>(<span class="kw">assay</span>(se)) <span class="op">+</span><span class="st"> </span><span class="dv">1</span>, <span class="dt">base=</span><span class="dv">2</span>))</span>
+<span id="cb33-8"><a href="#cb33-8"></a>        <span class="kw"><a href="https://rdrr.io/r/base/function.html">return</a></span>(se)</span>
+<span id="cb33-9"><a href="#cb33-9"></a>    })</span>
+<span id="cb33-10"><a href="#cb33-10"></a>exp.list &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/pkg/GSEABenchmarkeR/man/runDE.html">runDE</a></span>(exp.list)</span>
+<span id="cb33-11"><a href="#cb33-11"></a><span class="co"># for(n in names(exp.list)) saveRDS(exp.list[[n]], file = paste(n, "rds", sep="."))</span></span></code></pre></div>
 <div id="figure-3-boxplot" class="section level3">
 <h3 class="hasAnchor">
 <a href="#figure-3-boxplot" class="anchor"></a>Figure 3 BoxPlot</h3>
 <p>Extract genes with consistent expression changes:</p>
-<div class="sourceCode" id="cb481"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb481-1"><a href="#cb481-1"></a>wfcs &lt;-<span class="st"> </span><span class="kw">metaFC</span>(exp.list, <span class="dt">max.na=</span><span class="dv">3</span>)</span>
-<span id="cb481-2"><a href="#cb481-2"></a></span>
-<span id="cb481-3"><a href="#cb481-3"></a><span class="co"># Heatmap</span></span>
-<span id="cb481-4"><a href="#cb481-4"></a>top.wfcs.genes &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/names.html">names</a></span>(wfcs)[<span class="dv">1</span><span class="op">:</span><span class="dv">50</span>]</span>
-<span id="cb481-5"><a href="#cb481-5"></a>extractFC &lt;-<span class="st"> </span><span class="cf">function</span>(exp.list, top.wfcs.genes)</span>
-<span id="cb481-6"><a href="#cb481-6"></a>{</span>
-<span id="cb481-7"><a href="#cb481-7"></a>    fcs &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/lapply.html">vapply</a></span>(exp.list,</span>
-<span id="cb481-8"><a href="#cb481-8"></a>        <span class="cf">function</span>(d) <span class="kw">rowData</span>(d)[top.wfcs.genes, <span class="st">"FC"</span>],</span>
-<span id="cb481-9"><a href="#cb481-9"></a>        <span class="kw"><a href="https://rdrr.io/r/base/numeric.html">numeric</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/length.html">length</a></span>(top.wfcs.genes)))</span>
-<span id="cb481-10"><a href="#cb481-10"></a>    <span class="kw"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span>(fcs) &lt;-<span class="st"> </span>top.wfcs.genes</span>
-<span id="cb481-11"><a href="#cb481-11"></a>    <span class="kw"><a href="https://rdrr.io/r/base/function.html">return</a></span>(fcs)</span>
-<span id="cb481-12"><a href="#cb481-12"></a>}</span>
-<span id="cb481-13"><a href="#cb481-13"></a>fcs &lt;-<span class="st"> </span><span class="kw">extractFC</span>(exp.list, top.wfcs.genes)</span>
-<span id="cb481-14"><a href="#cb481-14"></a></span>
-<span id="cb481-15"><a href="#cb481-15"></a><span class="co"># pdf("log2fc.pdf", paper = "special", width = 8, height = 12)</span></span>
-<span id="cb481-16"><a href="#cb481-16"></a><span class="kw">Heatmap</span>(fcs, <span class="dt">name=</span><span class="st">"log2FC"</span>, <span class="dt">show_row_names=</span><span class="ot">TRUE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1"></a>wfcs &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/pkg/GSEABenchmarkeR/man/runDE.html">metaFC</a></span>(exp.list, <span class="dt">max.na=</span><span class="dv">3</span>)</span>
+<span id="cb34-2"><a href="#cb34-2"></a></span>
+<span id="cb34-3"><a href="#cb34-3"></a><span class="co"># Heatmap</span></span>
+<span id="cb34-4"><a href="#cb34-4"></a>top.wfcs.genes &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/names.html">names</a></span>(wfcs)[<span class="dv">1</span><span class="op">:</span><span class="dv">50</span>]</span>
+<span id="cb34-5"><a href="#cb34-5"></a>extractFC &lt;-<span class="st"> </span><span class="cf">function</span>(exp.list, top.wfcs.genes)</span>
+<span id="cb34-6"><a href="#cb34-6"></a>{</span>
+<span id="cb34-7"><a href="#cb34-7"></a>    fcs &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/lapply.html">vapply</a></span>(exp.list,</span>
+<span id="cb34-8"><a href="#cb34-8"></a>        <span class="cf">function</span>(d) <span class="kw">rowData</span>(d)[top.wfcs.genes, <span class="st">"FC"</span>],</span>
+<span id="cb34-9"><a href="#cb34-9"></a>        <span class="kw"><a href="https://rdrr.io/r/base/numeric.html">numeric</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/length.html">length</a></span>(top.wfcs.genes)))</span>
+<span id="cb34-10"><a href="#cb34-10"></a>    <span class="kw"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span>(fcs) &lt;-<span class="st"> </span>top.wfcs.genes</span>
+<span id="cb34-11"><a href="#cb34-11"></a>    <span class="kw"><a href="https://rdrr.io/r/base/function.html">return</a></span>(fcs)</span>
+<span id="cb34-12"><a href="#cb34-12"></a>}</span>
+<span id="cb34-13"><a href="#cb34-13"></a>fcs &lt;-<span class="st"> </span><span class="kw">extractFC</span>(exp.list, top.wfcs.genes)</span>
+<span id="cb34-14"><a href="#cb34-14"></a></span>
+<span id="cb34-15"><a href="#cb34-15"></a><span class="co"># pdf("log2fc.pdf", paper = "special", width = 8, height = 12)</span></span>
+<span id="cb34-16"><a href="#cb34-16"></a><span class="kw"><a href="https://rdrr.io/pkg/ComplexHeatmap/man/Heatmap.html">Heatmap</a></span>(fcs, <span class="dt">name=</span><span class="st">"log2FC"</span>, <span class="dt">show_row_names=</span><span class="ot">TRUE</span>)</span></code></pre></div>
 <p><img src="Figures3n4_GSEA_PanCan_files/figure-html/unnamed-chunk-16-1.png" width="700"></p>
-<div class="sourceCode" id="cb482"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb482-1"><a href="#cb482-1"></a><span class="co"># dev.off()</span></span></code></pre></div>
-<div class="sourceCode" id="cb483"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb483-1"><a href="#cb483-1"></a><span class="co"># Boxplot</span></span>
-<span id="cb483-2"><a href="#cb483-2"></a>top.wfcs.genes &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/names.html">names</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(wfcs[wfcs <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>][<span class="dv">1</span><span class="op">:</span><span class="dv">8</span>], wfcs[wfcs <span class="op">&lt;</span><span class="st"> </span><span class="dv">0</span>][<span class="dv">1</span><span class="op">:</span><span class="dv">8</span>]))</span>
-<span id="cb483-3"><a href="#cb483-3"></a>fcs &lt;-<span class="st"> </span><span class="kw">extractFC</span>(exp.list, top.wfcs.genes)</span>
-<span id="cb483-4"><a href="#cb483-4"></a>df &lt;-<span class="st"> </span>reshape2<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/reshape2/man/melt.html">melt</a></span>(fcs)</span>
-<span id="cb483-5"><a href="#cb483-5"></a>medians &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/apply.html">apply</a></span>(fcs, <span class="dv">1</span>, median, <span class="dt">na.rm=</span><span class="ot">TRUE</span>)</span>
-<span id="cb483-6"><a href="#cb483-6"></a>o &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/names.html">names</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/sort.html">sort</a></span>(medians))</span>
-<span id="cb483-7"><a href="#cb483-7"></a>p &lt;-<span class="st"> </span><span class="kw">ggboxplot</span>(df, <span class="dt">x =</span> <span class="st">"Var1"</span>, <span class="dt">y =</span> <span class="st">"value"</span>, <span class="dt">width =</span> <span class="fl">0.8</span>,</span>
-<span id="cb483-8"><a href="#cb483-8"></a>                <span class="dt">ylab=</span><span class="st">"log2 fold change"</span>, <span class="dt">xlab=</span><span class="st">""</span>, <span class="dt">order=</span>o, <span class="dt">color=</span><span class="st">"Var1"</span>, <span class="dt">add =</span><span class="st">"jitter"</span>)</span>
-<span id="cb483-9"><a href="#cb483-9"></a>p &lt;-<span class="st"> </span><span class="kw">ggpar</span>(p, <span class="dt">x.text.angle=</span><span class="dv">45</span>, <span class="dt">palette =</span> <span class="st">"simpsons"</span>, <span class="dt">legend=</span><span class="st">"none"</span>)</span>
-<span id="cb483-10"><a href="#cb483-10"></a>gg &lt;-<span class="st"> </span>p <span class="op">+</span><span class="st"> </span><span class="kw">geom_hline</span>(<span class="dt">yintercept=</span><span class="dv">0</span>, <span class="dt">linetype=</span><span class="st">"dashed"</span>, <span class="dt">color =</span> <span class="st">"darkgrey"</span>) <span class="op">+</span></span>
-<span id="cb483-11"><a href="#cb483-11"></a><span class="st">    </span><span class="kw">geom_vline</span>(<span class="dt">xintercept=</span><span class="fl">8.5</span>, <span class="dt">linetype=</span><span class="st">"dashed"</span>, <span class="dt">color =</span> <span class="st">"darkgrey"</span>)</span>
-<span id="cb483-12"><a href="#cb483-12"></a>gg</span></code></pre></div>
+<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1"></a><span class="co"># dev.off()</span></span></code></pre></div>
+</div>
+</div>
+<div id="figure-3" class="section level2">
+<h2 class="hasAnchor">
+<a href="#figure-3" class="anchor"></a>Figure 3</h2>
+<div id="pan-cancer-differential-expression-analysis" class="section level3">
+<h3 class="hasAnchor">
+<a href="#pan-cancer-differential-expression-analysis" class="anchor"></a>Pan-cancer differential expression analysis</h3>
+<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1"></a><span class="co"># Boxplot</span></span>
+<span id="cb36-2"><a href="#cb36-2"></a>top.wfcs.genes &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/names.html">names</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(wfcs[wfcs <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>][<span class="dv">1</span><span class="op">:</span><span class="dv">8</span>], wfcs[wfcs <span class="op">&lt;</span><span class="st"> </span><span class="dv">0</span>][<span class="dv">1</span><span class="op">:</span><span class="dv">8</span>]))</span>
+<span id="cb36-3"><a href="#cb36-3"></a>fcs &lt;-<span class="st"> </span><span class="kw">extractFC</span>(exp.list, top.wfcs.genes)</span>
+<span id="cb36-4"><a href="#cb36-4"></a>df &lt;-<span class="st"> </span>reshape2<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/reshape2/man/melt.html">melt</a></span>(fcs)</span>
+<span id="cb36-5"><a href="#cb36-5"></a>medians &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/apply.html">apply</a></span>(fcs, <span class="dv">1</span>, median, <span class="dt">na.rm=</span><span class="ot">TRUE</span>)</span>
+<span id="cb36-6"><a href="#cb36-6"></a>o &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/names.html">names</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/sort.html">sort</a></span>(medians))</span>
+<span id="cb36-7"><a href="#cb36-7"></a>p &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/pkg/ggpubr/man/ggboxplot.html">ggboxplot</a></span>(df, <span class="dt">x =</span> <span class="st">"Var1"</span>, <span class="dt">y =</span> <span class="st">"value"</span>, <span class="dt">width =</span> <span class="fl">0.8</span>,</span>
+<span id="cb36-8"><a href="#cb36-8"></a>    <span class="dt">ylab=</span><span class="st">"log2 fold change"</span>, <span class="dt">xlab=</span><span class="st">""</span>, <span class="dt">order=</span>o, <span class="dt">color=</span><span class="st">"Var1"</span>, <span class="dt">add =</span><span class="st">"jitter"</span>)</span>
+<span id="cb36-9"><a href="#cb36-9"></a>p &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/pkg/ggpubr/man/ggpar.html">ggpar</a></span>(p, <span class="dt">x.text.angle=</span><span class="dv">45</span>, <span class="dt">palette =</span> <span class="st">"simpsons"</span>, <span class="dt">legend=</span><span class="st">"none"</span>)</span>
+<span id="cb36-10"><a href="#cb36-10"></a>gg &lt;-<span class="st"> </span>p <span class="op">+</span><span class="st"> </span><span class="kw">geom_hline</span>(<span class="dt">yintercept=</span><span class="dv">0</span>, <span class="dt">linetype=</span><span class="st">"dashed"</span>, <span class="dt">color =</span> <span class="st">"darkgrey"</span>) <span class="op">+</span></span>
+<span id="cb36-11"><a href="#cb36-11"></a><span class="st">    </span><span class="kw">geom_vline</span>(<span class="dt">xintercept=</span><span class="fl">8.5</span>, <span class="dt">linetype=</span><span class="st">"dashed"</span>, <span class="dt">color =</span> <span class="st">"darkgrey"</span>)</span>
+<span id="cb36-12"><a href="#cb36-12"></a>gg</span></code></pre></div>
 <p><img src="Figures3n4_GSEA_PanCan_files/figure-html/unnamed-chunk-17-1.png" width="700"></p>
 <p>ggsaving…</p>
-<div class="sourceCode" id="cb484"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb484-1"><a href="#cb484-1"></a><span class="kw">ggsave</span>(<span class="st">"boxplot_pancan.svg"</span>, gg, <span class="dt">device =</span> <span class="st">"svg"</span>)</span>
-<span id="cb484-2"><a href="#cb484-2"></a></span>
-<span id="cb484-3"><a href="#cb484-3"></a><span class="co">## pdf</span></span>
-<span id="cb484-4"><a href="#cb484-4"></a><span class="kw">ggsave</span>(<span class="st">"boxplot_pancan.pdf"</span>, gg, <span class="dt">device =</span> <span class="st">"pdf"</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1"></a><span class="kw">ggsave</span>(<span class="st">"boxplot_pancan.svg"</span>, gg, <span class="dt">device =</span> <span class="st">"svg"</span>)</span>
+<span id="cb37-2"><a href="#cb37-2"></a></span>
+<span id="cb37-3"><a href="#cb37-3"></a><span class="co">## pdf</span></span>
+<span id="cb37-4"><a href="#cb37-4"></a><span class="kw">ggsave</span>(<span class="st">"boxplot_pancan.pdf"</span>, gg, <span class="dt">device =</span> <span class="st">"pdf"</span>)</span></code></pre></div>
 </div>
 </div>
 <div id="gsea" class="section level1">
 <h1 class="hasAnchor">
 <a href="#gsea" class="anchor"></a>GSEA</h1>
 <p>ID mapping</p>
-<div class="sourceCode" id="cb485"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb485-1"><a href="#cb485-1"></a>exp.list &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span>(exp.list,</span>
-<span id="cb485-2"><a href="#cb485-2"></a>    <span class="cf">function</span>(se) <span class="kw">idMap</span>(se, <span class="dt">org=</span><span class="st">"hsa"</span>, <span class="dt">from=</span><span class="st">"SYMBOL"</span>, <span class="dt">to=</span><span class="st">"ENTREZID"</span>))</span></code></pre></div>
-<pre><code>## Encountered 4 from.IDs with &gt;1 corresponding to.ID</code></pre>
-<pre><code>## (the first to.ID was chosen for each of them)</code></pre>
-<pre><code>## Excluded 2838 from.IDs without a corresponding to.ID</code></pre>
-<pre><code>## Mapped from.IDs have been added to the rowData column SYMBOL</code></pre>
-<pre><code>## Encountered 4 from.IDs with &gt;1 corresponding to.ID</code></pre>
-<pre><code>## (the first to.ID was chosen for each of them)</code></pre>
-<pre><code>## Excluded 2838 from.IDs without a corresponding to.ID</code></pre>
-<pre><code>## Mapped from.IDs have been added to the rowData column SYMBOL</code></pre>
-<pre><code>## Encountered 4 from.IDs with &gt;1 corresponding to.ID</code></pre>
-<pre><code>## (the first to.ID was chosen for each of them)</code></pre>
-<pre><code>## Excluded 2838 from.IDs without a corresponding to.ID</code></pre>
-<pre><code>## Mapped from.IDs have been added to the rowData column SYMBOL</code></pre>
-<pre><code>## Encountered 4 from.IDs with &gt;1 corresponding to.ID</code></pre>
-<pre><code>## (the first to.ID was chosen for each of them)</code></pre>
-<pre><code>## Excluded 2838 from.IDs without a corresponding to.ID</code></pre>
-<pre><code>## Mapped from.IDs have been added to the rowData column SYMBOL</code></pre>
-<pre><code>## Encountered 4 from.IDs with &gt;1 corresponding to.ID</code></pre>
-<pre><code>## (the first to.ID was chosen for each of them)</code></pre>
-<pre><code>## Excluded 2838 from.IDs without a corresponding to.ID</code></pre>
-<pre><code>## Mapped from.IDs have been added to the rowData column SYMBOL</code></pre>
-<pre><code>## Encountered 4 from.IDs with &gt;1 corresponding to.ID</code></pre>
-<pre><code>## (the first to.ID was chosen for each of them)</code></pre>
-<pre><code>## Excluded 2838 from.IDs without a corresponding to.ID</code></pre>
-<pre><code>## Mapped from.IDs have been added to the rowData column SYMBOL</code></pre>
-<pre><code>## Encountered 4 from.IDs with &gt;1 corresponding to.ID</code></pre>
-<pre><code>## (the first to.ID was chosen for each of them)</code></pre>
-<pre><code>## Excluded 2838 from.IDs without a corresponding to.ID</code></pre>
-<pre><code>## Mapped from.IDs have been added to the rowData column SYMBOL</code></pre>
-<pre><code>## Encountered 4 from.IDs with &gt;1 corresponding to.ID</code></pre>
-<pre><code>## (the first to.ID was chosen for each of them)</code></pre>
-<pre><code>## Excluded 2838 from.IDs without a corresponding to.ID</code></pre>
-<pre><code>## Mapped from.IDs have been added to the rowData column SYMBOL</code></pre>
-<pre><code>## Encountered 4 from.IDs with &gt;1 corresponding to.ID</code></pre>
-<pre><code>## (the first to.ID was chosen for each of them)</code></pre>
-<pre><code>## Excluded 2838 from.IDs without a corresponding to.ID</code></pre>
-<pre><code>## Mapped from.IDs have been added to the rowData column SYMBOL</code></pre>
-<pre><code>## Encountered 4 from.IDs with &gt;1 corresponding to.ID</code></pre>
-<pre><code>## (the first to.ID was chosen for each of them)</code></pre>
-<pre><code>## Excluded 2838 from.IDs without a corresponding to.ID</code></pre>
-<pre><code>## Mapped from.IDs have been added to the rowData column SYMBOL</code></pre>
-<pre><code>## Encountered 4 from.IDs with &gt;1 corresponding to.ID</code></pre>
-<pre><code>## (the first to.ID was chosen for each of them)</code></pre>
-<pre><code>## Excluded 2838 from.IDs without a corresponding to.ID</code></pre>
-<pre><code>## Mapped from.IDs have been added to the rowData column SYMBOL</code></pre>
-<pre><code>## Encountered 4 from.IDs with &gt;1 corresponding to.ID</code></pre>
-<pre><code>## (the first to.ID was chosen for each of them)</code></pre>
-<pre><code>## Excluded 2838 from.IDs without a corresponding to.ID</code></pre>
-<pre><code>## Mapped from.IDs have been added to the rowData column SYMBOL</code></pre>
-<pre><code>## Encountered 4 from.IDs with &gt;1 corresponding to.ID</code></pre>
-<pre><code>## (the first to.ID was chosen for each of them)</code></pre>
-<pre><code>## Excluded 2838 from.IDs without a corresponding to.ID</code></pre>
-<pre><code>## Mapped from.IDs have been added to the rowData column SYMBOL</code></pre>
-<pre><code>## Encountered 4 from.IDs with &gt;1 corresponding to.ID</code></pre>
-<pre><code>## (the first to.ID was chosen for each of them)</code></pre>
-<pre><code>## Excluded 2838 from.IDs without a corresponding to.ID</code></pre>
-<pre><code>## Mapped from.IDs have been added to the rowData column SYMBOL</code></pre>
-<pre><code>## Encountered 4 from.IDs with &gt;1 corresponding to.ID</code></pre>
-<pre><code>## (the first to.ID was chosen for each of them)</code></pre>
-<pre><code>## Excluded 2838 from.IDs without a corresponding to.ID</code></pre>
-<pre><code>## Mapped from.IDs have been added to the rowData column SYMBOL</code></pre>
-<pre><code>## Encountered 4 from.IDs with &gt;1 corresponding to.ID</code></pre>
-<pre><code>## (the first to.ID was chosen for each of them)</code></pre>
-<pre><code>## Excluded 2838 from.IDs without a corresponding to.ID</code></pre>
-<pre><code>## Mapped from.IDs have been added to the rowData column SYMBOL</code></pre>
+<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1"></a>exp.list &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span>(exp.list,</span>
+<span id="cb38-2"><a href="#cb38-2"></a>    <span class="cf">function</span>(se) <span class="kw"><a href="https://rdrr.io/pkg/EnrichmentBrowser/man/idMap.html">idMap</a></span>(se, <span class="dt">org=</span><span class="st">"hsa"</span>, <span class="dt">from=</span><span class="st">"SYMBOL"</span>, <span class="dt">to=</span><span class="st">"ENTREZID"</span>))</span></code></pre></div>
 <p>Obtain gene sets</p>
-<div class="sourceCode" id="cb550"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb550-1"><a href="#cb550-1"></a>go.gs &lt;-<span class="st"> </span><span class="kw">getGenesets</span>(<span class="dt">org=</span><span class="st">"hsa"</span>, <span class="dt">db=</span><span class="st">"go"</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1"></a>go.gs &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/pkg/EnrichmentBrowser/man/getGenesets.html">getGenesets</a></span>(<span class="dt">org=</span><span class="st">"hsa"</span>, <span class="dt">db=</span><span class="st">"go"</span>)</span></code></pre></div>
 <pre><code>## </code></pre>
-<div class="sourceCode" id="cb552"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb552-1"><a href="#cb552-1"></a>ids &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/lapply.html">vapply</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/names.html">names</a></span>(go.gs), <span class="cf">function</span>(n) <span class="kw"><a href="https://rdrr.io/r/base/unlist.html">unlist</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/strsplit.html">strsplit</a></span>(n, <span class="st">"_"</span>))[<span class="dv">1</span>], <span class="kw"><a href="https://rdrr.io/r/base/character.html">character</a></span>(<span class="dv">1</span>))</span>
-<span id="cb552-2"><a href="#cb552-2"></a>ids &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/grep.html">sub</a></span>(<span class="st">":"</span>, <span class="st">""</span>, ids)</span>
-<span id="cb552-3"><a href="#cb552-3"></a>extractTitle &lt;-<span class="st"> </span><span class="cf">function</span>(n)</span>
-<span id="cb552-4"><a href="#cb552-4"></a>{</span>
-<span id="cb552-5"><a href="#cb552-5"></a>    spl &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/unlist.html">unlist</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/strsplit.html">strsplit</a></span>(n, <span class="st">"_"</span>))[<span class="op">-</span><span class="dv">1</span>]</span>
-<span id="cb552-6"><a href="#cb552-6"></a>    <span class="kw"><a href="https://rdrr.io/r/base/paste.html">paste</a></span>(spl, <span class="dt">collapse =</span> <span class="st">" "</span>)</span>
-<span id="cb552-7"><a href="#cb552-7"></a>}</span>
-<span id="cb552-8"><a href="#cb552-8"></a>go.i2n &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/lapply.html">vapply</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/names.html">names</a></span>(go.gs), extractTitle, <span class="kw"><a href="https://rdrr.io/r/base/character.html">character</a></span>(<span class="dv">1</span>))</span>
-<span id="cb552-9"><a href="#cb552-9"></a><span class="kw"><a href="https://rdrr.io/r/base/names.html">names</a></span>(go.i2n) &lt;-<span class="st"> </span>ids</span></code></pre></div>
+<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1"></a>ids &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/lapply.html">vapply</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/names.html">names</a></span>(go.gs), <span class="cf">function</span>(n) <span class="kw"><a href="https://rdrr.io/r/base/unlist.html">unlist</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/strsplit.html">strsplit</a></span>(n, <span class="st">"_"</span>))[<span class="dv">1</span>], <span class="kw"><a href="https://rdrr.io/r/base/character.html">character</a></span>(<span class="dv">1</span>))</span>
+<span id="cb41-2"><a href="#cb41-2"></a>ids &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/grep.html">sub</a></span>(<span class="st">":"</span>, <span class="st">""</span>, ids)</span>
+<span id="cb41-3"><a href="#cb41-3"></a>extractTitle &lt;-<span class="st"> </span><span class="cf">function</span>(n)</span>
+<span id="cb41-4"><a href="#cb41-4"></a>{</span>
+<span id="cb41-5"><a href="#cb41-5"></a>    spl &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/unlist.html">unlist</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/strsplit.html">strsplit</a></span>(n, <span class="st">"_"</span>))[<span class="op">-</span><span class="dv">1</span>]</span>
+<span id="cb41-6"><a href="#cb41-6"></a>    <span class="kw"><a href="https://rdrr.io/r/base/paste.html">paste</a></span>(spl, <span class="dt">collapse =</span> <span class="st">" "</span>)</span>
+<span id="cb41-7"><a href="#cb41-7"></a>}</span>
+<span id="cb41-8"><a href="#cb41-8"></a>go.i2n &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/lapply.html">vapply</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/names.html">names</a></span>(go.gs), extractTitle, <span class="kw"><a href="https://rdrr.io/r/base/character.html">character</a></span>(<span class="dv">1</span>))</span>
+<span id="cb41-9"><a href="#cb41-9"></a><span class="kw"><a href="https://rdrr.io/r/base/names.html">names</a></span>(go.i2n) &lt;-<span class="st"> </span>ids</span></code></pre></div>
 <p>Execute ORA (has been pre-computed on a cluster, skip this step):</p>
-<div class="sourceCode" id="cb553"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb553-1"><a href="#cb553-1"></a>res &lt;-<span class="st"> </span><span class="kw">runEA</span>(exp.list, <span class="dt">methods=</span><span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"ora"</span>, <span class="st">"padog"</span>),</span>
-<span id="cb553-2"><a href="#cb553-2"></a>                <span class="dt">gs=</span>go.gs, <span class="dt">perm=</span><span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="dv">0</span>, <span class="dv">1000</span>), <span class="dt">save2file=</span><span class="ot">TRUE</span>, <span class="dt">out.dir=</span><span class="st">"../data"</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1"></a>res &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/pkg/GSEABenchmarkeR/man/runEA.html">runEA</a></span>(exp.list, <span class="dt">methods=</span><span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"ora"</span>, <span class="st">"padog"</span>),</span>
+<span id="cb42-2"><a href="#cb42-2"></a>    <span class="dt">gs=</span>go.gs, <span class="dt">perm=</span><span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="dv">0</span>, <span class="dv">1000</span>), <span class="dt">save2file=</span><span class="ot">TRUE</span>, <span class="dt">out.dir=</span><span class="st">"../inst/data"</span>)</span></code></pre></div>
 <p>Read pre-computed results for ORA and PADOG for GO-BP gene sets</p>
-<div class="sourceCode" id="cb554"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb554-1"><a href="#cb554-1"></a>res &lt;-<span class="st"> </span><span class="kw">readResults</span>(<span class="dt">data.dir=</span><span class="st">"../data"</span>, <span class="dt">data.ids=</span><span class="kw"><a href="https://rdrr.io/r/base/names.html">names</a></span>(exp.list),</span>
-<span id="cb554-2"><a href="#cb554-2"></a>                    <span class="dt">methods=</span><span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"ora"</span>, <span class="st">"padog"</span>), <span class="dt">type=</span><span class="st">"ranking"</span>)</span></code></pre></div>
-<pre><code>## Warning in FUN(X[[i]], ...): Ranking of ora for COAD not found</code></pre>
-<pre><code>## Warning in FUN(X[[i]], ...): Ranking of ora for READ not found</code></pre>
-<pre><code>## Warning in FUN(X[[i]], ...): Ranking of padog for COAD not found</code></pre>
-<pre><code>## Warning in FUN(X[[i]], ...): Ranking of padog for READ not found</code></pre>
+<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1"></a>res &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/pkg/GSEABenchmarkeR/man/readResults.html">readResults</a></span>(<span class="dt">data.dir=</span><span class="st">"../inst/data"</span>, <span class="dt">data.ids=</span><span class="kw"><a href="https://rdrr.io/r/base/names.html">names</a></span>(exp.list),</span>
+<span id="cb43-2"><a href="#cb43-2"></a>    <span class="dt">methods=</span><span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"ora"</span>, <span class="st">"padog"</span>), <span class="dt">type=</span><span class="st">"ranking"</span>)</span></code></pre></div>
 <p>Determine enrichment across datasets:</p>
-<div class="sourceCode" id="cb559"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb559-1"><a href="#cb559-1"></a>isEnriched &lt;-<span class="st"> </span><span class="cf">function</span>(res, <span class="dt">pthresh=</span><span class="fl">0.05</span>, <span class="dt">nr.top=</span><span class="dv">1</span><span class="op">:</span><span class="dv">15</span>)</span>
-<span id="cb559-2"><a href="#cb559-2"></a>{</span>
-<span id="cb559-3"><a href="#cb559-3"></a>    <span class="cf">for</span>(i <span class="cf">in</span> <span class="kw"><a href="https://rdrr.io/r/base/seq.html">seq_along</a></span>(res)) <span class="kw"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span>(res[[i]]) &lt;-<span class="st"> </span>res[[i]]<span class="op">$</span>GENE.SET</span>
-<span id="cb559-4"><a href="#cb559-4"></a>    pmat &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/lapply.html">vapply</a></span>(res, <span class="cf">function</span>(r) r[<span class="kw"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span>(res[[<span class="dv">1</span>]]), <span class="st">"PVAL"</span>], res[[<span class="dv">1</span>]]<span class="op">$</span>PVAL)</span>
-<span id="cb559-5"><a href="#cb559-5"></a>    <span class="kw"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span>(pmat) &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span>(res[[<span class="dv">1</span>]])</span>
-<span id="cb559-6"><a href="#cb559-6"></a>    is.enriched &lt;-<span class="st"> </span>pmat <span class="op">&lt;</span><span class="st"> </span>pthresh</span>
-<span id="cb559-7"><a href="#cb559-7"></a>    rse &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/colSums.html">rowSums</a></span>(is.enriched)</span>
-<span id="cb559-8"><a href="#cb559-8"></a></span>
-<span id="cb559-9"><a href="#cb559-9"></a>    top.gs &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/names.html">names</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/sort.html">sort</a></span>(rse, <span class="dt">decreasing=</span><span class="ot">TRUE</span>)[nr.top])</span>
-<span id="cb559-10"><a href="#cb559-10"></a>    top.mat &lt;-<span class="st"> </span>is.enriched[top.gs,]</span>
-<span id="cb559-11"><a href="#cb559-11"></a>    <span class="kw"><a href="https://rdrr.io/r/base/mode.html">mode</a></span>(top.mat) &lt;-<span class="st"> "integer"</span></span>
-<span id="cb559-12"><a href="#cb559-12"></a>    <span class="kw"><a href="https://rdrr.io/r/base/function.html">return</a></span>(top.mat)</span>
-<span id="cb559-13"><a href="#cb559-13"></a>}</span>
-<span id="cb559-14"><a href="#cb559-14"></a></span>
-<span id="cb559-15"><a href="#cb559-15"></a>go.ora &lt;-<span class="st"> </span><span class="kw">isEnriched</span>(res<span class="op">$</span>ora)</span>
-<span id="cb559-16"><a href="#cb559-16"></a>go.padog &lt;-<span class="st"> </span><span class="kw">isEnriched</span>(res<span class="op">$</span>padog, <span class="dt">nr.top=</span><span class="kw"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span>(go.ora))</span>
-<span id="cb559-17"><a href="#cb559-17"></a></span>
-<span id="cb559-18"><a href="#cb559-18"></a><span class="kw"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span>(go.ora) &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span>(go.padog) &lt;-<span class="st"> </span>go.i2n[<span class="kw"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span>(go.ora)]</span>
-<span id="cb559-19"><a href="#cb559-19"></a>extract &lt;-<span class="st"> </span><span class="cf">function</span>(n, ind) <span class="kw"><a href="https://rdrr.io/r/base/paste.html">paste</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/unlist.html">unlist</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/strsplit.html">strsplit</a></span>(n, <span class="st">" "</span>))[ind], <span class="dt">collapse =</span> <span class="st">" "</span>)</span>
-<span id="cb559-20"><a href="#cb559-20"></a><span class="kw"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span>(go.ora)[<span class="dv">4</span>] &lt;-<span class="st"> </span><span class="kw">extract</span>(<span class="kw"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span>(go.ora)[<span class="dv">4</span>], <span class="dv">1</span><span class="op">:</span><span class="dv">2</span>)</span>
-<span id="cb559-21"><a href="#cb559-21"></a><span class="kw"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span>(go.ora)[<span class="dv">10</span>] &lt;-<span class="st"> </span><span class="kw">extract</span>(<span class="kw"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span>(go.ora)[<span class="dv">10</span>], <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="dv">1</span>, <span class="dv">3</span><span class="op">:</span><span class="dv">4</span>))</span>
-<span id="cb559-22"><a href="#cb559-22"></a><span class="kw"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span>(go.ora)[<span class="dv">11</span>] &lt;-<span class="st"> </span><span class="kw">extract</span>(<span class="kw"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span>(go.ora)[<span class="dv">11</span>], <span class="dv">1</span><span class="op">:</span><span class="dv">2</span>)</span>
-<span id="cb559-23"><a href="#cb559-23"></a><span class="kw"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span>(go.ora)[<span class="dv">15</span>] &lt;-<span class="st"> </span><span class="kw">extract</span>(<span class="kw"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span>(go.ora)[<span class="dv">15</span>], <span class="dv">1</span><span class="op">:</span><span class="dv">5</span>)</span>
-<span id="cb559-24"><a href="#cb559-24"></a></span>
-<span id="cb559-25"><a href="#cb559-25"></a><span class="kw"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span>(go.padog) &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span>(go.ora)</span>
-<span id="cb559-26"><a href="#cb559-26"></a></span>
-<span id="cb559-27"><a href="#cb559-27"></a>h1 &lt;-<span class="st"> </span><span class="kw">Heatmap</span>(go.ora, <span class="dt">cluster_rows=</span><span class="ot">FALSE</span>, <span class="dt">cluster_columns=</span><span class="ot">FALSE</span>,</span>
-<span id="cb559-28"><a href="#cb559-28"></a>                <span class="dt">show_row_names=</span><span class="ot">FALSE</span>, <span class="dt">show_heatmap_legend =</span> <span class="ot">FALSE</span>,</span>
-<span id="cb559-29"><a href="#cb559-29"></a>                <span class="dt">col=</span><span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"white"</span>, <span class="st">"black"</span>), <span class="dt">column_title=</span><span class="st">"ORA p &lt; 0.05"</span>,</span>
-<span id="cb559-30"><a href="#cb559-30"></a>                <span class="dt">row_names_gp =</span> <span class="kw">gpar</span>(<span class="dt">fontsize =</span> <span class="dv">11</span>))</span>
-<span id="cb559-31"><a href="#cb559-31"></a>h2 &lt;-<span class="st"> </span><span class="kw">Heatmap</span>(go.padog, <span class="dt">cluster_rows=</span><span class="ot">FALSE</span>, <span class="dt">cluster_columns=</span><span class="ot">FALSE</span>,</span>
-<span id="cb559-32"><a href="#cb559-32"></a>                <span class="dt">show_row_names=</span><span class="ot">TRUE</span>, <span class="dt">show_heatmap_legend =</span> <span class="ot">FALSE</span>,</span>
-<span id="cb559-33"><a href="#cb559-33"></a>                <span class="dt">col=</span><span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"white"</span>, <span class="st">"black"</span>), <span class="dt">column_title=</span><span class="st">"PADOG p &lt; 0.05"</span>,</span>
-<span id="cb559-34"><a href="#cb559-34"></a>                <span class="dt">row_names_gp =</span> <span class="kw">gpar</span>(<span class="dt">fontsize =</span> <span class="dv">11</span>))</span>
-<span id="cb559-35"><a href="#cb559-35"></a>hl &lt;-<span class="st"> </span>h1 <span class="op">+</span><span class="st"> </span>h2</span>
-<span id="cb559-36"><a href="#cb559-36"></a><span class="kw">draw</span>(hl, <span class="dt">ht_gap =</span> <span class="kw">unit</span>(<span class="dv">1</span>, <span class="st">"cm"</span>))</span></code></pre></div>
-<p><img src="Figures3n4_GSEA_PanCan_files/figure-html/unnamed-chunk-23-1.png" width="700"></p>
+<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1"></a>isEnriched &lt;-<span class="st"> </span><span class="cf">function</span>(res, <span class="dt">pthresh=</span><span class="fl">0.05</span>, <span class="dt">nr.top=</span><span class="dv">1</span><span class="op">:</span><span class="dv">15</span>)</span>
+<span id="cb44-2"><a href="#cb44-2"></a>{</span>
+<span id="cb44-3"><a href="#cb44-3"></a>    <span class="cf">for</span>(i <span class="cf">in</span> <span class="kw"><a href="https://rdrr.io/r/base/seq.html">seq_along</a></span>(res)) <span class="kw"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span>(res[[i]]) &lt;-<span class="st"> </span>res[[i]]<span class="op">$</span>GENE.SET</span>
+<span id="cb44-4"><a href="#cb44-4"></a>    pmat &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/lapply.html">vapply</a></span>(res, <span class="cf">function</span>(r) r[<span class="kw"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span>(res[[<span class="dv">1</span>]]), <span class="st">"PVAL"</span>], res[[<span class="dv">1</span>]]<span class="op">$</span>PVAL)</span>
+<span id="cb44-5"><a href="#cb44-5"></a>    <span class="kw"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span>(pmat) &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span>(res[[<span class="dv">1</span>]])</span>
+<span id="cb44-6"><a href="#cb44-6"></a>    is.enriched &lt;-<span class="st"> </span>pmat <span class="op">&lt;</span><span class="st"> </span>pthresh</span>
+<span id="cb44-7"><a href="#cb44-7"></a>    rse &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/colSums.html">rowSums</a></span>(is.enriched)</span>
+<span id="cb44-8"><a href="#cb44-8"></a></span>
+<span id="cb44-9"><a href="#cb44-9"></a>    top.gs &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/names.html">names</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/sort.html">sort</a></span>(rse, <span class="dt">decreasing=</span><span class="ot">TRUE</span>)[nr.top])</span>
+<span id="cb44-10"><a href="#cb44-10"></a>    top.mat &lt;-<span class="st"> </span>is.enriched[top.gs,]</span>
+<span id="cb44-11"><a href="#cb44-11"></a>    <span class="kw"><a href="https://rdrr.io/r/base/mode.html">mode</a></span>(top.mat) &lt;-<span class="st"> "integer"</span></span>
+<span id="cb44-12"><a href="#cb44-12"></a>    <span class="kw"><a href="https://rdrr.io/r/base/function.html">return</a></span>(top.mat)</span>
+<span id="cb44-13"><a href="#cb44-13"></a>}</span>
+<span id="cb44-14"><a href="#cb44-14"></a></span>
+<span id="cb44-15"><a href="#cb44-15"></a>go.ora &lt;-<span class="st"> </span><span class="kw">isEnriched</span>(res<span class="op">$</span>ora)</span>
+<span id="cb44-16"><a href="#cb44-16"></a>go.padog &lt;-<span class="st"> </span><span class="kw">isEnriched</span>(res<span class="op">$</span>padog, <span class="dt">nr.top=</span><span class="kw"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span>(go.ora))</span>
+<span id="cb44-17"><a href="#cb44-17"></a></span>
+<span id="cb44-18"><a href="#cb44-18"></a><span class="kw"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span>(go.ora) &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span>(go.padog) &lt;-<span class="st"> </span>go.i2n[<span class="kw"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span>(go.ora)]</span>
+<span id="cb44-19"><a href="#cb44-19"></a>extract &lt;-<span class="st"> </span><span class="cf">function</span>(n, ind) <span class="kw"><a href="https://rdrr.io/r/base/paste.html">paste</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/unlist.html">unlist</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/strsplit.html">strsplit</a></span>(n, <span class="st">" "</span>))[ind], <span class="dt">collapse =</span> <span class="st">" "</span>)</span>
+<span id="cb44-20"><a href="#cb44-20"></a><span class="kw"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span>(go.ora)[<span class="dv">4</span>] &lt;-<span class="st"> </span><span class="kw">extract</span>(<span class="kw"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span>(go.ora)[<span class="dv">4</span>], <span class="dv">1</span><span class="op">:</span><span class="dv">2</span>)</span>
+<span id="cb44-21"><a href="#cb44-21"></a><span class="kw"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span>(go.ora)[<span class="dv">10</span>] &lt;-<span class="st"> </span><span class="kw">extract</span>(<span class="kw"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span>(go.ora)[<span class="dv">10</span>], <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="dv">1</span>, <span class="dv">3</span><span class="op">:</span><span class="dv">4</span>))</span>
+<span id="cb44-22"><a href="#cb44-22"></a><span class="kw"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span>(go.ora)[<span class="dv">11</span>] &lt;-<span class="st"> </span><span class="kw">extract</span>(<span class="kw"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span>(go.ora)[<span class="dv">11</span>], <span class="dv">1</span><span class="op">:</span><span class="dv">2</span>)</span>
+<span id="cb44-23"><a href="#cb44-23"></a><span class="kw"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span>(go.ora)[<span class="dv">15</span>] &lt;-<span class="st"> </span><span class="kw">extract</span>(<span class="kw"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span>(go.ora)[<span class="dv">15</span>], <span class="dv">1</span><span class="op">:</span><span class="dv">5</span>)</span>
+<span id="cb44-24"><a href="#cb44-24"></a></span>
+<span id="cb44-25"><a href="#cb44-25"></a><span class="kw"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span>(go.padog) &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span>(go.ora)</span></code></pre></div>
+<div id="figure-4" class="section level2">
+<h2 class="hasAnchor">
+<a href="#figure-4" class="anchor"></a>Figure 4</h2>
+<div id="pan-cancer-gene-set-enrichment-analysis" class="section level3">
+<h3 class="hasAnchor">
+<a href="#pan-cancer-gene-set-enrichment-analysis" class="anchor"></a>Pan-cancer gene set enrichment analysis</h3>
+<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1"></a>h1 &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/pkg/ComplexHeatmap/man/Heatmap.html">Heatmap</a></span>(go.ora, <span class="dt">cluster_rows=</span><span class="ot">FALSE</span>, <span class="dt">cluster_columns=</span><span class="ot">FALSE</span>,</span>
+<span id="cb45-2"><a href="#cb45-2"></a>    <span class="dt">show_row_names=</span><span class="ot">FALSE</span>, <span class="dt">show_heatmap_legend =</span> <span class="ot">FALSE</span>,</span>
+<span id="cb45-3"><a href="#cb45-3"></a>    <span class="dt">col=</span><span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"white"</span>, <span class="st">"black"</span>), <span class="dt">column_title=</span><span class="st">"ORA p &lt; 0.05"</span>,</span>
+<span id="cb45-4"><a href="#cb45-4"></a>    <span class="dt">row_names_gp =</span> <span class="kw">gpar</span>(<span class="dt">fontsize =</span> <span class="dv">11</span>))</span>
+<span id="cb45-5"><a href="#cb45-5"></a>h2 &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/pkg/ComplexHeatmap/man/Heatmap.html">Heatmap</a></span>(go.padog, <span class="dt">cluster_rows=</span><span class="ot">FALSE</span>, <span class="dt">cluster_columns=</span><span class="ot">FALSE</span>,</span>
+<span id="cb45-6"><a href="#cb45-6"></a>    <span class="dt">show_row_names=</span><span class="ot">TRUE</span>, <span class="dt">show_heatmap_legend =</span> <span class="ot">FALSE</span>,</span>
+<span id="cb45-7"><a href="#cb45-7"></a>    <span class="dt">col=</span><span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"white"</span>, <span class="st">"black"</span>), <span class="dt">column_title=</span><span class="st">"PADOG p &lt; 0.05"</span>,</span>
+<span id="cb45-8"><a href="#cb45-8"></a>    <span class="dt">row_names_gp =</span> <span class="kw">gpar</span>(<span class="dt">fontsize =</span> <span class="dv">11</span>))</span>
+<span id="cb45-9"><a href="#cb45-9"></a>hl &lt;-<span class="st"> </span>h1 <span class="op">+</span><span class="st"> </span>h2</span>
+<span id="cb45-10"><a href="#cb45-10"></a><span class="kw"><a href="https://rdrr.io/pkg/ComplexHeatmap/man/draw-dispatch.html">draw</a></span>(hl, <span class="dt">ht_gap =</span> <span class="kw">unit</span>(<span class="dv">1</span>, <span class="st">"cm"</span>))</span></code></pre></div>
+<p><img src="Figures3n4_GSEA_PanCan_files/figure-html/unnamed-chunk-24-1.png" width="700"></p>
 <p>Code for saving to PDF:</p>
-<div class="sourceCode" id="cb560"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb560-1"><a href="#cb560-1"></a><span class="kw"><a href="https://rdrr.io/r/grDevices/pdf.html">pdf</a></span>(<span class="st">"orapadog.pdf"</span>, <span class="dt">paper =</span> <span class="st">"special"</span>, <span class="dt">width =</span> <span class="dv">12</span>, <span class="dt">height =</span> <span class="dv">8</span>)</span>
-<span id="cb560-2"><a href="#cb560-2"></a><span class="kw">draw</span>(hl, <span class="dt">ht_gap =</span> <span class="kw">unit</span>(<span class="dv">1</span>, <span class="st">"cm"</span>))</span>
-<span id="cb560-3"><a href="#cb560-3"></a><span class="kw"><a href="https://rdrr.io/r/grDevices/dev.html">dev.off</a></span>()</span></code></pre></div>
+<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1"></a><span class="kw"><a href="https://rdrr.io/r/grDevices/pdf.html">pdf</a></span>(<span class="st">"orapadog.pdf"</span>, <span class="dt">paper =</span> <span class="st">"special"</span>, <span class="dt">width =</span> <span class="dv">12</span>, <span class="dt">height =</span> <span class="dv">8</span>)</span>
+<span id="cb46-2"><a href="#cb46-2"></a><span class="kw"><a href="https://rdrr.io/pkg/ComplexHeatmap/man/draw-dispatch.html">draw</a></span>(hl, <span class="dt">ht_gap =</span> <span class="kw">unit</span>(<span class="dv">1</span>, <span class="st">"cm"</span>))</span>
+<span id="cb46-3"><a href="#cb46-3"></a><span class="kw"><a href="https://rdrr.io/r/grDevices/dev.html">dev.off</a></span>()</span></code></pre></div>
+</div>
+</div>
 </div>
   </div>
 
@@ -1168,10 +690,16 @@
       <h2 class="hasAnchor">
 <a href="#tocnav" class="anchor"></a>Contents</h2>
       <ul class="nav nav-pills nav-stacked">
-<li><a href="#obtain-acc-data-from-curatedtcgadata">Obtain ACC data from curatedTCGAData:</a></li>
+<li><a href="#dependencies">Dependencies</a></li>
+      <li><a href="#obtain-acc-data-from-curatedtcgadata">Obtain ACC data from curatedTCGAData:</a></li>
       <li><a href="#download-and-reshape-data">Download and reshape data</a></li>
       <li><a href="#pancan-rnaseq2">PanCan RNASeq2*</a></li>
-      <li><a href="#gsea">GSEA</a></li>
+      <li><a href="#figure-3">Figure 3</a></li>
+      <li>
+<a href="#gsea">GSEA</a><ul class="nav nav-pills nav-stacked">
+<li><a href="#figure-4">Figure 4</a></li>
+      </ul>
+</li>
       </ul>
 </div>
       </div>

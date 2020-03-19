@@ -31,32 +31,30 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">curatedTCGAManu</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.7</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-<li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    Articles
-     
-    <span class="caret"></span>
-  </a>
-  <ul class="dropdown-menu" role="menu">
 <li>
-      <a href="../articles/Figure2_OncoPrint.html">PanCan OncoPrint</a>
-    </li>
-    <li>
-      <a href="../articles/Figures3n4_GSEA_PanCan.html">PanCan DE &amp; GSEA</a>
-    </li>
-    <li>
-      <a href="../articles/Figures5-6-S4.html">Example Multi-omic Plots</a>
-    </li>
-  </ul>
+  <a href="../articles/Figure2_OncoPrint.html">PanCan OncoPrint</a>
+</li>
+<li>
+  <a href="../articles/Figures3n4_GSEA_PanCan.html">PanCan DE &amp; GSEA</a>
+</li>
+<li>
+  <a href="../articles/Figures5-6-S4.html">Multi-omic Plots</a>
 </li>
       </ul>
-<ul class="nav navbar-nav navbar-right"></ul>
+<ul class="nav navbar-nav navbar-right">
+<li>
+  <a href="https://github.com/LiNk-NY/curatedTCGAManu">
+    <span class="fab fa fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
+      </ul>
 </div>
 <!--/.nav-collapse -->
   </div>
@@ -72,9 +70,9 @@
       <h1>Figures 5, 6, and S4</h1>
                         <h4 class="author">Waldron Lab</h4>
             
-            <h4 class="date">July 23, 2019</h4>
+            <h4 class="date">March 19, 2020</h4>
       
-      
+      <small class="dont-index">Source: <a href="https://github.com/LiNk-NY/curatedTCGAManu/blob/master/vignettes/Figures5-6-S4.Rmd"><code>vignettes/Figures5-6-S4.Rmd</code></a></small>
       <div class="hidden name"><code>Figures5-6-S4.Rmd</code></div>
 
     </div>
@@ -131,15 +129,15 @@
 ##                             &lt;numeric&gt; &lt;Surv&gt;
 ## 1                             75.8886 1355:1
 ## 2                            326.5332 1677:1
-## 3                            190.1940   NA:0
+## 3                             190.194   NA:0
 ## 4                                  NA  423:1
 ## 5                            366.3826  365:1
 ## ...                               ...    ...
 ## 88                             47.806   NA:0
-## 89                            118.523   NA:0
-## 90                            390.136   NA:0
+## 89                           118.5226   NA:0
+## 90                           390.1363   NA:0
 ## 91                                 NA   NA:0
-## 92                            684.872  383:1</code></pre>
+## 92                           684.8721  383:1</code></pre>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a><span class="kw"><a href="https://rdrr.io/pkg/survival/man/coxph.html">coxph</a></span>(</span>
 <span id="cb5-2"><a href="#cb5-2"></a>    <span class="kw"><a href="https://rdrr.io/pkg/survival/man/Surv.html">Surv</a></span>(days_to_death, vital_status) <span class="op">~</span><span class="st"> `</span><span class="dt">ACC_GISTIC_ThresholdedByGene.20160128_EZH2</span><span class="st">`</span> <span class="op">+</span></span>
 <span id="cb5-3"><a href="#cb5-3"></a><span class="st">        </span><span class="kw"><a href="https://rdrr.io/r/base/Log.html">log2</a></span>(<span class="st">`</span><span class="dt">ACC_RNASeq2GeneNorm.20160128_EZH2</span><span class="st">`</span>) <span class="op">+</span><span class="st"> </span>pathology_N_stage,</span>
@@ -179,189 +177,150 @@
 <div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a>corres &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/stats/cor.html">cor</a></span>(subacc.list[[<span class="dv">1</span>]], subacc.list[[<span class="dv">2</span>]])</span></code></pre></div>
 <pre><code>## Warning in cor(subacc.list[[1]], subacc.list[[2]]): the standard deviation is
 ## zero</code></pre>
-<p>And finally, create the histograms:</p>
+<p>And finally, create the histogram:</p>
 </div>
 <div id="figure-5" class="section level2">
 <h2 class="hasAnchor">
 <a href="#figure-5" class="anchor"></a>Figure 5</h2>
+<div id="histogram-of-the-distribution-of-pearson-correlation-coefficients-between-gene-copy-number-and-rna-seq-gene-expression-in-adrenocortical-carcinoma-acc" class="section level3">
+<h3 class="hasAnchor">
+<a href="#histogram-of-the-distribution-of-pearson-correlation-coefficients-between-gene-copy-number-and-rna-seq-gene-expression-in-adrenocortical-carcinoma-acc" class="anchor"></a>Histogram of the distribution of Pearson correlation coefficients between gene copy number and RNA-seq gene expression in adrenocortical carcinoma (ACC)</h3>
 <p>Histogram of the distribution of Pearson correlation coefficients between RNA-Seq and copy number alteration in adrenocortical carcinoma (ACC). An integrative representaiton readily allows comparison and correlation of multi-omics experiments.</p>
 <div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a>diagvals &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/diag.html">diag</a></span>(corres)</span>
 <span id="cb13-2"><a href="#cb13-2"></a>diagframe &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span>(<span class="dt">genename =</span> <span class="kw"><a href="https://rdrr.io/r/base/names.html">names</a></span>(diagvals), <span class="dt">value =</span> diagvals)</span>
 <span id="cb13-3"><a href="#cb13-3"></a></span>
 <span id="cb13-4"><a href="#cb13-4"></a>jco &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/pkg/ggpubr/man/get_palette.html">get_palette</a></span>(<span class="dt">palette =</span> <span class="st">"jco"</span>, <span class="dv">1</span>)</span>
 <span id="cb13-5"><a href="#cb13-5"></a></span>
-<span id="cb13-6"><a href="#cb13-6"></a><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span>(diagframe, <span class="kw"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(<span class="dt">x =</span> value)) <span class="op">+</span><span class="st"> </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/geom_histogram.html">geom_histogram</a></span>(<span class="dt">color =</span> <span class="st">"black"</span>,</span>
-<span id="cb13-7"><a href="#cb13-7"></a>    <span class="dt">fill =</span> jco, <span class="dt">binwidth =</span> <span class="fl">0.082</span>, <span class="dt">alpha =</span> <span class="fl">0.25</span>) <span class="op">+</span><span class="st"> </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_bw</a></span>() <span class="op">+</span></span>
-<span id="cb13-8"><a href="#cb13-8"></a><span class="st">    </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/labs.html">xlab</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/expression.html">expression</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/paste.html">paste</a></span>(<span class="st">"Pearson coefficient ("</span>, rho, <span class="st">")"</span>))) <span class="op">+</span></span>
-<span id="cb13-9"><a href="#cb13-9"></a><span class="st">    </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ylab</a></span>(<span class="st">"Frequency"</span>)</span></code></pre></div>
-<pre><code>## Warning: Removed 438 rows containing non-finite values (stat_bin).</code></pre>
-<pre><code>## Warning in grid.Call.graphics(C_rect, x$x, x$y, x$width, x$height,
-## resolveHJust(x$just, : semi-transparency is not supported on this device:
-## reported only once per page</code></pre>
+<span id="cb13-6"><a href="#cb13-6"></a><span class="kw"><a href="https://rdrr.io/pkg/ggpubr/man/gghistogram.html">gghistogram</a></span>(diagframe, <span class="dt">x =</span> <span class="st">"value"</span>, <span class="dt">color =</span> jco, <span class="dt">fill =</span> jco, <span class="dt">ylab =</span> <span class="st">"Frequency"</span>,</span>
+<span id="cb13-7"><a href="#cb13-7"></a>    <span class="dt">xlab =</span> <span class="kw"><a href="https://rdrr.io/r/base/expression.html">expression</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/paste.html">paste</a></span>(<span class="st">"Pearson coefficient ("</span>, rho, <span class="st">")"</span>)), <span class="dt">alpha =</span> <span class="fl">0.25</span>,</span>
+<span id="cb13-8"><a href="#cb13-8"></a>    <span class="dt">ggtheme =</span> <span class="kw"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_bw</a></span>(), <span class="dt">rug =</span> <span class="ot">TRUE</span>, <span class="dt">bins =</span> <span class="dv">45</span>, <span class="dt">add =</span> <span class="st">"mean"</span>)</span></code></pre></div>
 <p><img src="Figures5-6-S4_files/figure-html/unnamed-chunk-9-1.png" width="700"></p>
 <p>Code for saving as PDF:</p>
-<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1"></a><span class="co"># png("rnaseq-cn-correl.png", width = 8, height = 6, units = "in", res = 300)</span></span>
-<span id="cb16-2"><a href="#cb16-2"></a><span class="kw"><a href="https://rdrr.io/r/grDevices/pdf.html">pdf</a></span>(<span class="st">"rnaseq-cn-correl.pdf"</span>, <span class="dt">width =</span> <span class="dv">8</span>, <span class="dt">height =</span> <span class="dv">6</span>, <span class="dt">paper =</span> <span class="st">"special"</span>)</span>
-<span id="cb16-3"><a href="#cb16-3"></a></span>
-<span id="cb16-4"><a href="#cb16-4"></a><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span>(diagframe, <span class="kw"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(<span class="dt">x =</span> value)) <span class="op">+</span><span class="st"> </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/geom_histogram.html">geom_histogram</a></span>(<span class="dt">color =</span> <span class="st">"black"</span>,</span>
-<span id="cb16-5"><a href="#cb16-5"></a>    <span class="dt">fill =</span> jco, <span class="dt">binwidth =</span> <span class="fl">0.082</span>, <span class="dt">alpha =</span> <span class="fl">0.25</span>) <span class="op">+</span><span class="st"> </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_bw</a></span>() <span class="op">+</span></span>
-<span id="cb16-6"><a href="#cb16-6"></a><span class="st">    </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/labs.html">xlab</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/expression.html">expression</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/paste.html">paste</a></span>(<span class="st">"Pearson coefficient ("</span>, rho, <span class="st">")"</span>))) <span class="op">+</span></span>
-<span id="cb16-7"><a href="#cb16-7"></a><span class="st">    </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ylab</a></span>(<span class="st">"Frequency"</span>)</span>
-<span id="cb16-8"><a href="#cb16-8"></a></span>
-<span id="cb16-9"><a href="#cb16-9"></a><span class="kw"><a href="https://rdrr.io/r/grDevices/dev.html">dev.off</a></span>()</span></code></pre></div>
-<div id="figure-5-gghistogram-version" class="section level3">
-<h3 class="hasAnchor">
-<a href="#figure-5-gghistogram-version" class="anchor"></a>Figure 5: <code>gghistogram</code> version</h3>
-<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a>jco &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/pkg/ggpubr/man/get_palette.html">get_palette</a></span>(<span class="dt">palette =</span> <span class="st">"jco"</span>, <span class="dv">1</span>)</span>
-<span id="cb17-2"><a href="#cb17-2"></a></span>
-<span id="cb17-3"><a href="#cb17-3"></a><span class="kw"><a href="https://rdrr.io/pkg/ggpubr/man/gghistogram.html">gghistogram</a></span>(diagframe, <span class="dt">x =</span> <span class="st">"value"</span>, <span class="dt">color =</span> jco, <span class="dt">fill =</span> jco, <span class="dt">ylab =</span> <span class="st">"Frequency"</span>,</span>
-<span id="cb17-4"><a href="#cb17-4"></a>    <span class="dt">xlab =</span> <span class="kw"><a href="https://rdrr.io/r/base/expression.html">expression</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/paste.html">paste</a></span>(<span class="st">"Pearson coefficient ("</span>, rho, <span class="st">")"</span>)), <span class="dt">alpha =</span> <span class="fl">0.25</span>,</span>
-<span id="cb17-5"><a href="#cb17-5"></a>    <span class="dt">ggtheme =</span> <span class="kw"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_bw</a></span>(), <span class="dt">rug =</span> <span class="ot">TRUE</span>, <span class="dt">bins =</span> <span class="dv">45</span>, <span class="dt">add =</span> <span class="st">"mean"</span>)</span></code></pre></div>
-<pre><code>## Warning: geom_vline(): Ignoring `mapping` because `xintercept` was provided.</code></pre>
-<pre><code>## Warning: geom_vline(): Ignoring `data` because `xintercept` was provided.</code></pre>
-<pre><code>## Warning: Removed 438 rows containing non-finite values (stat_bin).</code></pre>
-<pre><code>## Warning in grid.Call.graphics(C_rect, x$x, x$y, x$width, x$height,
-## resolveHJust(x$just, : semi-transparency is not supported on this device:
-## reported only once per page</code></pre>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a><span class="co"># png("F5_rnaseq-cn-correl_ggpubr.png", width = 8, height = 6, units = "in",</span></span>
+<span id="cb14-2"><a href="#cb14-2"></a><span class="co">#    res = 300)</span></span>
+<span id="cb14-3"><a href="#cb14-3"></a><span class="kw"><a href="https://rdrr.io/r/grDevices/pdf.html">pdf</a></span>(<span class="st">"F5_rnaseq-cn-correl_ggpubr.pdf"</span>, <span class="dt">width =</span> <span class="dv">8</span>, <span class="dt">height =</span> <span class="dv">6</span>, <span class="dt">paper =</span> <span class="st">"special"</span>)</span>
+<span id="cb14-4"><a href="#cb14-4"></a></span>
+<span id="cb14-5"><a href="#cb14-5"></a><span class="kw"><a href="https://rdrr.io/pkg/ggpubr/man/gghistogram.html">gghistogram</a></span>(diagframe, <span class="dt">x =</span> <span class="st">"value"</span>, <span class="dt">color =</span> jco, <span class="dt">fill =</span> jco, <span class="dt">ylab =</span> <span class="st">"Frequency"</span>,</span>
+<span id="cb14-6"><a href="#cb14-6"></a>    <span class="dt">xlab =</span> <span class="kw"><a href="https://rdrr.io/r/base/expression.html">expression</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/paste.html">paste</a></span>(<span class="st">"Pearson coefficient ("</span>, rho, <span class="st">")"</span>)), <span class="dt">alpha =</span> <span class="fl">0.25</span>,</span>
+<span id="cb14-7"><a href="#cb14-7"></a>    <span class="dt">ggtheme =</span> <span class="kw"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_bw</a></span>(), <span class="dt">rug =</span> <span class="ot">TRUE</span>, <span class="dt">bins =</span> <span class="dv">45</span>, <span class="dt">add =</span> <span class="st">"mean"</span>)</span>
+<span id="cb14-8"><a href="#cb14-8"></a></span>
+<span id="cb14-9"><a href="#cb14-9"></a><span class="kw"><a href="https://rdrr.io/r/grDevices/dev.html">dev.off</a></span>()</span></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a><span class="kw"><a href="https://rdrr.io/r/graphics/hist.html">hist</a></span>(corres[<span class="kw"><a href="https://rdrr.io/r/base/lower.tri.html">upper.tri</a></span>(corres)])</span></code></pre></div>
 <p><img src="Figures5-6-S4_files/figure-html/unnamed-chunk-11-1.png" width="700"></p>
-<p>Code for saving as PDF:</p>
-<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1"></a><span class="co"># png("rnaseq-cn-correl_ggpubr.png", width = 8, height = 6, units = "in",</span></span>
-<span id="cb22-2"><a href="#cb22-2"></a><span class="co">#    res = 300)</span></span>
-<span id="cb22-3"><a href="#cb22-3"></a><span class="kw"><a href="https://rdrr.io/r/grDevices/pdf.html">pdf</a></span>(<span class="st">"F5_rnaseq-cn-correl_ggpubr.pdf"</span>, <span class="dt">width =</span> <span class="dv">8</span>, <span class="dt">height =</span> <span class="dv">6</span>, <span class="dt">paper =</span> <span class="st">"special"</span>)</span>
-<span id="cb22-4"><a href="#cb22-4"></a></span>
-<span id="cb22-5"><a href="#cb22-5"></a><span class="kw"><a href="https://rdrr.io/pkg/ggpubr/man/gghistogram.html">gghistogram</a></span>(diagframe, <span class="dt">x =</span> <span class="st">"value"</span>, <span class="dt">color =</span> jco, <span class="dt">fill =</span> jco, <span class="dt">ylab =</span> <span class="st">"Frequency"</span>,</span>
-<span id="cb22-6"><a href="#cb22-6"></a>    <span class="dt">xlab =</span> <span class="kw"><a href="https://rdrr.io/r/base/expression.html">expression</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/paste.html">paste</a></span>(<span class="st">"Pearson coefficient ("</span>, rho, <span class="st">")"</span>)), <span class="dt">alpha =</span> <span class="fl">0.25</span>,</span>
-<span id="cb22-7"><a href="#cb22-7"></a>    <span class="dt">ggtheme =</span> <span class="kw"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_bw</a></span>(), <span class="dt">rug =</span> <span class="ot">TRUE</span>, <span class="dt">bins =</span> <span class="dv">45</span>, <span class="dt">add =</span> <span class="st">"mean"</span>)</span>
-<span id="cb22-8"><a href="#cb22-8"></a></span>
-<span id="cb22-9"><a href="#cb22-9"></a><span class="kw"><a href="https://rdrr.io/r/grDevices/dev.html">dev.off</a></span>()</span></code></pre></div>
-<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1"></a><span class="kw"><a href="https://rdrr.io/r/graphics/hist.html">hist</a></span>(corres[<span class="kw"><a href="https://rdrr.io/r/base/lower.tri.html">upper.tri</a></span>(corres)])</span></code></pre></div>
-<p><img src="Figures5-6-S4_files/figure-html/unnamed-chunk-13-1.png" width="700"></p>
 </div>
 </div>
-<div id="figure-6-violin-plots" class="section level2">
+<div id="figure-6" class="section level2">
 <h2 class="hasAnchor">
-<a href="#figure-6-violin-plots" class="anchor"></a>Figure 6: Violin plots</h2>
+<a href="#figure-6" class="anchor"></a>Figure 6</h2>
+<div id="violin-plots" class="section level3">
+<h3 class="hasAnchor">
+<a href="#violin-plots" class="anchor"></a>Violin plots</h3>
 <p>Log 2 expression values by copy number alteration for the highly correlated SNRPB2 gene in adrenocortical carcinoma tumors. Violin plots show differences in expression by copy number loss or gain of SNRPB2, the gene with the highest corration of expression to copy number values (0.83). Copy number increases as log 2 expression values also increase.</p>
-<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1"></a>(topvals &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/sort.html">sort</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/MathFun.html">abs</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/diag.html">diag</a></span>(corres)), <span class="dt">decreasing =</span> <span class="ot">TRUE</span>)))</span></code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1"></a>(topvals &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/sort.html">sort</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/MathFun.html">abs</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/diag.html">diag</a></span>(corres)), <span class="dt">decreasing =</span> <span class="ot">TRUE</span>)))</span></code></pre></div>
 <pre><code>##    SNRPB2     NAA20    CRNKL1      BAG5    POLR2C     UBOX5 
 ## 0.8289331 0.8046060 0.8038552 0.7997314 0.7910225 0.7866916</code></pre>
 <p>The ‘SNRPB2’ gene expression has a correlation to CNV = 0.83</p>
-<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1"></a>snr &lt;-<span class="st"> </span>subacc[<span class="kw"><a href="https://rdrr.io/r/base/names.html">names</a></span>(topvals)[1L], ]</span></code></pre></div>
-<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1"></a>snpexp &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/as.data.frame.html">as.data.frame</a></span>(<span class="kw"><a href="https://rdrr.io/pkg/MultiAssayExperiment/man/MultiAssayExperiment-helpers.html">wideFormat</a></span>(snr, <span class="dt">check.names =</span> <span class="ot">FALSE</span>))</span>
-<span id="cb27-2"><a href="#cb27-2"></a><span class="kw"><a href="https://rdrr.io/r/base/names.html">names</a></span>(snpexp) &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"primary"</span>, <span class="st">"CopyNumber"</span>, <span class="st">"Expression"</span>)</span>
-<span id="cb27-3"><a href="#cb27-3"></a><span class="co">## remove outlier in CN</span></span>
-<span id="cb27-4"><a href="#cb27-4"></a><span class="kw"><a href="https://rdrr.io/r/base/table.html">table</a></span>(snpexp<span class="op">$</span>CopyNumber)</span></code></pre></div>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1"></a>snr &lt;-<span class="st"> </span>subacc[<span class="kw"><a href="https://rdrr.io/r/base/names.html">names</a></span>(topvals)[1L], ]</span></code></pre></div>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1"></a>snpexp &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/as.data.frame.html">as.data.frame</a></span>(<span class="kw"><a href="https://rdrr.io/pkg/MultiAssayExperiment/man/MultiAssayExperiment-helpers.html">wideFormat</a></span>(snr, <span class="dt">check.names =</span> <span class="ot">FALSE</span>))</span>
+<span id="cb19-2"><a href="#cb19-2"></a><span class="kw"><a href="https://rdrr.io/r/base/names.html">names</a></span>(snpexp) &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"primary"</span>, <span class="st">"CopyNumber"</span>, <span class="st">"Expression"</span>)</span>
+<span id="cb19-3"><a href="#cb19-3"></a><span class="co">## remove outlier in CN</span></span>
+<span id="cb19-4"><a href="#cb19-4"></a><span class="kw"><a href="https://rdrr.io/r/base/table.html">table</a></span>(snpexp<span class="op">$</span>CopyNumber)</span></code></pre></div>
 <pre><code>## 
 ## -2 -1  0  1 
 ##  1  9 29 38</code></pre>
-<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1"></a>snpexp &lt;-<span class="st"> </span>snpexp[snpexp<span class="op">$</span>CopyNumber <span class="op">!=</span><span class="st"> </span><span class="dv">-2</span>, ]</span>
-<span id="cb29-2"><a href="#cb29-2"></a></span>
-<span id="cb29-3"><a href="#cb29-3"></a>snpexp[[<span class="st">"Log2Exp"</span>]] &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/Log.html">log</a></span>(snpexp[[<span class="st">"Expression"</span>]], <span class="dv">2</span>)</span>
-<span id="cb29-4"><a href="#cb29-4"></a>snpexp<span class="op">$</span>CopyNumber &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/factor.html">factor</a></span>(snpexp<span class="op">$</span>CopyNumber)</span>
-<span id="cb29-5"><a href="#cb29-5"></a></span>
-<span id="cb29-6"><a href="#cb29-6"></a>jcols &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/pkg/ggpubr/man/get_palette.html">get_palette</a></span>(<span class="dt">palette =</span> <span class="st">"jco"</span>, <span class="dv">4</span>)</span>
-<span id="cb29-7"><a href="#cb29-7"></a>jcols &lt;-<span class="st"> </span>jcols[<span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">4</span>)]</span>
-<span id="cb29-8"><a href="#cb29-8"></a></span>
-<span id="cb29-9"><a href="#cb29-9"></a><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span>(snpexp, <span class="kw"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(CopyNumber, Log2Exp, <span class="dt">fill =</span> CopyNumber)) <span class="op">+</span></span>
-<span id="cb29-10"><a href="#cb29-10"></a><span class="st">    </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/geom_violin.html">geom_violin</a></span>(<span class="dt">trim =</span> <span class="ot">FALSE</span>) <span class="op">+</span></span>
-<span id="cb29-11"><a href="#cb29-11"></a><span class="st">    </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/labs.html">xlab</a></span>(<span class="st">"Copy Number"</span>) <span class="op">+</span></span>
-<span id="cb29-12"><a href="#cb29-12"></a><span class="st">    </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ylab</a></span>(<span class="st">"log2(expression)"</span>) <span class="op">+</span></span>
-<span id="cb29-13"><a href="#cb29-13"></a><span class="st">    </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/geom_boxplot.html">geom_boxplot</a></span>(<span class="dt">width=</span><span class="fl">0.2</span>, <span class="dt">fill =</span> <span class="st">"white"</span>) <span class="op">+</span></span>
-<span id="cb29-14"><a href="#cb29-14"></a><span class="st">    </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html">scale_fill_manual</a></span>(<span class="dt">values =</span> jcols) <span class="op">+</span></span>
-<span id="cb29-15"><a href="#cb29-15"></a><span class="st">    </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_bw</a></span>()</span></code></pre></div>
-<p><img src="Figures5-6-S4_files/figure-html/unnamed-chunk-16-1.png" width="700"></p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1"></a>snpexp &lt;-<span class="st"> </span>snpexp[snpexp<span class="op">$</span>CopyNumber <span class="op">!=</span><span class="st"> </span><span class="dv">-2</span>, ]</span>
+<span id="cb21-2"><a href="#cb21-2"></a></span>
+<span id="cb21-3"><a href="#cb21-3"></a>snpexp[[<span class="st">"Log2Exp"</span>]] &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/Log.html">log</a></span>(snpexp[[<span class="st">"Expression"</span>]], <span class="dv">2</span>)</span>
+<span id="cb21-4"><a href="#cb21-4"></a>snpexp<span class="op">$</span>CopyNumber &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/factor.html">factor</a></span>(snpexp<span class="op">$</span>CopyNumber)</span>
+<span id="cb21-5"><a href="#cb21-5"></a></span>
+<span id="cb21-6"><a href="#cb21-6"></a>jcols &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/pkg/ggpubr/man/get_palette.html">get_palette</a></span>(<span class="dt">palette =</span> <span class="st">"jco"</span>, <span class="dv">4</span>)</span>
+<span id="cb21-7"><a href="#cb21-7"></a>jcols &lt;-<span class="st"> </span>jcols[<span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">4</span>)]</span>
+<span id="cb21-8"><a href="#cb21-8"></a></span>
+<span id="cb21-9"><a href="#cb21-9"></a><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span>(snpexp, <span class="kw"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(CopyNumber, Log2Exp, <span class="dt">fill =</span> CopyNumber)) <span class="op">+</span></span>
+<span id="cb21-10"><a href="#cb21-10"></a><span class="st">    </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/geom_violin.html">geom_violin</a></span>(<span class="dt">trim =</span> <span class="ot">FALSE</span>) <span class="op">+</span></span>
+<span id="cb21-11"><a href="#cb21-11"></a><span class="st">    </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/labs.html">xlab</a></span>(<span class="st">"Copy Number"</span>) <span class="op">+</span></span>
+<span id="cb21-12"><a href="#cb21-12"></a><span class="st">    </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ylab</a></span>(<span class="st">"log2(expression)"</span>) <span class="op">+</span></span>
+<span id="cb21-13"><a href="#cb21-13"></a><span class="st">    </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/geom_boxplot.html">geom_boxplot</a></span>(<span class="dt">width=</span><span class="fl">0.2</span>, <span class="dt">fill =</span> <span class="st">"white"</span>) <span class="op">+</span></span>
+<span id="cb21-14"><a href="#cb21-14"></a><span class="st">    </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html">scale_fill_manual</a></span>(<span class="dt">values =</span> jcols) <span class="op">+</span></span>
+<span id="cb21-15"><a href="#cb21-15"></a><span class="st">    </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_bw</a></span>()</span></code></pre></div>
+<p><img src="Figures5-6-S4_files/figure-html/unnamed-chunk-14-1.png" width="700"></p>
 <p>Code for saving as PDF:</p>
-<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1"></a><span class="co"># png("violin_exp.png", width = 8, height = 6, units = "in", res = 300)</span></span>
-<span id="cb30-2"><a href="#cb30-2"></a><span class="kw"><a href="https://rdrr.io/r/grDevices/pdf.html">pdf</a></span>(<span class="st">"F6_violin_exp.pdf"</span>, <span class="dt">width =</span> <span class="dv">8</span>, <span class="dt">height =</span> <span class="dv">6</span>, <span class="dt">paper =</span> <span class="st">"special"</span>)</span>
-<span id="cb30-3"><a href="#cb30-3"></a></span>
-<span id="cb30-4"><a href="#cb30-4"></a><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span>(snpexp, <span class="kw"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(CopyNumber, Log2Exp, <span class="dt">fill =</span> CopyNumber)) <span class="op">+</span></span>
-<span id="cb30-5"><a href="#cb30-5"></a><span class="st">    </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/geom_violin.html">geom_violin</a></span>(<span class="dt">trim =</span> <span class="ot">FALSE</span>) <span class="op">+</span></span>
-<span id="cb30-6"><a href="#cb30-6"></a><span class="st">    </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/labs.html">xlab</a></span>(<span class="st">"Copy Number"</span>) <span class="op">+</span></span>
-<span id="cb30-7"><a href="#cb30-7"></a><span class="st">    </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ylab</a></span>(<span class="st">"log2(expression)"</span>) <span class="op">+</span></span>
-<span id="cb30-8"><a href="#cb30-8"></a><span class="st">    </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/geom_boxplot.html">geom_boxplot</a></span>(<span class="dt">width=</span><span class="fl">0.2</span>, <span class="dt">fill =</span> <span class="st">"white"</span>) <span class="op">+</span></span>
-<span id="cb30-9"><a href="#cb30-9"></a><span class="st">    </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html">scale_fill_manual</a></span>(<span class="dt">values =</span> jcols) <span class="op">+</span></span>
-<span id="cb30-10"><a href="#cb30-10"></a><span class="st">    </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_bw</a></span>()</span>
-<span id="cb30-11"><a href="#cb30-11"></a></span>
-<span id="cb30-12"><a href="#cb30-12"></a><span class="kw"><a href="https://rdrr.io/r/grDevices/dev.html">dev.off</a></span>()</span></code></pre></div>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1"></a><span class="co"># png("violin_exp.png", width = 8, height = 6, units = "in", res = 300)</span></span>
+<span id="cb22-2"><a href="#cb22-2"></a><span class="kw"><a href="https://rdrr.io/r/grDevices/pdf.html">pdf</a></span>(<span class="st">"F6_violin_exp.pdf"</span>, <span class="dt">width =</span> <span class="dv">8</span>, <span class="dt">height =</span> <span class="dv">6</span>, <span class="dt">paper =</span> <span class="st">"special"</span>)</span>
+<span id="cb22-3"><a href="#cb22-3"></a></span>
+<span id="cb22-4"><a href="#cb22-4"></a><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span>(snpexp, <span class="kw"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(CopyNumber, Log2Exp, <span class="dt">fill =</span> CopyNumber)) <span class="op">+</span></span>
+<span id="cb22-5"><a href="#cb22-5"></a><span class="st">    </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/geom_violin.html">geom_violin</a></span>(<span class="dt">trim =</span> <span class="ot">FALSE</span>) <span class="op">+</span></span>
+<span id="cb22-6"><a href="#cb22-6"></a><span class="st">    </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/labs.html">xlab</a></span>(<span class="st">"Copy Number"</span>) <span class="op">+</span></span>
+<span id="cb22-7"><a href="#cb22-7"></a><span class="st">    </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ylab</a></span>(<span class="st">"log2(expression)"</span>) <span class="op">+</span></span>
+<span id="cb22-8"><a href="#cb22-8"></a><span class="st">    </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/geom_boxplot.html">geom_boxplot</a></span>(<span class="dt">width=</span><span class="fl">0.2</span>, <span class="dt">fill =</span> <span class="st">"white"</span>) <span class="op">+</span></span>
+<span id="cb22-9"><a href="#cb22-9"></a><span class="st">    </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html">scale_fill_manual</a></span>(<span class="dt">values =</span> jcols) <span class="op">+</span></span>
+<span id="cb22-10"><a href="#cb22-10"></a><span class="st">    </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_bw</a></span>()</span>
+<span id="cb22-11"><a href="#cb22-11"></a></span>
+<span id="cb22-12"><a href="#cb22-12"></a><span class="kw"><a href="https://rdrr.io/r/grDevices/dev.html">dev.off</a></span>()</span></code></pre></div>
 </div>
-<div id="supplemental-figure-4-identifying-correlated-principal-components" class="section level2">
+</div>
+<div id="supplemental-figure-4" class="section level2">
 <h2 class="hasAnchor">
-<a href="#supplemental-figure-4-identifying-correlated-principal-components" class="anchor"></a>Supplemental Figure 4: Identifying correlated principal components</h2>
+<a href="#supplemental-figure-4" class="anchor"></a>Supplemental Figure 4</h2>
+<div id="identifying-correlated-principal-components" class="section level3">
+<h3 class="hasAnchor">
+<a href="#identifying-correlated-principal-components" class="anchor"></a>Identifying correlated principal components</h3>
 <p>Correlated Principal Components across experimental assays in Adrenocortical carcinoma (ACC) from The Cancer Genome Atlas (TCGA). Plot identifies correlated principal components across protein, GISTIC copy number, microRNA, mutation, and RNA-Seq assays obtained from curatedTCGAData. The RNA-Seq PC is consistently correlated with protein arrays, GISTIC, and miRNA.</p>
 <p>Perform Principal Components Analysis of each of the five assays, using samples available on each assay, log-transforming RNA-seq data first. Using the first 10 components, calculate Pearson correlation between all scores and plot these correlations as a heatmap to identify correlated components across assays.</p>
-<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1"></a>acc_full &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/pkg/curatedTCGAData/man/curatedTCGAData.html">curatedTCGAData</a></span>(<span class="st">"ACC"</span>,</span>
-<span id="cb31-2"><a href="#cb31-2"></a>    <span class="dt">assays =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"RNASeq2*"</span>, <span class="st">"GISTIC_T*"</span>, <span class="st">"RPPA*"</span>, <span class="st">"Mutation"</span>, <span class="st">"miRNASeqGene"</span>),</span>
-<span id="cb31-3"><a href="#cb31-3"></a>    <span class="dt">dry.run =</span> <span class="ot">FALSE</span>)</span></code></pre></div>
-<pre><code>## snapshotDate(): 2020-03-09</code></pre>
-<pre><code>## Working on: ACC_GISTIC_ThresholdedByGene-20160128</code></pre>
-<pre><code>## see ?curatedTCGAData and browseVignettes('curatedTCGAData') for documentation</code></pre>
-<pre><code>## loading from cache</code></pre>
-<pre><code>## Working on: ACC_miRNASeqGene-20160128</code></pre>
-<pre><code>## see ?curatedTCGAData and browseVignettes('curatedTCGAData') for documentation</code></pre>
-<pre><code>## loading from cache</code></pre>
-<pre><code>## Working on: ACC_Mutation-20160128</code></pre>
-<pre><code>## see ?curatedTCGAData and browseVignettes('curatedTCGAData') for documentation</code></pre>
-<pre><code>## loading from cache</code></pre>
-<pre><code>## Working on: ACC_RNASeq2GeneNorm-20160128</code></pre>
-<pre><code>## see ?curatedTCGAData and browseVignettes('curatedTCGAData') for documentation</code></pre>
-<pre><code>## loading from cache</code></pre>
-<pre><code>## Working on: ACC_RPPAArray-20160128</code></pre>
-<pre><code>## see ?curatedTCGAData and browseVignettes('curatedTCGAData') for documentation</code></pre>
-<pre><code>## loading from cache</code></pre>
-<pre><code>## Working on: ACC_colData-20160128</code></pre>
-<pre><code>## see ?curatedTCGAData and browseVignettes('curatedTCGAData') for documentation</code></pre>
-<pre><code>## loading from cache</code></pre>
-<pre><code>## Working on: ACC_metadata-20160128</code></pre>
-<pre><code>## see ?curatedTCGAData and browseVignettes('curatedTCGAData') for documentation</code></pre>
-<pre><code>## loading from cache</code></pre>
-<pre><code>## Working on: ACC_sampleMap-20160128</code></pre>
-<pre><code>## see ?curatedTCGAData and browseVignettes('curatedTCGAData') for documentation</code></pre>
-<pre><code>## loading from cache</code></pre>
-<pre><code>## harmonizing input:
-##   removing 620 sampleMap rows not in names(experiments)</code></pre>
-<div class="sourceCode" id="cb58"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1"></a>getLoadings &lt;-<span class="st"> </span><span class="cf">function</span>(x, <span class="dt">ncomp=</span><span class="dv">10</span>, <span class="dt">dolog=</span><span class="ot">FALSE</span>, <span class="dt">center=</span><span class="ot">TRUE</span>, <span class="dt">scale.=</span><span class="ot">TRUE</span>) {</span>
-<span id="cb58-2"><a href="#cb58-2"></a>    <span class="cf">if</span> (dolog){</span>
-<span id="cb58-3"><a href="#cb58-3"></a>        x &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/Log.html">log2</a></span>(x <span class="op">+</span><span class="st"> </span><span class="dv">1</span>)</span>
-<span id="cb58-4"><a href="#cb58-4"></a>    }</span>
-<span id="cb58-5"><a href="#cb58-5"></a>    pc &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/stats/prcomp.html">prcomp</a></span>(x, <span class="dt">center=</span>center, <span class="dt">scale.=</span>scale.)</span>
-<span id="cb58-6"><a href="#cb58-6"></a>    <span class="kw"><a href="https://rdrr.io/r/base/t.html">t</a></span>(pc<span class="op">$</span>rotation[, <span class="dv">1</span><span class="op">:</span><span class="dv">10</span>])</span>
-<span id="cb58-7"><a href="#cb58-7"></a>}</span></code></pre></div>
-<div class="sourceCode" id="cb59"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb59-1"><a href="#cb59-1"></a>acc2 &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/pkg/MultiAssayExperiment/man/MultiAssayExperiment-helpers.html">intersectColumns</a></span>(acc_full)</span></code></pre></div>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1"></a>acc_full &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/pkg/curatedTCGAData/man/curatedTCGAData.html">curatedTCGAData</a></span>(<span class="st">"ACC"</span>,</span>
+<span id="cb23-2"><a href="#cb23-2"></a>    <span class="dt">assays =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"RNASeq2*"</span>, <span class="st">"GISTIC_T*"</span>, <span class="st">"RPPA*"</span>, <span class="st">"Mutation"</span>, <span class="st">"miRNASeqGene"</span>),</span>
+<span id="cb23-3"><a href="#cb23-3"></a>    <span class="dt">dry.run =</span> <span class="ot">FALSE</span>)</span>
+<span id="cb23-4"><a href="#cb23-4"></a>acc_full</span></code></pre></div>
+<pre><code>## A MultiAssayExperiment object of 5 listed
+##  experiments with user-defined names and respective classes.
+##  Containing an ExperimentList class object of length 5:
+##  [1] ACC_GISTIC_ThresholdedByGene-20160128: SummarizedExperiment with 24776 rows and 90 columns
+##  [2] ACC_miRNASeqGene-20160128: SummarizedExperiment with 1046 rows and 80 columns
+##  [3] ACC_Mutation-20160128: RaggedExperiment with 20166 rows and 90 columns
+##  [4] ACC_RNASeq2GeneNorm-20160128: SummarizedExperiment with 20501 rows and 79 columns
+##  [5] ACC_RPPAArray-20160128: SummarizedExperiment with 192 rows and 46 columns
+## Features:
+##  experiments() - obtain the ExperimentList instance
+##  colData() - the primary/phenotype DataFrame
+##  sampleMap() - the sample availability DFrame
+##  `$`, `[`, `[[` - extract colData columns, subset, or experiment
+##  *Format() - convert into a long or wide DataFrame
+##  assays() - convert ExperimentList to a SimpleList of matrices</code></pre>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1"></a>getLoadings &lt;-<span class="st"> </span><span class="cf">function</span>(x, <span class="dt">ncomp=</span><span class="dv">10</span>, <span class="dt">dolog=</span><span class="ot">FALSE</span>, <span class="dt">center=</span><span class="ot">TRUE</span>, <span class="dt">scale.=</span><span class="ot">TRUE</span>) {</span>
+<span id="cb25-2"><a href="#cb25-2"></a>    <span class="cf">if</span> (dolog){</span>
+<span id="cb25-3"><a href="#cb25-3"></a>        x &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/Log.html">log2</a></span>(x <span class="op">+</span><span class="st"> </span><span class="dv">1</span>)</span>
+<span id="cb25-4"><a href="#cb25-4"></a>    }</span>
+<span id="cb25-5"><a href="#cb25-5"></a>    pc &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/stats/prcomp.html">prcomp</a></span>(x, <span class="dt">center=</span>center, <span class="dt">scale.=</span>scale.)</span>
+<span id="cb25-6"><a href="#cb25-6"></a>    <span class="kw"><a href="https://rdrr.io/r/base/t.html">t</a></span>(pc<span class="op">$</span>rotation[, <span class="dv">1</span><span class="op">:</span><span class="dv">10</span>])</span>
+<span id="cb25-7"><a href="#cb25-7"></a>}</span></code></pre></div>
+<p>Take only samples that match accross assays:</p>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1"></a>acc2 &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/pkg/MultiAssayExperiment/man/MultiAssayExperiment-helpers.html">intersectColumns</a></span>(acc_full)</span></code></pre></div>
 <p>Categorize by silent mutations:</p>
-<div class="sourceCode" id="cb60"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb60-1"><a href="#cb60-1"></a>mut &lt;-<span class="st"> </span><span class="kw">assay</span>(acc2[[<span class="st">"ACC_Mutation-20160128"</span>]], <span class="dt">i =</span> <span class="st">"Variant_Classification"</span>)</span>
-<span id="cb60-2"><a href="#cb60-2"></a>mut &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span>(mut) <span class="op">|</span><span class="st"> </span>mut <span class="op">==</span><span class="st"> "Silent"</span>, <span class="dv">0</span>, <span class="dv">1</span>)</span>
-<span id="cb60-3"><a href="#cb60-3"></a>acc2[[<span class="st">"ACC_Mutation-20160128"</span>]] &lt;-<span class="st"> </span>mut</span></code></pre></div>
-<div class="sourceCode" id="cb61"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb61-1"><a href="#cb61-1"></a>acc2 &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(acc2,</span>
-<span id="cb61-2"><a href="#cb61-2"></a>    <span class="st">`</span><span class="dt">RNA-Seq</span><span class="st">`</span> =<span class="st"> </span><span class="kw">getLoadings</span>(<span class="kw">assays</span>(acc2)[[<span class="st">"ACC_RNASeq2GeneNorm-20160128"</span>]],</span>
-<span id="cb61-3"><a href="#cb61-3"></a>        <span class="dt">dolog=</span><span class="ot">TRUE</span>), <span class="dt">mapFrom=</span>1L</span>
-<span id="cb61-4"><a href="#cb61-4"></a>    )</span></code></pre></div>
-<pre><code>## Warning: Assuming column order in the data provided 
-##  matches the order in 'mapFrom' experiment(s) colnames</code></pre>
-<div class="sourceCode" id="cb63"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb63-1"><a href="#cb63-1"></a>acc2 &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(acc2,</span>
-<span id="cb63-2"><a href="#cb63-2"></a>    <span class="st">`</span><span class="dt">GISTIC-T</span><span class="st">`</span> =<span class="st"> </span><span class="kw">getLoadings</span>(<span class="kw">assays</span>(acc2)[[<span class="st">"ACC_GISTIC_ThresholdedByGene-20160128"</span>]],</span>
-<span id="cb63-3"><a href="#cb63-3"></a>        <span class="dt">center=</span><span class="ot">FALSE</span>, <span class="dt">scale.=</span><span class="ot">FALSE</span>), <span class="dt">mapFrom=</span>2L)</span></code></pre></div>
-<pre><code>## Warning: Assuming column order in the data provided 
-##  matches the order in 'mapFrom' experiment(s) colnames</code></pre>
-<div class="sourceCode" id="cb65"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb65-1"><a href="#cb65-1"></a>acc2 &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(acc2,</span>
-<span id="cb65-2"><a href="#cb65-2"></a>    <span class="dt">Protein =</span> <span class="kw">getLoadings</span>(<span class="kw">assays</span>(acc2)[[<span class="st">"ACC_RPPAArray-20160128"</span>]]),</span>
-<span id="cb65-3"><a href="#cb65-3"></a>        <span class="dt">mapFrom=</span>3L)</span></code></pre></div>
-<pre><code>## Warning: Assuming column order in the data provided 
-##  matches the order in 'mapFrom' experiment(s) colnames</code></pre>
-<div class="sourceCode" id="cb67"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb67-1"><a href="#cb67-1"></a>acc2 &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(acc2,</span>
-<span id="cb67-2"><a href="#cb67-2"></a>    <span class="dt">Mutations =</span> <span class="kw">getLoadings</span>(<span class="kw">assays</span>(acc2)[[<span class="st">"ACC_Mutation-20160128"</span>]],</span>
-<span id="cb67-3"><a href="#cb67-3"></a>        <span class="dt">center=</span><span class="ot">FALSE</span>, <span class="dt">scale.=</span><span class="ot">FALSE</span>), <span class="dt">mapFrom=</span>4L)</span></code></pre></div>
-<pre><code>## Warning: Assuming column order in the data provided 
-##  matches the order in 'mapFrom' experiment(s) colnames</code></pre>
-<div class="sourceCode" id="cb69"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb69-1"><a href="#cb69-1"></a>acc2 &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(acc2,</span>
-<span id="cb69-2"><a href="#cb69-2"></a>    <span class="dt">miRNA =</span> <span class="kw">getLoadings</span>(<span class="kw">assays</span>(acc2)[[<span class="st">"ACC_miRNASeqGene-20160128"</span>]]),</span>
-<span id="cb69-3"><a href="#cb69-3"></a>        <span class="dt">mapFrom=</span>5L)</span></code></pre></div>
-<pre><code>## Warning: Assuming column order in the data provided 
-##  matches the order in 'mapFrom' experiment(s) colnames</code></pre>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1"></a>mut &lt;-<span class="st"> </span><span class="kw">assay</span>(acc2[[<span class="st">"ACC_Mutation-20160128"</span>]], <span class="dt">i =</span> <span class="st">"Variant_Classification"</span>)</span>
+<span id="cb27-2"><a href="#cb27-2"></a>mut &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span>(mut) <span class="op">|</span><span class="st"> </span>mut <span class="op">==</span><span class="st"> "Silent"</span>, <span class="dv">0</span>, <span class="dv">1</span>)</span>
+<span id="cb27-3"><a href="#cb27-3"></a>acc2[[<span class="st">"ACC_Mutation-20160128"</span>]] &lt;-<span class="st"> </span>mut</span></code></pre></div>
+<p>Add loadings as a separate assay for each:</p>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1"></a>acc2 &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(acc2,</span>
+<span id="cb28-2"><a href="#cb28-2"></a>    <span class="st">`</span><span class="dt">RNA-Seq</span><span class="st">`</span> =<span class="st"> </span><span class="kw">getLoadings</span>(<span class="kw">assays</span>(acc2)[[<span class="st">"ACC_RNASeq2GeneNorm-20160128"</span>]],</span>
+<span id="cb28-3"><a href="#cb28-3"></a>        <span class="dt">dolog=</span><span class="ot">TRUE</span>), <span class="dt">mapFrom=</span>1L</span>
+<span id="cb28-4"><a href="#cb28-4"></a>    )</span>
+<span id="cb28-5"><a href="#cb28-5"></a>acc2 &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(acc2,</span>
+<span id="cb28-6"><a href="#cb28-6"></a>    <span class="st">`</span><span class="dt">GISTIC-T</span><span class="st">`</span> =<span class="st"> </span><span class="kw">getLoadings</span>(<span class="kw">assays</span>(acc2)[[<span class="st">"ACC_GISTIC_ThresholdedByGene-20160128"</span>]],</span>
+<span id="cb28-7"><a href="#cb28-7"></a>        <span class="dt">center=</span><span class="ot">FALSE</span>, <span class="dt">scale.=</span><span class="ot">FALSE</span>), <span class="dt">mapFrom=</span>2L)</span>
+<span id="cb28-8"><a href="#cb28-8"></a>acc2 &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(acc2,</span>
+<span id="cb28-9"><a href="#cb28-9"></a>    <span class="dt">Protein =</span> <span class="kw">getLoadings</span>(<span class="kw">assays</span>(acc2)[[<span class="st">"ACC_RPPAArray-20160128"</span>]]),</span>
+<span id="cb28-10"><a href="#cb28-10"></a>        <span class="dt">mapFrom=</span>3L)</span>
+<span id="cb28-11"><a href="#cb28-11"></a>acc2 &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(acc2,</span>
+<span id="cb28-12"><a href="#cb28-12"></a>    <span class="dt">Mutations =</span> <span class="kw">getLoadings</span>(<span class="kw">assays</span>(acc2)[[<span class="st">"ACC_Mutation-20160128"</span>]],</span>
+<span id="cb28-13"><a href="#cb28-13"></a>        <span class="dt">center=</span><span class="ot">FALSE</span>, <span class="dt">scale.=</span><span class="ot">FALSE</span>), <span class="dt">mapFrom=</span>4L)</span>
+<span id="cb28-14"><a href="#cb28-14"></a>acc2 &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(acc2,</span>
+<span id="cb28-15"><a href="#cb28-15"></a>    <span class="dt">miRNA =</span> <span class="kw">getLoadings</span>(<span class="kw">assays</span>(acc2)[[<span class="st">"ACC_miRNASeqGene-20160128"</span>]]),</span>
+<span id="cb28-16"><a href="#cb28-16"></a>        <span class="dt">mapFrom=</span>5L)</span></code></pre></div>
 <p>Now subset to keep <em>only</em> the PCA results:</p>
-<div class="sourceCode" id="cb71"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb71-1"><a href="#cb71-1"></a>acc2 &lt;-<span class="st"> </span>acc2[, , <span class="dv">6</span><span class="op">:</span><span class="dv">10</span>]</span></code></pre></div>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1"></a>acc2 &lt;-<span class="st"> </span>acc2[, , <span class="dv">6</span><span class="op">:</span><span class="dv">10</span>]</span></code></pre></div>
 <pre><code>## harmonizing input:
 ##   removing 215 sampleMap rows not in names(experiments)</code></pre>
-<div class="sourceCode" id="cb73"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb73-1"><a href="#cb73-1"></a><span class="kw"><a href="https://rdrr.io/pkg/MultiAssayExperiment/man/MultiAssayExperiment-methods.html">experiments</a></span>(acc2)</span></code></pre></div>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1"></a><span class="kw"><a href="https://rdrr.io/pkg/MultiAssayExperiment/man/MultiAssayExperiment-methods.html">experiments</a></span>(acc2)</span></code></pre></div>
 <pre><code>## ExperimentList class object of length 5:
 ##  [1] RNA-Seq: matrix with 10 rows and 43 columns
 ##  [2] GISTIC-T: matrix with 10 rows and 43 columns
@@ -370,22 +329,23 @@
 ##  [5] miRNA: matrix with 10 rows and 43 columns</code></pre>
 <p>Note, it would be equally easy (and maybe better) to do PCA on all samples available for each assay, then do intersectColumns at this point instead.</p>
 <p>Now, steps for calculating the correlations and plotting a heatmap: * Use <em>wideFormat</em> to paste these together, which has the nice property of adding assay names to the column names. * The first column always contains the sample identifier, so remove it. * Coerce to a matrix * Calculate the correlations, and take the absolute value (since signs of principal components are arbitrary) * Set the diagonals to NA (each variable has a correlation of 1 to itself).</p>
-<div class="sourceCode" id="cb75"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb75-1"><a href="#cb75-1"></a>df &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/pkg/MultiAssayExperiment/man/MultiAssayExperiment-helpers.html">wideFormat</a></span>(acc2)[, <span class="dv">-1</span>]</span>
-<span id="cb75-2"><a href="#cb75-2"></a>mycors &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/stats/cor.html">cor</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/matrix.html">as.matrix</a></span>(df))</span>
-<span id="cb75-3"><a href="#cb75-3"></a>mycors &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/MathFun.html">abs</a></span>(mycors)</span>
-<span id="cb75-4"><a href="#cb75-4"></a><span class="kw"><a href="https://rdrr.io/r/base/diag.html">diag</a></span>(mycors) &lt;-<span class="st"> </span><span class="ot">NA</span></span></code></pre></div>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1"></a>df &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/pkg/MultiAssayExperiment/man/MultiAssayExperiment-helpers.html">wideFormat</a></span>(acc2)[, <span class="dv">-1</span>]</span>
+<span id="cb33-2"><a href="#cb33-2"></a>mycors &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/stats/cor.html">cor</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/matrix.html">as.matrix</a></span>(df))</span>
+<span id="cb33-3"><a href="#cb33-3"></a>mycors &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/MathFun.html">abs</a></span>(mycors)</span>
+<span id="cb33-4"><a href="#cb33-4"></a><span class="kw"><a href="https://rdrr.io/r/base/diag.html">diag</a></span>(mycors) &lt;-<span class="st"> </span><span class="ot">NA</span></span></code></pre></div>
 <p>To simplify the heatmap, show only components that have at least one correlation greater than 0.5.</p>
-<div class="sourceCode" id="cb76"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb76-1"><a href="#cb76-1"></a>has.high.cor &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/apply.html">apply</a></span>(mycors, <span class="dv">2</span>, max, <span class="dt">na.rm=</span><span class="ot">TRUE</span>) <span class="op">&gt;</span><span class="st"> </span><span class="fl">0.5</span></span>
-<span id="cb76-2"><a href="#cb76-2"></a>mycors &lt;-<span class="st"> </span>mycors[has.high.cor, has.high.cor]</span>
-<span id="cb76-3"><a href="#cb76-3"></a></span>
-<span id="cb76-4"><a href="#cb76-4"></a><span class="co"># colors</span></span>
-<span id="cb76-5"><a href="#cb76-5"></a>mycolors &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/grDevices/colorRamp.html">colorRampPalette</a></span>(<span class="kw"><a href="https://rdrr.io/pkg/RColorBrewer/man/ColorBrewer.html">brewer.pal</a></span>(<span class="dt">n =</span> <span class="dv">7</span>, <span class="dt">name =</span> <span class="st">"Oranges"</span>))(<span class="dv">100</span>)</span>
-<span id="cb76-6"><a href="#cb76-6"></a>pheatmap<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/pheatmap/man/pheatmap.html">pheatmap</a></span>(mycors, <span class="dt">color =</span> mycolors, <span class="dt">angle_col =</span> <span class="dv">90</span>)</span></code></pre></div>
-<p><img src="Figures5-6-S4_files/figure-html/unnamed-chunk-25-1.png" width="700"></p>
-<div class="sourceCode" id="cb77"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb77-1"><a href="#cb77-1"></a><span class="co"># png("FS4_pca_correls.png", width = 9, height = 8, units = "in", res = 300)</span></span>
-<span id="cb77-2"><a href="#cb77-2"></a><span class="kw"><a href="https://rdrr.io/r/grDevices/pdf.html">pdf</a></span>(<span class="st">"pca_correls.pdf"</span>, <span class="dt">width =</span> <span class="dv">9</span>, <span class="dt">height =</span> <span class="dv">8</span>, <span class="dt">paper =</span> <span class="st">"special"</span>)</span>
-<span id="cb77-3"><a href="#cb77-3"></a>pheatmap<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/pheatmap/man/pheatmap.html">pheatmap</a></span>(mycors, <span class="dt">color =</span> mycolors, <span class="dt">angle_col =</span> <span class="dv">90</span>)</span>
-<span id="cb77-4"><a href="#cb77-4"></a><span class="kw"><a href="https://rdrr.io/r/grDevices/dev.html">dev.off</a></span>()</span></code></pre></div>
+<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1"></a>has.high.cor &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/apply.html">apply</a></span>(mycors, <span class="dv">2</span>, max, <span class="dt">na.rm=</span><span class="ot">TRUE</span>) <span class="op">&gt;</span><span class="st"> </span><span class="fl">0.5</span></span>
+<span id="cb34-2"><a href="#cb34-2"></a>mycors &lt;-<span class="st"> </span>mycors[has.high.cor, has.high.cor]</span>
+<span id="cb34-3"><a href="#cb34-3"></a></span>
+<span id="cb34-4"><a href="#cb34-4"></a><span class="co"># colors</span></span>
+<span id="cb34-5"><a href="#cb34-5"></a>mycolors &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/grDevices/colorRamp.html">colorRampPalette</a></span>(<span class="kw"><a href="https://rdrr.io/pkg/RColorBrewer/man/ColorBrewer.html">brewer.pal</a></span>(<span class="dt">n =</span> <span class="dv">7</span>, <span class="dt">name =</span> <span class="st">"Oranges"</span>))(<span class="dv">100</span>)</span>
+<span id="cb34-6"><a href="#cb34-6"></a>pheatmap<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/pheatmap/man/pheatmap.html">pheatmap</a></span>(mycors, <span class="dt">color =</span> mycolors, <span class="dt">angle_col =</span> <span class="dv">90</span>)</span></code></pre></div>
+<p><img src="Figures5-6-S4_files/figure-html/unnamed-chunk-23-1.png" width="700"></p>
+<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1"></a><span class="co"># png("FS4_pca_correls.png", width = 9, height = 8, units = "in", res = 300)</span></span>
+<span id="cb35-2"><a href="#cb35-2"></a><span class="kw"><a href="https://rdrr.io/r/grDevices/pdf.html">pdf</a></span>(<span class="st">"pca_correls.pdf"</span>, <span class="dt">width =</span> <span class="dv">9</span>, <span class="dt">height =</span> <span class="dv">8</span>, <span class="dt">paper =</span> <span class="st">"special"</span>)</span>
+<span id="cb35-3"><a href="#cb35-3"></a>pheatmap<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/pheatmap/man/pheatmap.html">pheatmap</a></span>(mycors, <span class="dt">color =</span> mycolors, <span class="dt">angle_col =</span> <span class="dv">90</span>)</span>
+<span id="cb35-4"><a href="#cb35-4"></a><span class="kw"><a href="https://rdrr.io/r/grDevices/dev.html">dev.off</a></span>()</span></code></pre></div>
+</div>
 </div>
 </div>
   </div>
@@ -401,8 +361,8 @@
 <li><a href="#example-multivariate-cox-regression-with-rnaseq-expression-copy-number-and-pathology">Example: Multivariate Cox regression with RNASeq expression, copy number, and pathology</a></li>
       <li><a href="#example-correlation-between-rnaseq-expression-and-copy-number">Example: Correlation between RNASeq expression and copy number</a></li>
       <li><a href="#figure-5">Figure 5</a></li>
-      <li><a href="#figure-6-violin-plots">Figure 6: Violin plots</a></li>
-      <li><a href="#supplemental-figure-4-identifying-correlated-principal-components">Supplemental Figure 4: Identifying correlated principal components</a></li>
+      <li><a href="#figure-6">Figure 6</a></li>
+      <li><a href="#supplemental-figure-4">Supplemental Figure 4</a></li>
       </ul>
 </li>
       </ul>
