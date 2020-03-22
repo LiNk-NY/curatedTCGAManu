@@ -92,29 +92,48 @@ supplemental code chunks.
 
 # Figures
 
-## Figure 1
+## Ease-of-use schematic
+
+### Figure 1
 
 <a href="https://github.com/waldronlab/schematics/"><img src="https://raw.githubusercontent.com/waldronlab/schematics/master/pngs/F1_curatedTCGAData.png"/></a>
 
-## Figure 2
+## Pan-Cancer OncoPrint Plot
 
-[Figure 2](articles/Figure2_OncoPrint.html)
+### Figure 2
 
-## Figures 3 and 4
+![Figure
+2](articles/Figure2_OncoPrint_files/figure-html/unnamed-chunk-20-1.png)
 
-### Differential Expression and GSEA PanCan
+## Differential Expression and GSEA PanCan
 
-[Figures 3 and 4](articles/Figures3n4_GSEA_PanCan.html)
+### Figure 3
 
-## Figures 5 and 6
+![Figure
+3](articles/Figures3n4_GSEA_PanCan_files/figure-html/unnamed-chunk-17-1.png)
 
-### Example Multi-omic Analyses
+### Figure 4
 
-[Figures 5 and 6](articles/Figures5-6-S4.html)
+![Figure
+4](articles/Figures3n4_GSEA_PanCan_files/figure-html/unnamed-chunk-24-1.png)
+
+## Example Multi-omic Analyses
+
+### Figure 5
+
+![Figure
+5](articles/Figures5-6-S4_files/figure-html/unnamed-chunk-9-1.png)
+
+### Figure 6
+
+![Figure
+6](articles/Figures5-6-S4_files/figure-html/unnamed-chunk-14-1.png)
 
 # Supplement Reference
 
 ## Figure S1
+
+### Data provenance and package network
 
 <a href="https://github.com/waldronlab/schematics/"><img src="https://raw.githubusercontent.com/waldronlab/schematics/master/pngs/TCGAMAEPipelineSchematic.png"/></a>
 
@@ -345,4 +364,5 @@ makeGRangesListFromExonFiles(exonfiles, nrows = 4)
 
 ### Correlated principal components across experimental assays in adrenocortical carcinoma (ACC)
 
-[Figure S4](articles/Figures5-6-S4.html#supplemental-figure-4)
+![Figure
+S4](articles/Figures5-6-S4_files/figure-html/unnamed-chunk-23-1.png)
