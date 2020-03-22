@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">curatedTCGAManu</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.7</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0</span>
       </span>
     </div>
 
@@ -70,7 +70,7 @@
       <h1>Figure 2 - OncoPrint PANCAN</h1>
                         <h4 class="author">Waldron Lab</h4>
             
-            <h4 class="date">March 19, 2020</h4>
+            <h4 class="date">March 21, 2020</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/LiNk-NY/curatedTCGAManu/blob/master/vignettes/Figure2_OncoPrint.Rmd"><code>vignettes/Figure2_OncoPrint.Rmd</code></a></small>
       <div class="hidden name"><code>Figure2_OncoPrint.Rmd</code></div>
@@ -342,7 +342,6 @@
 <span id="cb26-2"><a href="#cb26-2"></a><span class="cf">if</span> (<span class="op">!</span><span class="kw"><a href="https://rdrr.io/r/base/files.html">file.exists</a></span>(afile))</span>
 <span id="cb26-3"><a href="#cb26-3"></a>  <span class="kw"><a href="https://rdrr.io/r/base/save.html">save</a></span>(mutfuns2, <span class="dt">file =</span> afile)</span>
 <span id="cb26-4"><a href="#cb26-4"></a><span class="kw"><a href="https://rdrr.io/r/base/load.html">load</a></span>(afile)</span></code></pre></div>
-<p>Plot the oncoPrint function:</p>
 </div>
 <div id="figure-2" class="section level2">
 <h2 class="hasAnchor">
@@ -350,6 +349,7 @@
 <div id="oncoprint-plot-of-selected-cancer-driver-genes-frequently-mutated-across-33-tcga-cancer-types" class="section level3">
 <h3 class="hasAnchor">
 <a href="#oncoprint-plot-of-selected-cancer-driver-genes-frequently-mutated-across-33-tcga-cancer-types" class="anchor"></a>OncoPrint plot of selected cancer driver genes frequently mutated across 33 TCGA cancer types</h3>
+<p>Plot the oncoPrint function:</p>
 <div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1"></a>ll &lt;-<span class="st"> </span>IRanges<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/IRanges/man/AtomicList-class.html">LogicalList</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span>(list_mats2, <span class="cf">function</span>(y) <span class="kw"><a href="https://rdrr.io/r/base/colSums.html">colSums</a></span>(y) <span class="op">==</span><span class="st"> </span><span class="dv">0</span>))</span>
 <span id="cb27-2"><a href="#cb27-2"></a>matlog &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/do.call.html">do.call</a></span>(rbind, <span class="kw"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span>(ll, unname))</span>
 <span id="cb27-3"><a href="#cb27-3"></a>allzero &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/apply.html">apply</a></span>(matlog, <span class="dv">2</span>, all)</span>
