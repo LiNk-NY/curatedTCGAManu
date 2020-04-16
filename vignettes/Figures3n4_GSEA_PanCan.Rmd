@@ -75,7 +75,7 @@ exper <- as(redl, "ExperimentList")
 sampleTables(MultiAssayExperiment(exper))
 ```
 
-### Create a pseduo clinical DataFrame for new samples
+### Create a pseudo clinical DataFrame for new samples
 
 ```{r}
 allSamps <- unlist(colnames(exper))
