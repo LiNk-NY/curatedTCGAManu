@@ -140,7 +140,7 @@ chunks.
 
 ## Figure S2A
 
-### Example code for installing and downloading TCGA data using curatedTCGAData.
+### Example code for installing, downloading, and exporting TCGA data using curatedTCGAData
 
 ```{r cTDexample,message=FALSE}
 if (!requireNamespace("BiocManager", quietly = TRUE))
@@ -152,7 +152,11 @@ library(curatedTCGAData)
 
 ## Glioblastoma Multiforme (GBM)
 
-curatedTCGAData(diseaseCode = "GBM", assays = "*", dry.run = FALSE)
+tcga_gbm <- curatedTCGAData(diseaseCode = "GBM", assays = "RNA*", dry.run = FALSE)
+
+tcga_gbm
+
+exportClass(tcga_gbm, dir = tempdir(), fmt = "csv")
 ```
 
 ## Figure S2B

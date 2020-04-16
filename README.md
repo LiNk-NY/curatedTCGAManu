@@ -139,7 +139,7 @@ supplemental code chunks.
 
 ## Figure S2A
 
-### Example code for installing and downloading TCGA data using curatedTCGAData.
+### Example code for installing, downloading, and exporting TCGA data using curatedTCGAData
 
 ``` r
 if (!requireNamespace("BiocManager", quietly = TRUE))
@@ -151,28 +151,13 @@ library(curatedTCGAData)
 
 ## Glioblastoma Multiforme (GBM)
 
-curatedTCGAData(diseaseCode = "GBM", assays = "*", dry.run = FALSE)
-#> A MultiAssayExperiment object of 18 listed
-#>  experiments with user-defined names and respective classes.
-#>  Containing an ExperimentList class object of length 18:
-#>  [1] GBM_CNACGH_CGH_hg_244a-20160128: RaggedExperiment with 81512 rows and 438 columns
-#>  [2] GBM_CNACGH_CGH_hg_415k_g4124a-20160128: RaggedExperiment with 57975 rows and 338 columns
-#>  [3] GBM_CNASNP-20160128: RaggedExperiment with 602338 rows and 1104 columns
-#>  [4] GBM_CNVSNP-20160128: RaggedExperiment with 146852 rows and 1104 columns
-#>  [5] GBM_GISTIC_AllByGene-20160128: SummarizedExperiment with 24776 rows and 577 columns
-#>  [6] GBM_GISTIC_ThresholdedByGene-20160128: SummarizedExperiment with 24776 rows and 577 columns
-#>  [7] GBM_miRNAArray-20160128: SummarizedExperiment with 534 rows and 565 columns
-#>  [8] GBM_miRNASeqGene-20160128: SummarizedExperiment with 1046 rows and 0 columns
-#>  [9] GBM_mRNAArray_huex-20160128: SummarizedExperiment with 18632 rows and 431 columns
-#>  [10] GBM_mRNAArray_TX_g4502a_1-20160128: SummarizedExperiment with 17814 rows and 401 columns
-#>  [11] GBM_mRNAArray_TX_g4502a-20160128: SummarizedExperiment with 17814 rows and 101 columns
-#>  [12] GBM_mRNAArray_TX_ht_hg_u133a-20160128: SummarizedExperiment with 12042 rows and 528 columns
-#>  [13] GBM_Mutation-20160128: RaggedExperiment with 22073 rows and 290 columns
-#>  [14] GBM_RNASeq2GeneNorm-20160128: SummarizedExperiment with 20501 rows and 166 columns
-#>  [15] GBM_RPPAArray-20160128: SummarizedExperiment with 208 rows and 244 columns
-#>  [16] GBM_GISTIC_Peaks-20160128: RangedSummarizedExperiment with 68 rows and 577 columns
-#>  [17] GBM_Methylation_methyl27-20160128: SummarizedExperiment with 27578 rows and 285 columns
-#>  [18] GBM_Methylation_methyl450-20160128: SummarizedExperiment with 485577 rows and 154 columns
+tcga_gbm <- curatedTCGAData(diseaseCode = "GBM", assays = "RNA*", dry.run = FALSE)
+
+tcga_gbm
+#> A MultiAssayExperiment object of 1 listed
+#>  experiment with a user-defined name and respective class.
+#>  Containing an ExperimentList class object of length 1:
+#>  [1] GBM_RNASeq2GeneNorm-20160128: SummarizedExperiment with 20501 rows and 166 columns
 #> Features:
 #>  experiments() - obtain the ExperimentList instance
 #>  colData() - the primary/phenotype DataFrame
@@ -180,6 +165,13 @@ curatedTCGAData(diseaseCode = "GBM", assays = "*", dry.run = FALSE)
 #>  `$`, `[`, `[[` - extract colData columns, subset, or experiment
 #>  *Format() - convert into a long or wide DataFrame
 #>  assays() - convert ExperimentList to a SimpleList of matrices
+
+exportClass(tcga_gbm, dir = tempdir(), fmt = "csv")
+#> [1] "/tmp/Rtmpsne1fI/tcga_gbm_META_0.csv"                      
+#> [2] "/tmp/Rtmpsne1fI/tcga_gbm_META_1.csv"                      
+#> [3] "/tmp/Rtmpsne1fI/tcga_gbm_GBM_RNASeq2GeneNorm-20160128.csv"
+#> [4] "/tmp/Rtmpsne1fI/tcga_gbm_colData.csv"                     
+#> [5] "/tmp/Rtmpsne1fI/tcga_gbm_sampleMap.csv"
 ```
 
 ## Figure S2B
