@@ -65,7 +65,7 @@ necessary packages either directly or as dependencies. Note that this code chunk
 is not evaluated, because installation only needs to be performed once.
 
 ```{r,eval=FALSE}
-BiocManager::install(c("waldronlab/cBioPortalData", "LiNk-NY/curatedTCGAManu")) 
+BiocManager::install(c("cBioPortalData", "LiNk-NY/curatedTCGAManu"))
 ```
 
 ## Vignette Build
