@@ -1,0 +1,32 @@
+name: CICD
+
+'on':
+  - push
+  - pull_request
+
+jobs:
+  build:
+    runs-on: ubuntu-18.04
+    container:
+      image: bioconductor/bioconductor_full:devel
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@master
+      - name: Install Package Dependencies
+        run: |
+          Rscript -e "BiocManager::install(c('remotes', 'rcmdcheck', 'covr', 'pkgdown'))"
+          Rscript -e "remotes::install(dependencies = TRUE)"
+      - name: System dependencies
+        run: |
+          pip install ghp-import
+      - name: Check Package
+        run: Rscript -e "rcmdcheck::rcmdcheck(error_on = 'error', check_dir = 'check')"
+      - name: Document Package
+        run: |
+          Rscript -e "pkgdown::build_site()"
+      - name: Deploy to GitHub Pages
+        if: github.ref == 'master'
+        run: |
+          ghp-import -n docs && \
+          git push -qf https://${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git gh-pages
+
