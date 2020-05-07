@@ -1,8 +1,6 @@
 pandoc: 2.7.3
-pkgdown: 1.4.1
+pkgdown: 1.5.1
 pkgdown_sha: ~
-articles:
-  Figure2_OncoPrint: Figure2_OncoPrint.html
-  Figures3n4_GSEA_PanCan: Figures3n4_GSEA_PanCan.html
-  Figures5-6-S4: Figures5-6-S4.html
+articles: []
+last_built: 2020-05-07T16:49Z
 
