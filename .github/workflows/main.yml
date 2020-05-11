@@ -12,10 +12,17 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@master
-      - name: Install Package Dependencies
-        run: |
-          Rscript -e "BiocManager::install(c('remotes', 'rcmdcheck', 'covr', 'pkgdown'))"
-          Rscript -e "remotes::install_deps(dependencies = TRUE, repos = BiocManager::repositories())"
+      - name: Install Prelim Package Dependencies
+        run: Rscript -e "BiocManager::install(c('remotes', 'rcmdcheck', 'covr', 'pkgdown', 'renv'))"
+      - name: Set up cache
+        uses: actions/cache@v1
+          with:
+            path: ~/.local/share/renv
+            key: ${{ runner.os }}-renv-${{ hashFiles('**/renv.lock') }}
+            restore-keys: |
+              ${{ runner.os }}-renv-
+      - name: Finish Installing Package Deps
+        run: Rscript -e "remotes::install_deps(dependencies = TRUE, repos = BiocManager::repositories())"
       - name: System dependencies
         run: |
           pip install ghp-import
