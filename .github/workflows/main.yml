@@ -15,7 +15,7 @@ jobs:
       - name: Install Package Dependencies
         run: |
           Rscript -e "BiocManager::install(c('remotes', 'rcmdcheck', 'covr', 'pkgdown'))"
-          Rscript -e "remotes::install_deps(dependencies = TRUE)"
+          Rscript -e "remotes::install_deps(dependencies = TRUE, repos = BiocManager::repositories())"
       - name: System dependencies
         run: |
           pip install ghp-import
