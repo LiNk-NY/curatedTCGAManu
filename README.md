@@ -55,7 +55,7 @@ that this code chunk is not evaluated, because installation only needs
 to be performed once.
 
 ``` r
-BiocManager::install(c("waldronlab/cBioPortalData", "LiNk-NY/curatedTCGAManu")) 
+BiocManager::install(c("cBioPortalData", "LiNk-NY/curatedTCGAManu"))
 ```
 
 ## Vignette Build
@@ -102,32 +102,27 @@ supplemental code chunks.
 
 ### Figure 2
 
-![Figure
-2](articles/Figure2_OncoPrint_files/figure-html/unnamed-chunk-20-1.png)
+<a href="https://github.com/waldronlab/schematics/"><img src="https://raw.githubusercontent.com/waldronlab/schematics/master/pngs/unnamed-chunk-20-1.png"/></a>
 
 ## Differential Expression and GSEA PanCan
 
 ### Figure 3
 
-![Figure
-3](articles/Figures3n4_GSEA_PanCan_files/figure-html/unnamed-chunk-17-1.png)
+<a href="https://github.com/waldronlab/schematics/"><img src="https://raw.githubusercontent.com/waldronlab/schematics/master/pngs/unnamed-chunk-17-1.png"/></a>
 
 ### Figure 4
 
-![Figure
-4](articles/Figures3n4_GSEA_PanCan_files/figure-html/unnamed-chunk-24-1.png)
+<a href="https://github.com/waldronlab/schematics/"><img src="https://raw.githubusercontent.com/waldronlab/schematics/master/pngs/unnamed-chunk-24-1.png"/></a>
 
 ## Example Multi-omic Analyses
 
 ### Figure 5
 
-![Figure
-5](articles/Figures5-6-S4_files/figure-html/unnamed-chunk-9-1.png)
+<a href="https://github.com/waldronlab/schematics/"><img src="https://raw.githubusercontent.com/waldronlab/schematics/master/pngs/unnamed-chunk-9-1.png"/></a>
 
 ### Figure 6
 
-![Figure
-6](articles/Figures5-6-S4_files/figure-html/unnamed-chunk-14-1.png)
+<a href="https://github.com/waldronlab/schematics/"><img src="https://raw.githubusercontent.com/waldronlab/schematics/master/pngs/unnamed-chunk-14-1.png"/></a>
 
 # Supplement Reference
 
@@ -139,48 +134,40 @@ supplemental code chunks.
 
 ## Figure S2A
 
-### Example code for installing, downloading, and exporting TCGA data using curatedTCGAData
+### Example code for installing and downloading TCGA data using curatedTCGAData
 
 ``` r
 if (!requireNamespace("BiocManager", quietly = TRUE))
     install.packages("BiocManager")
 
-# BiocManager::install("curatedTCGAData")
-
-library(curatedTCGAData)
+if (!requireNamespace("curatedTCGAData", quietly = TRUE))
+    BiocManager::install("curatedTCGAData")
 
 ## Glioblastoma Multiforme (GBM)
-
-tcga_gbm <- curatedTCGAData(diseaseCode = "GBM", assays = "RNA*", dry.run = FALSE)
-
-tcga_gbm
+library(curatedTCGAData)
+curatedTCGAData(diseaseCode = "GBM", assays = "RNA*", dry.run = FALSE)
 #> A MultiAssayExperiment object of 1 listed
 #>  experiment with a user-defined name and respective class.
 #>  Containing an ExperimentList class object of length 1:
 #>  [1] GBM_RNASeq2GeneNorm-20160128: SummarizedExperiment with 20501 rows and 166 columns
-#> Features:
+#> Functionality:
 #>  experiments() - obtain the ExperimentList instance
 #>  colData() - the primary/phenotype DataFrame
-#>  sampleMap() - the sample availability DFrame
+#>  sampleMap() - the sample coordination DataFrame
 #>  `$`, `[`, `[[` - extract colData columns, subset, or experiment
 #>  *Format() - convert into a long or wide DataFrame
 #>  assays() - convert ExperimentList to a SimpleList of matrices
-
-exportClass(tcga_gbm, dir = tempdir(), fmt = "csv")
-#> [1] "/tmp/Rtmpsne1fI/tcga_gbm_META_0.csv"                      
-#> [2] "/tmp/Rtmpsne1fI/tcga_gbm_META_1.csv"                      
-#> [3] "/tmp/Rtmpsne1fI/tcga_gbm_GBM_RNASeq2GeneNorm-20160128.csv"
-#> [4] "/tmp/Rtmpsne1fI/tcga_gbm_colData.csv"                     
-#> [5] "/tmp/Rtmpsne1fI/tcga_gbm_sampleMap.csv"
+#>  exportClass() - save all data to files
 ```
 
 ## Figure S2B
 
-### Example cBioPortalData code for downloading TCGA data from cBioPortal.org and via the cBioPortal API
+### Example cBioPortalData code for downloading and exporting TCGA data from cBioPortal.org and via the cBioPortal API
 
 ``` r
 ## installation
-# BiocManager::install("WaldronLab/cBioPortalData")
+if (!requireNamespace("cBioPortalData", quietly = TRUE))
+    BiocManager::install("cBioPortalData")
 
 library(cBioPortalData)
 
@@ -189,10 +176,14 @@ gbm <- cBioDataPack("gbm_tcga")
 
 ## https://cBioPortal.org/api (API method)
 cBio <- cBioPortal()
-cBioPortalData(cBio, studyId = "gbm_tcga", genePanelId = "IMPACT341")
-#> A MultiAssayExperiment object of 13 listed
+
+## use exportClass() with the result to save data files
+tcga_gbm <- cBioPortalData(cBio, studyId = "gbm_tcga", genePanelId = "IMPACT341")
+
+tcga_gbm
+#> A MultiAssayExperiment object of 16 listed
 #>  experiments with user-defined names and respective classes.
-#>  Containing an ExperimentList class object of length 13:
+#>  Containing an ExperimentList class object of length 16:
 #>  [1] gbm_tcga_rppa: SummarizedExperiment with 67 rows and 244 columns
 #>  [2] gbm_tcga_rppa_Zscores: SummarizedExperiment with 67 rows and 244 columns
 #>  [3] gbm_tcga_gistic: SummarizedExperiment with 339 rows and 577 columns
@@ -206,13 +197,53 @@ cBioPortalData(cBio, studyId = "gbm_tcga", genePanelId = "IMPACT341")
 #>  [11] gbm_tcga_methylation_hm27: SummarizedExperiment with 282 rows and 285 columns
 #>  [12] gbm_tcga_methylation_hm450: SummarizedExperiment with 282 rows and 153 columns
 #>  [13] gbm_tcga_mutations: RangedSummarizedExperiment with 810 rows and 271 columns
-#> Features:
+#>  [14] gbm_tcga_rna_seq_v2_mrna_median_all_sample_Zscores: SummarizedExperiment with 340 rows and 166 columns
+#>  [15] gbm_tcga_mrna_median_all_sample_Zscores: SummarizedExperiment with 304 rows and 401 columns
+#>  [16] gbm_tcga_mrna_U133_all_sample_Zscores: SummarizedExperiment with 311 rows and 528 columns
+#> Functionality:
 #>  experiments() - obtain the ExperimentList instance
-#>  colData() - the primary/phenotype DFrame
-#>  sampleMap() - the sample availability DFrame
+#>  colData() - the primary/phenotype DataFrame
+#>  sampleMap() - the sample coordination DataFrame
 #>  `$`, `[`, `[[` - extract colData columns, subset, or experiment
-#>  *Format() - convert into a long or wide DFrame
+#>  *Format() - convert into a long or wide DataFrame
 #>  assays() - convert ExperimentList to a SimpleList of matrices
+#>  exportClass() - save all data to files
+
+exportClass(tcga_gbm, dir = tempdir(), fmt = "csv")
+#>  [1] "/tmp/Rtmp1EL92I/tcga_gbm_META_1.csv"                                            
+#>  [2] "/tmp/Rtmp1EL92I/tcga_gbm_META_2.csv"                                            
+#>  [3] "/tmp/Rtmp1EL92I/tcga_gbm_META_3.csv"                                            
+#>  [4] "/tmp/Rtmp1EL92I/tcga_gbm_META_4.csv"                                            
+#>  [5] "/tmp/Rtmp1EL92I/tcga_gbm_META_5.csv"                                            
+#>  [6] "/tmp/Rtmp1EL92I/tcga_gbm_META_6.csv"                                            
+#>  [7] "/tmp/Rtmp1EL92I/tcga_gbm_META_7.csv"                                            
+#>  [8] "/tmp/Rtmp1EL92I/tcga_gbm_META_8.csv"                                            
+#>  [9] "/tmp/Rtmp1EL92I/tcga_gbm_META_9.csv"                                            
+#> [10] "/tmp/Rtmp1EL92I/tcga_gbm_META_10.csv"                                           
+#> [11] "/tmp/Rtmp1EL92I/tcga_gbm_META_11.csv"                                           
+#> [12] "/tmp/Rtmp1EL92I/tcga_gbm_META_12.csv"                                           
+#> [13] "/tmp/Rtmp1EL92I/tcga_gbm_META_13.csv"                                           
+#> [14] "/tmp/Rtmp1EL92I/tcga_gbm_META_14.csv"                                           
+#> [15] "/tmp/Rtmp1EL92I/tcga_gbm_META_15.csv"                                           
+#> [16] "/tmp/Rtmp1EL92I/tcga_gbm_META_16.csv"                                           
+#> [17] "/tmp/Rtmp1EL92I/tcga_gbm_gbm_tcga_rppa.csv"                                     
+#> [18] "/tmp/Rtmp1EL92I/tcga_gbm_gbm_tcga_rppa_Zscores.csv"                             
+#> [19] "/tmp/Rtmp1EL92I/tcga_gbm_gbm_tcga_gistic.csv"                                   
+#> [20] "/tmp/Rtmp1EL92I/tcga_gbm_gbm_tcga_mrna_U133.csv"                                
+#> [21] "/tmp/Rtmp1EL92I/tcga_gbm_gbm_tcga_mrna_U133_Zscores.csv"                        
+#> [22] "/tmp/Rtmp1EL92I/tcga_gbm_gbm_tcga_mrna.csv"                                     
+#> [23] "/tmp/Rtmp1EL92I/tcga_gbm_gbm_tcga_mrna_median_Zscores.csv"                      
+#> [24] "/tmp/Rtmp1EL92I/tcga_gbm_gbm_tcga_rna_seq_v2_mrna.csv"                          
+#> [25] "/tmp/Rtmp1EL92I/tcga_gbm_gbm_tcga_rna_seq_v2_mrna_median_Zscores.csv"           
+#> [26] "/tmp/Rtmp1EL92I/tcga_gbm_gbm_tcga_linear_CNA.csv"                               
+#> [27] "/tmp/Rtmp1EL92I/tcga_gbm_gbm_tcga_methylation_hm27.csv"                         
+#> [28] "/tmp/Rtmp1EL92I/tcga_gbm_gbm_tcga_methylation_hm450.csv"                        
+#> [29] "/tmp/Rtmp1EL92I/tcga_gbm_gbm_tcga_mutations.csv"                                
+#> [30] "/tmp/Rtmp1EL92I/tcga_gbm_gbm_tcga_rna_seq_v2_mrna_median_all_sample_Zscores.csv"
+#> [31] "/tmp/Rtmp1EL92I/tcga_gbm_gbm_tcga_mrna_median_all_sample_Zscores.csv"           
+#> [32] "/tmp/Rtmp1EL92I/tcga_gbm_gbm_tcga_mrna_U133_all_sample_Zscores.csv"             
+#> [33] "/tmp/Rtmp1EL92I/tcga_gbm_colData.csv"                                           
+#> [34] "/tmp/Rtmp1EL92I/tcga_gbm_sampleMap.csv"
 ```
 
 ## Figure S2C
@@ -227,10 +258,11 @@ download.file(liftchain, dfile)
 R.utils::gunzip(dfile, destname = cloc38, remove = FALSE)
 
 library(rtracklayer)
-chain38 <- suppressMessages(
-    import.chain(cloc38)
-)
-## Note. Run bulk data download example (in S2B) first
+chain38 <- suppressMessages( import.chain(cloc38) )
+
+## Run bulk data download (from S2B) to create gbm object
+if (!exists("gbm")) gbm <- cBioPortalData::cBioDataPack("gbm_tcga")
+
 mutations <- gbm[["mutations_extended"]]
 seqlevelsStyle(mutations) <- "UCSC"
 
@@ -245,6 +277,7 @@ ranges38 <- liftOver(rowRanges(mutations), chain38)
 library(TCGAutils)
 library(GenomicDataCommons)
 
+## GenomicDataCommons
 query <- files(legacy = TRUE) %>%
     filter( ~ cases.project.project_id == "TCGA-COAD" &
         data_category == "Gene expression" &
@@ -253,6 +286,7 @@ query <- files(legacy = TRUE) %>%
 fileids <- manifest(query)$id[1:4]
 exonfiles <- gdcdata(fileids, use_cached = FALSE)
 
+## TCGAutils
 makeGRangesListFromExonFiles(exonfiles, nrows = 4)
 #> Parsed with column specification:
 #> cols(
@@ -287,16 +321,16 @@ makeGRangesListFromExonFiles(exonfiles, nrows = 4)
 #> GRanges object with 4 ranges and 3 metadata columns:
 #>       seqnames      ranges strand | raw_counts median_length_normalized
 #>          <Rle>   <IRanges>  <Rle> |  <numeric>                <numeric>
-#>   [1]     chr1 11874-12227      + |          1                0.1359773
+#>   [1]     chr1 11874-12227      + |          1                 0.135977
 #>   [2]     chr1 12595-12721      + |          2                 0.547619
-#>   [3]     chr1 12613-12721      + |          2                0.4722222
-#>   [4]     chr1 12646-12697      + |          1                0.5294118
-#>                     RPKM
-#>                <numeric>
-#>   [1] 0.0228441576458164
-#>   [2]     0.127351681994
-#>   [3]  0.148382234983835
-#>   [4]  0.155515996281135
+#>   [3]     chr1 12613-12721      + |          2                 0.472222
+#>   [4]     chr1 12646-12697      + |          1                 0.529412
+#>            RPKM
+#>       <numeric>
+#>   [1] 0.0228442
+#>   [2] 0.1273517
+#>   [3] 0.1483822
+#>   [4] 0.1555160
 #>   -------
 #>   seqinfo: 1 sequence from an unspecified genome; no seqlengths
 #> 
@@ -304,16 +338,16 @@ makeGRangesListFromExonFiles(exonfiles, nrows = 4)
 #> GRanges object with 4 ranges and 3 metadata columns:
 #>       seqnames      ranges strand | raw_counts median_length_normalized
 #>          <Rle>   <IRanges>  <Rle> |  <numeric>                <numeric>
-#>   [1]     chr1 11874-12227      + |         35                0.7847025
-#>   [2]     chr1 12595-12721      + |          9                0.8730159
-#>   [3]     chr1 12613-12721      + |          9                0.8518519
-#>   [4]     chr1 12646-12697      + |          8                0.8431373
-#>                    RPKM
-#>               <numeric>
-#>   [1]  0.69124304141909
-#>   [2] 0.495455642285989
-#>   [3] 0.577274005232299
-#>   [4]  1.07560455675762
+#>   [1]     chr1 11874-12227      + |         35                 0.784702
+#>   [2]     chr1 12595-12721      + |          9                 0.873016
+#>   [3]     chr1 12613-12721      + |          9                 0.851852
+#>   [4]     chr1 12646-12697      + |          8                 0.843137
+#>            RPKM
+#>       <numeric>
+#>   [1]  0.691243
+#>   [2]  0.495456
+#>   [3]  0.577274
+#>   [4]  1.075605
 #>   -------
 #>   seqinfo: 1 sequence from an unspecified genome; no seqlengths
 #> 
@@ -321,16 +355,16 @@ makeGRangesListFromExonFiles(exonfiles, nrows = 4)
 #> GRanges object with 4 ranges and 3 metadata columns:
 #>       seqnames      ranges strand | raw_counts median_length_normalized
 #>          <Rle>   <IRanges>  <Rle> |  <numeric>                <numeric>
-#>   [1]     chr1 11874-12227      + |          4                0.4929178
-#>   [2]     chr1 12595-12721      + |          2                0.3412699
-#>   [3]     chr1 12613-12721      + |          2                0.3981481
+#>   [1]     chr1 11874-12227      + |          4                 0.492918
+#>   [2]     chr1 12595-12721      + |          2                 0.341270
+#>   [3]     chr1 12613-12721      + |          2                 0.398148
 #>   [4]     chr1 12646-12697      + |          2                 0.372549
-#>                    RPKM
-#>               <numeric>
-#>   [1] 0.322476823123937
-#>   [2] 0.449436202306589
-#>   [3] 0.523655024705842
-#>   [4]  1.09766149409494
+#>            RPKM
+#>       <numeric>
+#>   [1]  0.322477
+#>   [2]  0.449436
+#>   [3]  0.523655
+#>   [4]  1.097661
 #>   -------
 #>   seqinfo: 1 sequence from an unspecified genome; no seqlengths
 #> 
@@ -356,5 +390,4 @@ makeGRangesListFromExonFiles(exonfiles, nrows = 4)
 
 ### Correlated principal components across experimental assays in adrenocortical carcinoma (ACC)
 
-![Figure
-S4](articles/Figures5-6-S4_files/figure-html/unnamed-chunk-23-1.png)
+<a href="https://github.com/waldronlab/schematics/"><img src="https://raw.githubusercontent.com/waldronlab/schematics/master/pngs/unnamed-chunk-23-1.png"/></a>

@@ -111,24 +111,23 @@ chunks.
 ## Pan-Cancer OncoPrint Plot
 
 ### Figure 2
-![Figure 2](articles/Figure2_OncoPrint_files/figure-html/unnamed-chunk-20-1.png)
-
+<a href="https://github.com/waldronlab/schematics/"><img src="https://raw.githubusercontent.com/waldronlab/schematics/master/pngs/unnamed-chunk-20-1.png"/></a>
 
 ## Differential Expression and GSEA PanCan
 
 ### Figure 3
-![Figure 3](articles/Figures3n4_GSEA_PanCan_files/figure-html/unnamed-chunk-17-1.png)
+<a href="https://github.com/waldronlab/schematics/"><img src="https://raw.githubusercontent.com/waldronlab/schematics/master/pngs/unnamed-chunk-17-1.png"/></a>
 
 ### Figure 4
-![Figure 4](articles/Figures3n4_GSEA_PanCan_files/figure-html/unnamed-chunk-24-1.png)
+<a href="https://github.com/waldronlab/schematics/"><img src="https://raw.githubusercontent.com/waldronlab/schematics/master/pngs/unnamed-chunk-24-1.png"/></a>
 
 ## Example Multi-omic Analyses
 
 ### Figure 5
-![Figure 5](articles/Figures5-6-S4_files/figure-html/unnamed-chunk-9-1.png)
+<a href="https://github.com/waldronlab/schematics/"><img src="https://raw.githubusercontent.com/waldronlab/schematics/master/pngs/unnamed-chunk-9-1.png"/></a>
 
 ### Figure 6
-![Figure 6](articles/Figures5-6-S4_files/figure-html/unnamed-chunk-14-1.png)
+<a href="https://github.com/waldronlab/schematics/"><img src="https://raw.githubusercontent.com/waldronlab/schematics/master/pngs/unnamed-chunk-14-1.png"/></a>
 
 # Supplement Reference
 
@@ -140,31 +139,27 @@ chunks.
 
 ## Figure S2A
 
-### Example code for installing, downloading, and exporting TCGA data using curatedTCGAData
+### Example code for installing and downloading TCGA data using curatedTCGAData
 
 ```{r cTDexample,message=FALSE}
 if (!requireNamespace("BiocManager", quietly = TRUE))
     install.packages("BiocManager")
 
-# BiocManager::install("curatedTCGAData")
-
-library(curatedTCGAData)
+if (!requireNamespace("curatedTCGAData", quietly = TRUE))
+    BiocManager::install("curatedTCGAData")
 
 ## Glioblastoma Multiforme (GBM)
-
-tcga_gbm <- curatedTCGAData(diseaseCode = "GBM", assays = "RNA*", dry.run = FALSE)
-
-tcga_gbm
-
-exportClass(tcga_gbm, dir = tempdir(), fmt = "csv")
+library(curatedTCGAData)
+curatedTCGAData(diseaseCode = "GBM", assays = "RNA*", dry.run = FALSE)
 ```
 
 ## Figure S2B
-### Example cBioPortalData code for downloading TCGA data from cBioPortal.org and via the cBioPortal API
+### Example cBioPortalData code for downloading and exporting TCGA data from cBioPortal.org and via the cBioPortal API
 
 ```{r cbioportal,message=FALSE,warning=FALSE}
 ## installation
-# BiocManager::install("WaldronLab/cBioPortalData")
+if (!requireNamespace("cBioPortalData", quietly = TRUE))
+    BiocManager::install("cBioPortalData")
 
 library(cBioPortalData)
 
@@ -173,7 +168,13 @@ gbm <- cBioDataPack("gbm_tcga")
 
 ## https://cBioPortal.org/api (API method)
 cBio <- cBioPortal()
-cBioPortalData(cBio, studyId = "gbm_tcga", genePanelId = "IMPACT341")
+
+## use exportClass() with the result to save data files
+tcga_gbm <- cBioPortalData(cBio, studyId = "gbm_tcga", genePanelId = "IMPACT341")
+
+tcga_gbm
+
+exportClass(tcga_gbm, dir = tempdir(), fmt = "csv")
 ```
 
 ## Figure S2C
@@ -187,10 +188,11 @@ download.file(liftchain, dfile)
 R.utils::gunzip(dfile, destname = cloc38, remove = FALSE)
 
 library(rtracklayer)
-chain38 <- suppressMessages(
-    import.chain(cloc38)
-)
-## Note. Run bulk data download example (in S2B) first
+chain38 <- suppressMessages( import.chain(cloc38) )
+
+## Run bulk data download (from S2B) to create gbm object
+if (!exists("gbm")) gbm <- cBioPortalData::cBioDataPack("gbm_tcga")
+
 mutations <- gbm[["mutations_extended"]]
 seqlevelsStyle(mutations) <- "UCSC"
 
@@ -204,6 +206,7 @@ ranges38 <- liftOver(rowRanges(mutations), chain38)
 library(TCGAutils)
 library(GenomicDataCommons)
 
+## GenomicDataCommons
 query <- files(legacy = TRUE) %>%
     filter( ~ cases.project.project_id == "TCGA-COAD" &
         data_category == "Gene expression" &
@@ -212,10 +215,12 @@ query <- files(legacy = TRUE) %>%
 fileids <- manifest(query)$id[1:4]
 exonfiles <- gdcdata(fileids, use_cached = FALSE)
 
+## TCGAutils
 makeGRangesListFromExonFiles(exonfiles, nrows = 4)
 ```
 
 ## Figure S4
 ### Correlated principal components across experimental assays in adrenocortical carcinoma (ACC)
 
-![Figure S4](articles/Figures5-6-S4_files/figure-html/unnamed-chunk-23-1.png)
+<a href="https://github.com/waldronlab/schematics/"><img src="https://raw.githubusercontent.com/waldronlab/schematics/master/pngs/unnamed-chunk-23-1.png"/></a>
+
