@@ -13,7 +13,7 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@master
       - name: Install Prelim Package Dependencies
-        run: Rscript -e "BiocManager::install(c('remotes', 'rcmdcheck', 'covr', 'pkgdown', 'renv'))"
+        run: Rscript -e "BiocManager::install(c('remotes', 'rcmdcheck', 'covr', 'pkgdown', 'renv', 'BiocStyle'))"
       - name: Set up cache
         uses: actions/cache@v1
           with:
