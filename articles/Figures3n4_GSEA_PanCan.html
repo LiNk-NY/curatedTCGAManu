@@ -70,7 +70,7 @@
       <h1 data-toc-skip>Figure 3 and 4 - DE / GSEA PanCan</h1>
                         <h4 class="author">Waldron Lab</h4>
             
-            <h4 class="date">May 07, 2020</h4>
+            <h4 class="date">May 11, 2020</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/LiNk-NY/curatedTCGAManu/blob/master/vignettes/Figures3n4_GSEA_PanCan.Rmd"><code>vignettes/Figures3n4_GSEA_PanCan.Rmd</code></a></small>
       <div class="hidden name"><code>Figures3n4_GSEA_PanCan.Rmd</code></div>
@@ -594,9 +594,9 @@
 <span class="no">df</span> <span class="kw">&lt;-</span> <span class="kw pkg">reshape2</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/reshape2/man/melt.html">melt</a></span>(<span class="no">fcs</span>)
 <span class="no">medians</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/apply.html">apply</a></span>(<span class="no">fcs</span>, <span class="fl">1</span>, <span class="no">median</span>, <span class="kw">na.rm</span><span class="kw">=</span><span class="fl">TRUE</span>)
 <span class="no">o</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/sort.html">sort</a></span>(<span class="no">medians</span>))
-<span class="no">p</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/ggpubr/man/ggboxplot.html">ggboxplot</a></span>(<span class="no">df</span>, <span class="kw">x</span> <span class="kw">=</span> <span class="st">"Var1"</span>, <span class="kw">y</span> <span class="kw">=</span> <span class="st">"value"</span>, <span class="kw">width</span> <span class="kw">=</span> <span class="fl">0.8</span>,
+<span class="no">p</span> <span class="kw">&lt;-</span> <span class="fu">ggboxplot</span>(<span class="no">df</span>, <span class="kw">x</span> <span class="kw">=</span> <span class="st">"Var1"</span>, <span class="kw">y</span> <span class="kw">=</span> <span class="st">"value"</span>, <span class="kw">width</span> <span class="kw">=</span> <span class="fl">0.8</span>,
     <span class="kw">ylab</span><span class="kw">=</span><span class="st">"log2 fold change"</span>, <span class="kw">xlab</span><span class="kw">=</span><span class="st">""</span>, <span class="kw">order</span><span class="kw">=</span><span class="no">o</span>, <span class="kw">color</span><span class="kw">=</span><span class="st">"Var1"</span>, <span class="kw">add</span> <span class="kw">=</span><span class="st">"jitter"</span>)
-<span class="no">p</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/ggpubr/man/ggpar.html">ggpar</a></span>(<span class="no">p</span>, <span class="kw">x.text.angle</span><span class="kw">=</span><span class="fl">45</span>, <span class="kw">palette</span> <span class="kw">=</span> <span class="st">"simpsons"</span>, <span class="kw">legend</span><span class="kw">=</span><span class="st">"none"</span>)
+<span class="no">p</span> <span class="kw">&lt;-</span> <span class="fu">ggpar</span>(<span class="no">p</span>, <span class="kw">x.text.angle</span><span class="kw">=</span><span class="fl">45</span>, <span class="kw">palette</span> <span class="kw">=</span> <span class="st">"simpsons"</span>, <span class="kw">legend</span><span class="kw">=</span><span class="st">"none"</span>)
 <span class="no">gg</span> <span class="kw">&lt;-</span> <span class="no">p</span> + <span class="fu">geom_hline</span>(<span class="kw">yintercept</span><span class="kw">=</span><span class="fl">0</span>, <span class="kw">linetype</span><span class="kw">=</span><span class="st">"dashed"</span>, <span class="kw">color</span> <span class="kw">=</span> <span class="st">"darkgrey"</span>) +
     <span class="fu">geom_vline</span>(<span class="kw">xintercept</span><span class="kw">=</span><span class="fl">8.5</span>, <span class="kw">linetype</span><span class="kw">=</span><span class="st">"dashed"</span>, <span class="kw">color</span> <span class="kw">=</span> <span class="st">"darkgrey"</span>)
 <span class="no">gg</span></pre></body></html></div>

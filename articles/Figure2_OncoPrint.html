@@ -70,7 +70,7 @@
       <h1 data-toc-skip>Figure 2 - OncoPrint PANCAN</h1>
                         <h4 class="author">Waldron Lab</h4>
             
-            <h4 class="date">May 07, 2020</h4>
+            <h4 class="date">May 11, 2020</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/LiNk-NY/curatedTCGAManu/blob/master/vignettes/Figure2_OncoPrint.Rmd"><code>vignettes/Figure2_OncoPrint.Rmd</code></a></small>
       <div class="hidden name"><code>Figure2_OncoPrint.Rmd</code></div>
@@ -195,32 +195,22 @@
 })</pre></body></html></div>
 <pre><code>## Discarding unchained sequences: NT_113923</code></pre>
 <p>Generate references from respective annotation packages</p>
-<div class="sourceCode" id="cb12"><html><body><pre class="r"><span class="no">gn18</span> <span class="kw">&lt;-</span> <span class="fu">genes</span>(<span class="no">TxDb.Hsapiens.UCSC.hg18.knownGene</span>)</pre></body></html></div>
-<pre><code>##   379 genes were dropped because they have exons located on both strands
-##   of the same reference sequence or on more than one reference sequence,
-##   so cannot be represented by a single genomic range.
-##   Use 'single.strand.genes.only=FALSE' to get all the genes in a
-##   GRangesList object, or use suppressMessages() to suppress this message.</code></pre>
-<div class="sourceCode" id="cb14"><html><body><pre class="r"><span class="no">gn18</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/GenomeInfoDb/man/seqlevels-wrappers.html">keepStandardChromosomes</a></span>(<span class="fu">granges</span>(<span class="no">gn18</span>), <span class="kw">pruning.mode</span><span class="kw">=</span><span class="st">"coarse"</span>)
+<div class="sourceCode" id="cb12"><html><body><pre class="r"><span class="no">gn18</span> <span class="kw">&lt;-</span> <span class="fu">genes</span>(<span class="no">TxDb.Hsapiens.UCSC.hg18.knownGene</span>)
+<span class="no">gn18</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/GenomeInfoDb/man/seqlevels-wrappers.html">keepStandardChromosomes</a></span>(<span class="fu">granges</span>(<span class="no">gn18</span>), <span class="kw">pruning.mode</span><span class="kw">=</span><span class="st">"coarse"</span>)
 <span class="fu"><a href="https://rdrr.io/pkg/GenomeInfoDb/man/seqlevelsStyle.html">seqlevelsStyle</a></span>(<span class="no">gn18</span>) <span class="kw">&lt;-</span> <span class="st">"NCBI"</span>
 <span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span>(<span class="no">gn18</span>) <span class="kw">&lt;-</span> <span class="kw pkg">AnnotationDbi</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/AnnotationDbi/man/AnnotationDb-class.html">mapIds</a></span>(<span class="kw pkg">org.Hs.eg.db</span><span class="kw ns">::</span><span class="no"><a href="https://rdrr.io/pkg/org.Hs.eg.db/man/org.Hs.egBASE.html">org.Hs.eg.db</a></span>, <span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span>(<span class="no">gn18</span>),
     <span class="kw">keytype</span> <span class="kw">=</span> <span class="st">"ENTREZID"</span>, <span class="kw">column</span> <span class="kw">=</span> <span class="st">"SYMBOL"</span>)</pre></body></html></div>
 <pre><code>## 'select()' returned 1:1 mapping between keys and columns</code></pre>
-<div class="sourceCode" id="cb16"><html><body><pre class="r"><span class="no">gn18</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sort.html">sort</a></span>(<span class="no">gn18</span>)
+<div class="sourceCode" id="cb14"><html><body><pre class="r"><span class="no">gn18</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sort.html">sort</a></span>(<span class="no">gn18</span>)
 <span class="no">gn18</span> <span class="kw">&lt;-</span> <span class="fu">unstrand</span>(<span class="no">gn18</span>)
 
-<span class="no">gn19</span> <span class="kw">&lt;-</span> <span class="fu">genes</span>(<span class="no">TxDb.Hsapiens.UCSC.hg19.knownGene</span>)</pre></body></html></div>
-<pre><code>##   403 genes were dropped because they have exons located on both strands
-##   of the same reference sequence or on more than one reference sequence,
-##   so cannot be represented by a single genomic range.
-##   Use 'single.strand.genes.only=FALSE' to get all the genes in a
-##   GRangesList object, or use suppressMessages() to suppress this message.</code></pre>
-<div class="sourceCode" id="cb18"><html><body><pre class="r"><span class="no">gn19</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/GenomeInfoDb/man/seqlevels-wrappers.html">keepStandardChromosomes</a></span>(<span class="fu">granges</span>(<span class="no">gn19</span>), <span class="kw">pruning.mode</span><span class="kw">=</span><span class="st">"coarse"</span>)
+<span class="no">gn19</span> <span class="kw">&lt;-</span> <span class="fu">genes</span>(<span class="no">TxDb.Hsapiens.UCSC.hg19.knownGene</span>)
+<span class="no">gn19</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/GenomeInfoDb/man/seqlevels-wrappers.html">keepStandardChromosomes</a></span>(<span class="fu">granges</span>(<span class="no">gn19</span>), <span class="kw">pruning.mode</span><span class="kw">=</span><span class="st">"coarse"</span>)
 <span class="fu"><a href="https://rdrr.io/pkg/GenomeInfoDb/man/seqlevelsStyle.html">seqlevelsStyle</a></span>(<span class="no">gn19</span>) <span class="kw">&lt;-</span> <span class="st">"NCBI"</span>
 <span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span>(<span class="no">gn19</span>) <span class="kw">&lt;-</span> <span class="kw pkg">AnnotationDbi</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/AnnotationDbi/man/AnnotationDb-class.html">mapIds</a></span>(<span class="kw pkg">org.Hs.eg.db</span><span class="kw ns">::</span><span class="no"><a href="https://rdrr.io/pkg/org.Hs.eg.db/man/org.Hs.egBASE.html">org.Hs.eg.db</a></span>, <span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span>(<span class="no">gn19</span>),
     <span class="kw">keytype</span> <span class="kw">=</span> <span class="st">"ENTREZID"</span>, <span class="kw">column</span> <span class="kw">=</span> <span class="st">"SYMBOL"</span>)</pre></body></html></div>
 <pre><code>## 'select()' returned 1:1 mapping between keys and columns</code></pre>
-<div class="sourceCode" id="cb20"><html><body><pre class="r"><span class="no">gn19</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sort.html">sort</a></span>(<span class="no">gn19</span>)
+<div class="sourceCode" id="cb16"><html><body><pre class="r"><span class="no">gn19</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sort.html">sort</a></span>(<span class="no">gn19</span>)
 <span class="no">gn19</span> <span class="kw">&lt;-</span> <span class="fu">unstrand</span>(<span class="no">gn19</span>)
 
 <span class="no">mutlist2</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span>(<span class="no">mutlist</span>, <span class="kw">function</span>(<span class="no">ragex</span>) {
@@ -232,7 +222,7 @@
 <h2 class="hasAnchor">
 <a href="#combine-all-cancers" class="anchor"></a>Combine all cancers</h2>
 <p>The variant function tallies the number of non-silent mutations. We use <code>qreduceAssay</code> to perform the reduction and calculation of non-silent mutations based on the gene regions in the genome.</p>
-<div class="sourceCode" id="cb21"><html><body><pre class="r"><span class="no">variant_fun</span> <span class="kw">&lt;-</span> <span class="kw">function</span>(<span class="no">scores</span>, <span class="no">ranges</span>, <span class="no">qranges</span>) {
+<div class="sourceCode" id="cb17"><html><body><pre class="r"><span class="no">variant_fun</span> <span class="kw">&lt;-</span> <span class="kw">function</span>(<span class="no">scores</span>, <span class="no">ranges</span>, <span class="no">qranges</span>) {
     <span class="fu"><a href="https://rdrr.io/r/base/numeric.html">as.numeric</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/any.html">any</a></span>(<span class="no">scores</span> <span class="kw">!=</span> <span class="st">"Silent"</span>))
 }
 
@@ -257,12 +247,12 @@
 <span class="no">mut4</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span>(<span class="no">mut3</span>, <span class="kw">function</span>(<span class="no">mutmat</span>) {
     <span class="no">mutmat</span>[<span class="no">allgenes</span>, ]
 })</pre></body></html></div>
-<div class="sourceCode" id="cb22"><html><body><pre class="r"><span class="no">afile</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span>(<span class="no">datafolder</span>, <span class="st">"mutationspancan.rda"</span>)
+<div class="sourceCode" id="cb18"><html><body><pre class="r"><span class="no">afile</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span>(<span class="no">datafolder</span>, <span class="st">"mutationspancan.rda"</span>)
 <span class="kw">if</span> (!<span class="fu"><a href="https://rdrr.io/r/base/files.html">file.exists</a></span>(<span class="no">afile</span>))
   <span class="fu"><a href="https://rdrr.io/r/base/save.html">save</a></span>(<span class="no">mut4</span>, <span class="kw">file</span> <span class="kw">=</span> <span class="no">afile</span>)
 <span class="fu"><a href="https://rdrr.io/r/base/load.html">load</a></span>(<span class="no">afile</span>)</pre></body></html></div>
 <p>Find the top genes where we get the most non-silent mutations.</p>
-<div class="sourceCode" id="cb23"><html><body><pre class="r"><span class="no">mut18</span> <span class="kw">&lt;-</span> <span class="no">mut4</span>[<span class="no">genomut</span> <span class="kw">==</span> <span class="st">"hg18"</span>]
+<div class="sourceCode" id="cb19"><html><body><pre class="r"><span class="no">mut18</span> <span class="kw">&lt;-</span> <span class="no">mut4</span>[<span class="no">genomut</span> <span class="kw">==</span> <span class="st">"hg18"</span>]
 <span class="no">mut19</span> <span class="kw">&lt;-</span> <span class="no">mut4</span>[<span class="no">genomut</span> <span class="kw">==</span> <span class="st">"hg19"</span>]
 
 <span class="no">mut18full</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/do.call.html">do.call</a></span>(<span class="no">cbind.data.frame</span>, <span class="no">mut18</span>)
@@ -280,12 +270,12 @@
 <span class="no">genesoi</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"CASP8"</span>, <span class="st">"CDKN1A"</span>, <span class="st">"EP300"</span>, <span class="st">"CREBBP"</span>, <span class="st">"ARID1A"</span>, <span class="st">"ARID2"</span>, <span class="st">"KDM6A"</span>,
 <span class="st">"TP53"</span>, <span class="st">"NF1"</span>, <span class="st">"NF2"</span>, <span class="st">"CDH1"</span>, <span class="st">"APC"</span>, <span class="st">"PIK3R1"</span>, <span class="st">"IDH1"</span>, <span class="st">"IDH2"</span>, <span class="st">"GNA11"</span>, <span class="st">"GNAQ"</span>,
 <span class="st">"GNAS"</span>, <span class="st">"EGFR"</span>, <span class="st">"ERBB2"</span>, <span class="st">"ERBB4"</span>, <span class="st">"KRAS"</span>, <span class="st">"PIK3CA"</span>, <span class="st">"RHOA"</span>, <span class="st">"AKT1"</span>, <span class="st">"CTNNB1"</span>)</pre></body></html></div>
-<div class="sourceCode" id="cb24"><html><body><pre class="r"><span class="no">afile</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span>(<span class="no">datafolder</span>, <span class="st">"genesoi.rda"</span>)
+<div class="sourceCode" id="cb20"><html><body><pre class="r"><span class="no">afile</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span>(<span class="no">datafolder</span>, <span class="st">"genesoi.rda"</span>)
 <span class="kw">if</span> (!<span class="fu"><a href="https://rdrr.io/r/base/files.html">file.exists</a></span>(<span class="no">afile</span>))
   <span class="fu"><a href="https://rdrr.io/r/base/save.html">save</a></span>(<span class="no">genesoi</span>, <span class="kw">file</span> <span class="kw">=</span> <span class="no">afile</span>)
 <span class="fu"><a href="https://rdrr.io/r/base/load.html">load</a></span>(<span class="no">afile</span>)</pre></body></html></div>
 <p>Generate a list of funcitons that target each mutation variant. Use the list of functions to tally up the number of variants per gene.</p>
-<div class="sourceCode" id="cb25"><html><body><pre class="r"><span class="no">mutlist18</span> <span class="kw">&lt;-</span> <span class="no">mutlist2</span>[<span class="no">genomut</span> <span class="kw">==</span> <span class="st">"hg18"</span>]
+<div class="sourceCode" id="cb21"><html><body><pre class="r"><span class="no">mutlist18</span> <span class="kw">&lt;-</span> <span class="no">mutlist2</span>[<span class="no">genomut</span> <span class="kw">==</span> <span class="st">"hg18"</span>]
 <span class="no">mutlist19</span> <span class="kw">&lt;-</span> <span class="no">mutlist2</span>[<span class="no">genomut</span> <span class="kw">==</span> <span class="st">"hg19"</span>]
 
 <span class="no">simplify_funs</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span>(<span class="no">validvariants</span>,
@@ -326,16 +316,16 @@
 
 <span class="no">list_mats</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/funprog.html">Map</a></span>(<span class="no">cbind</span>, <span class="no">simps18</span>, <span class="no">simps19</span>)
 <span class="no">list_mats2</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span>(<span class="no">list_mats</span>, <span class="no">data.matrix</span>)</pre></body></html></div>
-<div class="sourceCode" id="cb26"><html><body><pre class="r"><span class="no">afile</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span>(<span class="no">datafolder</span>, <span class="st">"list_mats2.rda"</span>)
+<div class="sourceCode" id="cb22"><html><body><pre class="r"><span class="no">afile</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span>(<span class="no">datafolder</span>, <span class="st">"list_mats2.rda"</span>)
 <span class="kw">if</span> (!<span class="fu"><a href="https://rdrr.io/r/base/files.html">file.exists</a></span>(<span class="no">afile</span>))
   <span class="fu"><a href="https://rdrr.io/r/base/save.html">save</a></span>(<span class="no">list_mats2</span>, <span class="kw">file</span> <span class="kw">=</span> <span class="no">afile</span>)
 <span class="fu"><a href="https://rdrr.io/r/base/load.html">load</a></span>(<span class="no">afile</span>)</pre></body></html></div>
 <p>Checkpoint - load variants</p>
-<div class="sourceCode" id="cb27"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/load.html">load</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span>(<span class="no">datafolder</span>, <span class="st">"validvariants.rda"</span>))</pre></body></html></div>
+<div class="sourceCode" id="cb23"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/load.html">load</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span>(<span class="no">datafolder</span>, <span class="st">"validvariants.rda"</span>))</pre></body></html></div>
 <p>Create a list of functions for input for the <code>ComplexHeatmap</code> plotting function.</p>
-<div class="sourceCode" id="cb28"><html><body><pre class="r"><span class="no">qualcolors</span> <span class="kw">&lt;-</span> <span class="kw pkg">RColorBrewer</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/RColorBrewer/man/ColorBrewer.html">brewer.pal</a></span>(<span class="kw">n</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span>(<span class="no">validvariants</span>), <span class="st">'Set3'</span>)
+<div class="sourceCode" id="cb24"><html><body><pre class="r"><span class="no">qualcolors</span> <span class="kw">&lt;-</span> <span class="kw pkg">RColorBrewer</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/RColorBrewer/man/ColorBrewer.html">brewer.pal</a></span>(<span class="kw">n</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span>(<span class="no">validvariants</span>), <span class="st">'Set3'</span>)
 <span class="no">colors</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/setNames.html">setNames</a></span>(<span class="no">qualcolors</span>, <span class="no">validvariants</span>)</pre></body></html></div>
-<div class="sourceCode" id="cb29"><html><body><pre class="r"><span class="no">mutfuns</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span>(<span class="no">colors</span>, <span class="kw">function</span>(<span class="no">couleur</span>) {
+<div class="sourceCode" id="cb25"><html><body><pre class="r"><span class="no">mutfuns</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span>(<span class="no">colors</span>, <span class="kw">function</span>(<span class="no">couleur</span>) {
     <span class="no">args</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">alist</a></span>(<span class="kw">x</span> <span class="kw">=</span>, <span class="kw">y</span> <span class="kw">=</span>, <span class="kw">w</span> <span class="kw">=</span>, <span class="kw">h</span> <span class="kw">=</span>)
     <span class="no">args</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">as.pairlist</a></span>(<span class="no">args</span>)
     <span class="no">body</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/substitute.html">substitute</a></span>({
@@ -348,7 +338,7 @@
     <span class="kw pkg">grid</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/r/grid/grid.rect.html">grid.rect</a></span>(<span class="no">x</span>, <span class="no">y</span>, <span class="no">w</span>, <span class="no">h</span>,
         <span class="kw">gp</span> <span class="kw">=</span> <span class="kw pkg">grid</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/r/grid/gpar.html">gpar</a></span>(<span class="kw">fill</span> <span class="kw">=</span> <span class="st">"#FFFFFF"</span>, <span class="kw">col</span> <span class="kw">=</span> <span class="st">"#FFFFFF"</span>))
 <span class="no">mutfuns2</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="kw">background</span> <span class="kw">=</span> <span class="no">background</span>, <span class="no">mutfuns</span>)</pre></body></html></div>
-<div class="sourceCode" id="cb30"><html><body><pre class="r"><span class="no">afile</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span>(<span class="no">datafolder</span>, <span class="st">"mutfuns2.rda"</span>)
+<div class="sourceCode" id="cb26"><html><body><pre class="r"><span class="no">afile</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span>(<span class="no">datafolder</span>, <span class="st">"mutfuns2.rda"</span>)
 <span class="kw">if</span> (!<span class="fu"><a href="https://rdrr.io/r/base/files.html">file.exists</a></span>(<span class="no">afile</span>))
   <span class="fu"><a href="https://rdrr.io/r/base/save.html">save</a></span>(<span class="no">mutfuns2</span>, <span class="kw">file</span> <span class="kw">=</span> <span class="no">afile</span>)
 <span class="fu"><a href="https://rdrr.io/r/base/load.html">load</a></span>(<span class="no">afile</span>)</pre></body></html></div>
@@ -360,7 +350,7 @@
 <h3 class="hasAnchor">
 <a href="#oncoprint-plot-of-selected-cancer-driver-genes-frequently-mutated-across-33-tcga-cancer-types" class="anchor"></a>OncoPrint plot of selected cancer driver genes frequently mutated across 33 TCGA cancer types</h3>
 <p>Plot the oncoPrint function:</p>
-<div class="sourceCode" id="cb31"><html><body><pre class="r"><span class="no">ll</span> <span class="kw">&lt;-</span> <span class="kw pkg">IRanges</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/IRanges/man/AtomicList-class.html">LogicalList</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span>(<span class="no">list_mats2</span>, <span class="kw">function</span>(<span class="no">y</span>) <span class="fu"><a href="https://rdrr.io/r/base/colSums.html">colSums</a></span>(<span class="no">y</span>) <span class="kw">==</span> <span class="fl">0</span>))
+<div class="sourceCode" id="cb27"><html><body><pre class="r"><span class="no">ll</span> <span class="kw">&lt;-</span> <span class="kw pkg">IRanges</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/IRanges/man/AtomicList-class.html">LogicalList</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span>(<span class="no">list_mats2</span>, <span class="kw">function</span>(<span class="no">y</span>) <span class="fu"><a href="https://rdrr.io/r/base/colSums.html">colSums</a></span>(<span class="no">y</span>) <span class="kw">==</span> <span class="fl">0</span>))
 <span class="no">matlog</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/do.call.html">do.call</a></span>(<span class="no">rbind</span>, <span class="fu"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span>(<span class="no">ll</span>, <span class="no">unname</span>))
 <span class="no">allzero</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/apply.html">apply</a></span>(<span class="no">matlog</span>, <span class="fl">2</span>, <span class="no">all</span>)
 <span class="no">list_mats3</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span>(<span class="no">list_mats2</span>, <span class="kw">function</span>(<span class="no">x</span>) <span class="no">x</span>[, !<span class="no">allzero</span>])
@@ -373,7 +363,7 @@
 ## Frame Ins, Missense Mutation, Nonsense Mutation, RNA, Splice Site</code></pre>
 <p><img src="Figure2_OncoPrint_files/figure-html/unnamed-chunk-20-1.png" width="700"></p>
 <p>Saving to PDF format</p>
-<div class="sourceCode" id="cb33"><html><body><pre class="r"><span class="co"># png("PANCAN_Mutations-oncoprint.png", width = 12, height = 8, units = "in",</span>
+<div class="sourceCode" id="cb29"><html><body><pre class="r"><span class="co"># png("PANCAN_Mutations-oncoprint.png", width = 12, height = 8, units = "in",</span>
 <span class="co">#     res = 600)</span>
 <span class="fu"><a href="https://rdrr.io/r/grDevices/pdf.html">pdf</a></span>(<span class="st">"F2_PANCAN_Mutations-oncoprint.pdf"</span>, <span class="kw">width</span> <span class="kw">=</span> <span class="fl">12</span>, <span class="kw">height</span> <span class="kw">=</span> <span class="fl">8</span>,
     <span class="kw">paper</span> <span class="kw">=</span> <span class="st">"special"</span>)

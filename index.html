@@ -111,7 +111,7 @@
 <a href="#installation" class="anchor"></a>Installation</h2>
 <p>Until the release of Bioconductor 3.11 (scheduled for April 28, 2020), it is strongly recommended to use the <em>devel</em> version of Bioconductor. That version can be installed the <a href="https://bioconductor.org/developers/how-to/useDevel/">traditional way</a> or by using the <a href="https://bioconductor.org/help/docker/">Docker container</a>.</p>
 <p>Additionally until the release of Bioconductor 3.11, <code>cBioPortalData</code> must be installed from GitHub as shown in the following code chunk which installs all necessary packages either directly or as dependencies. Note that this code chunk is not evaluated, because installation only needs to be performed once.</p>
-<div class="sourceCode" id="cb1"><pre class="r"><span class="kw pkg">BiocManager</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/BiocManager/man/install.html">install</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"waldronlab/cBioPortalData"</span>, <span class="st">"LiNk-NY/curatedTCGAManu"</span>))</pre></div>
+<div class="sourceCode" id="cb1"><pre class="r"><span class="kw pkg">BiocManager</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/BiocManager/man/install.html">install</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"cBioPortalData"</span>, <span class="st">"LiNk-NY/curatedTCGAManu"</span>))</pre></div>
 </div>
 <div id="vignette-build" class="section level2">
 <h2 class="hasAnchor">
@@ -151,7 +151,7 @@
 <div id="figure-2" class="section level3">
 <h3 class="hasAnchor">
 <a href="#figure-2" class="anchor"></a>Figure 2</h3>
-<p><img src="articles/Figure2_OncoPrint_files/figure-html/unnamed-chunk-20-1.png" alt="Figure 2"></p>
+<p><a href="https://github.com/waldronlab/schematics/"><img src="https://raw.githubusercontent.com/waldronlab/schematics/master/pngs/unnamed-chunk-20-1.png"></a></p>
 </div>
 </div>
 <div id="differential-expression-and-gsea-pancan" class="section level2">
@@ -160,12 +160,12 @@
 <div id="figure-3" class="section level3">
 <h3 class="hasAnchor">
 <a href="#figure-3" class="anchor"></a>Figure 3</h3>
-<p><img src="articles/Figures3n4_GSEA_PanCan_files/figure-html/unnamed-chunk-17-1.png" alt="Figure 3"></p>
+<p><a href="https://github.com/waldronlab/schematics/"><img src="https://raw.githubusercontent.com/waldronlab/schematics/master/pngs/unnamed-chunk-17-1.png"></a></p>
 </div>
 <div id="figure-4" class="section level3">
 <h3 class="hasAnchor">
 <a href="#figure-4" class="anchor"></a>Figure 4</h3>
-<p><img src="articles/Figures3n4_GSEA_PanCan_files/figure-html/unnamed-chunk-24-1.png" alt="Figure 4"></p>
+<p><a href="https://github.com/waldronlab/schematics/"><img src="https://raw.githubusercontent.com/waldronlab/schematics/master/pngs/unnamed-chunk-24-1.png"></a></p>
 </div>
 </div>
 <div id="example-multi-omic-analyses" class="section level2">
@@ -174,12 +174,12 @@
 <div id="figure-5" class="section level3">
 <h3 class="hasAnchor">
 <a href="#figure-5" class="anchor"></a>Figure 5</h3>
-<p><img src="articles/Figures5-6-S4_files/figure-html/unnamed-chunk-9-1.png" alt="Figure 5"></p>
+<p><a href="https://github.com/waldronlab/schematics/"><img src="https://raw.githubusercontent.com/waldronlab/schematics/master/pngs/unnamed-chunk-9-1.png"></a></p>
 </div>
 <div id="figure-6" class="section level3">
 <h3 class="hasAnchor">
 <a href="#figure-6" class="anchor"></a>Figure 6</h3>
-<p><img src="articles/Figures5-6-S4_files/figure-html/unnamed-chunk-14-1.png" alt="Figure 6"></p>
+<p><a href="https://github.com/waldronlab/schematics/"><img src="https://raw.githubusercontent.com/waldronlab/schematics/master/pngs/unnamed-chunk-14-1.png"></a></p>
 </div>
 </div>
 </div>
@@ -198,61 +198,57 @@
 <div id="figure-s2a" class="section level2">
 <h2 class="hasAnchor">
 <a href="#figure-s2a" class="anchor"></a>Figure S2A</h2>
-<div id="example-code-for-installing-downloading-and-exporting-tcga-data-using-curatedtcgadata" class="section level3">
+<div id="example-code-for-installing-and-downloading-tcga-data-using-curatedtcgadata" class="section level3">
 <h3 class="hasAnchor">
-<a href="#example-code-for-installing-downloading-and-exporting-tcga-data-using-curatedtcgadata" class="anchor"></a>Example code for installing, downloading, and exporting TCGA data using curatedTCGAData</h3>
+<a href="#example-code-for-installing-and-downloading-tcga-data-using-curatedtcgadata" class="anchor"></a>Example code for installing and downloading TCGA data using curatedTCGAData</h3>
 <div class="sourceCode" id="cb5"><pre class="r"><span class="kw">if</span> (!<span class="fu"><a href="https://rdrr.io/r/base/ns-load.html">requireNamespace</a></span>(<span class="st">"BiocManager"</span>, <span class="kw">quietly</span> <span class="kw">=</span> <span class="fl">TRUE</span>))
     <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span>(<span class="st">"BiocManager"</span>)
 
-<span class="co"># BiocManager::install("curatedTCGAData")</span>
-
-<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">curatedTCGAData</span>)
+<span class="kw">if</span> (!<span class="fu"><a href="https://rdrr.io/r/base/ns-load.html">requireNamespace</a></span>(<span class="st">"curatedTCGAData"</span>, <span class="kw">quietly</span> <span class="kw">=</span> <span class="fl">TRUE</span>))
+    <span class="kw pkg">BiocManager</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/BiocManager/man/install.html">install</a></span>(<span class="st">"curatedTCGAData"</span>)
 
 <span class="co">## Glioblastoma Multiforme (GBM)</span>
-
-<span class="no">tcga_gbm</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/curatedTCGAData/man/curatedTCGAData.html">curatedTCGAData</a></span>(<span class="kw">diseaseCode</span> <span class="kw">=</span> <span class="st">"GBM"</span>, <span class="kw">assays</span> <span class="kw">=</span> <span class="st">"RNA*"</span>, <span class="kw">dry.run</span> <span class="kw">=</span> <span class="fl">FALSE</span>)
-
-<span class="no">tcga_gbm</span>
+<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">curatedTCGAData</span>)
+<span class="fu"><a href="https://rdrr.io/pkg/curatedTCGAData/man/curatedTCGAData.html">curatedTCGAData</a></span>(<span class="kw">diseaseCode</span> <span class="kw">=</span> <span class="st">"GBM"</span>, <span class="kw">assays</span> <span class="kw">=</span> <span class="st">"RNA*"</span>, <span class="kw">dry.run</span> <span class="kw">=</span> <span class="fl">FALSE</span>)
 <span class="co">#&gt; A MultiAssayExperiment object of 1 listed</span>
 <span class="co">#&gt;  experiment with a user-defined name and respective class.</span>
 <span class="co">#&gt;  Containing an ExperimentList class object of length 1:</span>
 <span class="co">#&gt;  [1] GBM_RNASeq2GeneNorm-20160128: SummarizedExperiment with 20501 rows and 166 columns</span>
-<span class="co">#&gt; Features:</span>
+<span class="co">#&gt; Functionality:</span>
 <span class="co">#&gt;  experiments() - obtain the ExperimentList instance</span>
 <span class="co">#&gt;  colData() - the primary/phenotype DataFrame</span>
-<span class="co">#&gt;  sampleMap() - the sample availability DFrame</span>
+<span class="co">#&gt;  sampleMap() - the sample coordination DataFrame</span>
 <span class="co">#&gt;  `$`, `[`, `[[` - extract colData columns, subset, or experiment</span>
 <span class="co">#&gt;  *Format() - convert into a long or wide DataFrame</span>
 <span class="co">#&gt;  assays() - convert ExperimentList to a SimpleList of matrices</span>
-
-<span class="fu">exportClass</span>(<span class="no">tcga_gbm</span>, <span class="kw">dir</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html">tempdir</a></span>(), <span class="kw">fmt</span> <span class="kw">=</span> <span class="st">"csv"</span>)
-<span class="co">#&gt; [1] "/tmp/Rtmpsne1fI/tcga_gbm_META_0.csv"                      </span>
-<span class="co">#&gt; [2] "/tmp/Rtmpsne1fI/tcga_gbm_META_1.csv"                      </span>
-<span class="co">#&gt; [3] "/tmp/Rtmpsne1fI/tcga_gbm_GBM_RNASeq2GeneNorm-20160128.csv"</span>
-<span class="co">#&gt; [4] "/tmp/Rtmpsne1fI/tcga_gbm_colData.csv"                     </span>
-<span class="co">#&gt; [5] "/tmp/Rtmpsne1fI/tcga_gbm_sampleMap.csv"</span></pre></div>
+<span class="co">#&gt;  exportClass() - save all data to files</span></pre></div>
 </div>
 </div>
 <div id="figure-s2b" class="section level2">
 <h2 class="hasAnchor">
 <a href="#figure-s2b" class="anchor"></a>Figure S2B</h2>
-<div id="example-cbioportaldata-code-for-downloading-tcga-data-from-cbioportalorg-and-via-the-cbioportal-api" class="section level3">
+<div id="example-cbioportaldata-code-for-downloading-and-exporting-tcga-data-from-cbioportalorg-and-via-the-cbioportal-api" class="section level3">
 <h3 class="hasAnchor">
-<a href="#example-cbioportaldata-code-for-downloading-tcga-data-from-cbioportalorg-and-via-the-cbioportal-api" class="anchor"></a>Example cBioPortalData code for downloading TCGA data from cBioPortal.org and via the cBioPortal API</h3>
+<a href="#example-cbioportaldata-code-for-downloading-and-exporting-tcga-data-from-cbioportalorg-and-via-the-cbioportal-api" class="anchor"></a>Example cBioPortalData code for downloading and exporting TCGA data from cBioPortal.org and via the cBioPortal API</h3>
 <div class="sourceCode" id="cb6"><pre class="r"><span class="co">## installation</span>
-<span class="co"># BiocManager::install("WaldronLab/cBioPortalData")</span>
+<span class="kw">if</span> (!<span class="fu"><a href="https://rdrr.io/r/base/ns-load.html">requireNamespace</a></span>(<span class="st">"cBioPortalData"</span>, <span class="kw">quietly</span> <span class="kw">=</span> <span class="fl">TRUE</span>))
+    <span class="kw pkg">BiocManager</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/BiocManager/man/install.html">install</a></span>(<span class="st">"cBioPortalData"</span>)
 
 <span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">cBioPortalData</span>)
 
 <span class="co">## https://cbioportal.org/datasets (Bulk data method)</span>
-<span class="no">gbm</span> <span class="kw">&lt;-</span> <span class="fu">cBioDataPack</span>(<span class="st">"gbm_tcga"</span>)
+<span class="no">gbm</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/cBioPortalData/man/cBioDataPack.html">cBioDataPack</a></span>(<span class="st">"gbm_tcga"</span>)
 
 <span class="co">## https://cBioPortal.org/api (API method)</span>
-<span class="no">cBio</span> <span class="kw">&lt;-</span> <span class="fu">cBioPortal</span>()
-<span class="fu">cBioPortalData</span>(<span class="no">cBio</span>, <span class="kw">studyId</span> <span class="kw">=</span> <span class="st">"gbm_tcga"</span>, <span class="kw">genePanelId</span> <span class="kw">=</span> <span class="st">"IMPACT341"</span>)
-<span class="co">#&gt; A MultiAssayExperiment object of 13 listed</span>
+<span class="no">cBio</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/cBioPortalData/man/cBioPortal.html">cBioPortal</a></span>()
+
+<span class="co">## use exportClass() with the result to save data files</span>
+<span class="no">tcga_gbm</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/cBioPortalData/man/cBioPortalData.html">cBioPortalData</a></span>(<span class="no">cBio</span>, <span class="kw">studyId</span> <span class="kw">=</span> <span class="st">"gbm_tcga"</span>, <span class="kw">genePanelId</span> <span class="kw">=</span> <span class="st">"IMPACT341"</span>)
+
+<span class="no">tcga_gbm</span>
+<span class="co">#&gt; A MultiAssayExperiment object of 16 listed</span>
 <span class="co">#&gt;  experiments with user-defined names and respective classes.</span>
-<span class="co">#&gt;  Containing an ExperimentList class object of length 13:</span>
+<span class="co">#&gt;  Containing an ExperimentList class object of length 16:</span>
 <span class="co">#&gt;  [1] gbm_tcga_rppa: SummarizedExperiment with 67 rows and 244 columns</span>
 <span class="co">#&gt;  [2] gbm_tcga_rppa_Zscores: SummarizedExperiment with 67 rows and 244 columns</span>
 <span class="co">#&gt;  [3] gbm_tcga_gistic: SummarizedExperiment with 339 rows and 577 columns</span>
@@ -266,13 +262,53 @@
 <span class="co">#&gt;  [11] gbm_tcga_methylation_hm27: SummarizedExperiment with 282 rows and 285 columns</span>
 <span class="co">#&gt;  [12] gbm_tcga_methylation_hm450: SummarizedExperiment with 282 rows and 153 columns</span>
 <span class="co">#&gt;  [13] gbm_tcga_mutations: RangedSummarizedExperiment with 810 rows and 271 columns</span>
-<span class="co">#&gt; Features:</span>
+<span class="co">#&gt;  [14] gbm_tcga_rna_seq_v2_mrna_median_all_sample_Zscores: SummarizedExperiment with 340 rows and 166 columns</span>
+<span class="co">#&gt;  [15] gbm_tcga_mrna_median_all_sample_Zscores: SummarizedExperiment with 304 rows and 401 columns</span>
+<span class="co">#&gt;  [16] gbm_tcga_mrna_U133_all_sample_Zscores: SummarizedExperiment with 311 rows and 528 columns</span>
+<span class="co">#&gt; Functionality:</span>
 <span class="co">#&gt;  experiments() - obtain the ExperimentList instance</span>
-<span class="co">#&gt;  colData() - the primary/phenotype DFrame</span>
-<span class="co">#&gt;  sampleMap() - the sample availability DFrame</span>
+<span class="co">#&gt;  colData() - the primary/phenotype DataFrame</span>
+<span class="co">#&gt;  sampleMap() - the sample coordination DataFrame</span>
 <span class="co">#&gt;  `$`, `[`, `[[` - extract colData columns, subset, or experiment</span>
-<span class="co">#&gt;  *Format() - convert into a long or wide DFrame</span>
-<span class="co">#&gt;  assays() - convert ExperimentList to a SimpleList of matrices</span></pre></div>
+<span class="co">#&gt;  *Format() - convert into a long or wide DataFrame</span>
+<span class="co">#&gt;  assays() - convert ExperimentList to a SimpleList of matrices</span>
+<span class="co">#&gt;  exportClass() - save all data to files</span>
+
+<span class="fu">exportClass</span>(<span class="no">tcga_gbm</span>, <span class="kw">dir</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html">tempdir</a></span>(), <span class="kw">fmt</span> <span class="kw">=</span> <span class="st">"csv"</span>)
+<span class="co">#&gt;  [1] "/tmp/Rtmp1EL92I/tcga_gbm_META_1.csv"                                            </span>
+<span class="co">#&gt;  [2] "/tmp/Rtmp1EL92I/tcga_gbm_META_2.csv"                                            </span>
+<span class="co">#&gt;  [3] "/tmp/Rtmp1EL92I/tcga_gbm_META_3.csv"                                            </span>
+<span class="co">#&gt;  [4] "/tmp/Rtmp1EL92I/tcga_gbm_META_4.csv"                                            </span>
+<span class="co">#&gt;  [5] "/tmp/Rtmp1EL92I/tcga_gbm_META_5.csv"                                            </span>
+<span class="co">#&gt;  [6] "/tmp/Rtmp1EL92I/tcga_gbm_META_6.csv"                                            </span>
+<span class="co">#&gt;  [7] "/tmp/Rtmp1EL92I/tcga_gbm_META_7.csv"                                            </span>
+<span class="co">#&gt;  [8] "/tmp/Rtmp1EL92I/tcga_gbm_META_8.csv"                                            </span>
+<span class="co">#&gt;  [9] "/tmp/Rtmp1EL92I/tcga_gbm_META_9.csv"                                            </span>
+<span class="co">#&gt; [10] "/tmp/Rtmp1EL92I/tcga_gbm_META_10.csv"                                           </span>
+<span class="co">#&gt; [11] "/tmp/Rtmp1EL92I/tcga_gbm_META_11.csv"                                           </span>
+<span class="co">#&gt; [12] "/tmp/Rtmp1EL92I/tcga_gbm_META_12.csv"                                           </span>
+<span class="co">#&gt; [13] "/tmp/Rtmp1EL92I/tcga_gbm_META_13.csv"                                           </span>
+<span class="co">#&gt; [14] "/tmp/Rtmp1EL92I/tcga_gbm_META_14.csv"                                           </span>
+<span class="co">#&gt; [15] "/tmp/Rtmp1EL92I/tcga_gbm_META_15.csv"                                           </span>
+<span class="co">#&gt; [16] "/tmp/Rtmp1EL92I/tcga_gbm_META_16.csv"                                           </span>
+<span class="co">#&gt; [17] "/tmp/Rtmp1EL92I/tcga_gbm_gbm_tcga_rppa.csv"                                     </span>
+<span class="co">#&gt; [18] "/tmp/Rtmp1EL92I/tcga_gbm_gbm_tcga_rppa_Zscores.csv"                             </span>
+<span class="co">#&gt; [19] "/tmp/Rtmp1EL92I/tcga_gbm_gbm_tcga_gistic.csv"                                   </span>
+<span class="co">#&gt; [20] "/tmp/Rtmp1EL92I/tcga_gbm_gbm_tcga_mrna_U133.csv"                                </span>
+<span class="co">#&gt; [21] "/tmp/Rtmp1EL92I/tcga_gbm_gbm_tcga_mrna_U133_Zscores.csv"                        </span>
+<span class="co">#&gt; [22] "/tmp/Rtmp1EL92I/tcga_gbm_gbm_tcga_mrna.csv"                                     </span>
+<span class="co">#&gt; [23] "/tmp/Rtmp1EL92I/tcga_gbm_gbm_tcga_mrna_median_Zscores.csv"                      </span>
+<span class="co">#&gt; [24] "/tmp/Rtmp1EL92I/tcga_gbm_gbm_tcga_rna_seq_v2_mrna.csv"                          </span>
+<span class="co">#&gt; [25] "/tmp/Rtmp1EL92I/tcga_gbm_gbm_tcga_rna_seq_v2_mrna_median_Zscores.csv"           </span>
+<span class="co">#&gt; [26] "/tmp/Rtmp1EL92I/tcga_gbm_gbm_tcga_linear_CNA.csv"                               </span>
+<span class="co">#&gt; [27] "/tmp/Rtmp1EL92I/tcga_gbm_gbm_tcga_methylation_hm27.csv"                         </span>
+<span class="co">#&gt; [28] "/tmp/Rtmp1EL92I/tcga_gbm_gbm_tcga_methylation_hm450.csv"                        </span>
+<span class="co">#&gt; [29] "/tmp/Rtmp1EL92I/tcga_gbm_gbm_tcga_mutations.csv"                                </span>
+<span class="co">#&gt; [30] "/tmp/Rtmp1EL92I/tcga_gbm_gbm_tcga_rna_seq_v2_mrna_median_all_sample_Zscores.csv"</span>
+<span class="co">#&gt; [31] "/tmp/Rtmp1EL92I/tcga_gbm_gbm_tcga_mrna_median_all_sample_Zscores.csv"           </span>
+<span class="co">#&gt; [32] "/tmp/Rtmp1EL92I/tcga_gbm_gbm_tcga_mrna_U133_all_sample_Zscores.csv"             </span>
+<span class="co">#&gt; [33] "/tmp/Rtmp1EL92I/tcga_gbm_colData.csv"                                           </span>
+<span class="co">#&gt; [34] "/tmp/Rtmp1EL92I/tcga_gbm_sampleMap.csv"</span></pre></div>
 </div>
 </div>
 <div id="figure-s2c" class="section level2">
@@ -288,10 +324,11 @@
 <span class="kw pkg">R.utils</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/R.utils/man/compressFile.html">gunzip</a></span>(<span class="no">dfile</span>, <span class="kw">destname</span> <span class="kw">=</span> <span class="no">cloc38</span>, <span class="kw">remove</span> <span class="kw">=</span> <span class="fl">FALSE</span>)
 
 <span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">rtracklayer</span>)
-<span class="no">chain38</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/message.html">suppressMessages</a></span>(
-    <span class="fu"><a href="https://rdrr.io/pkg/rtracklayer/man/Chain-class.html">import.chain</a></span>(<span class="no">cloc38</span>)
-)
-<span class="co">## Note. Run bulk data download example (in S2B) first</span>
+<span class="no">chain38</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/message.html">suppressMessages</a></span>( <span class="fu"><a href="https://rdrr.io/pkg/rtracklayer/man/Chain-class.html">import.chain</a></span>(<span class="no">cloc38</span>) )
+
+<span class="co">## Run bulk data download (from S2B) to create gbm object</span>
+<span class="kw">if</span> (!<span class="fu"><a href="https://rdrr.io/r/base/exists.html">exists</a></span>(<span class="st">"gbm"</span>)) <span class="no">gbm</span> <span class="kw">&lt;-</span> <span class="kw pkg">cBioPortalData</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/cBioPortalData/man/cBioDataPack.html">cBioDataPack</a></span>(<span class="st">"gbm_tcga"</span>)
+
 <span class="no">mutations</span> <span class="kw">&lt;-</span> <span class="no">gbm</span><span class="kw">[[</span><span class="st">"mutations_extended"</span>]]
 <span class="fu">seqlevelsStyle</span>(<span class="no">mutations</span>) <span class="kw">&lt;-</span> <span class="st">"UCSC"</span>
 
@@ -307,6 +344,7 @@
 <div class="sourceCode" id="cb8"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">TCGAutils</span>)
 <span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">GenomicDataCommons</span>)
 
+<span class="co">## GenomicDataCommons</span>
 <span class="no">query</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/GenomicDataCommons/man/query.html">files</a></span>(<span class="kw">legacy</span> <span class="kw">=</span> <span class="fl">TRUE</span>) <span class="kw">%&gt;%</span>
     <span class="fu"><a href="https://rdrr.io/pkg/GenomicDataCommons/man/filtering.html">filter</a></span>( ~ <span class="no">cases.project.project_id</span> <span class="kw">==</span> <span class="st">"TCGA-COAD"</span> <span class="kw">&amp;</span>
         <span class="no">data_category</span> <span class="kw">==</span> <span class="st">"Gene expression"</span> <span class="kw">&amp;</span>
@@ -315,6 +353,7 @@
 <span class="no">fileids</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/GenomicDataCommons/man/manifest.html">manifest</a></span>(<span class="no">query</span>)$<span class="no">id</span>[<span class="fl">1</span>:<span class="fl">4</span>]
 <span class="no">exonfiles</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/GenomicDataCommons/man/gdcdata.html">gdcdata</a></span>(<span class="no">fileids</span>, <span class="kw">use_cached</span> <span class="kw">=</span> <span class="fl">FALSE</span>)
 
+<span class="co">## TCGAutils</span>
 <span class="fu"><a href="https://rdrr.io/pkg/TCGAutils/man/makeGRangesListFromExonFiles.html">makeGRangesListFromExonFiles</a></span>(<span class="no">exonfiles</span>, <span class="kw">nrows</span> <span class="kw">=</span> <span class="fl">4</span>)
 <span class="co">#&gt; Parsed with column specification:</span>
 <span class="co">#&gt; cols(</span>
@@ -349,16 +388,16 @@
 <span class="co">#&gt; GRanges object with 4 ranges and 3 metadata columns:</span>
 <span class="co">#&gt;       seqnames      ranges strand | raw_counts median_length_normalized</span>
 <span class="co">#&gt;          &lt;Rle&gt;   &lt;IRanges&gt;  &lt;Rle&gt; |  &lt;numeric&gt;                &lt;numeric&gt;</span>
-<span class="co">#&gt;   [1]     chr1 11874-12227      + |          1                0.1359773</span>
+<span class="co">#&gt;   [1]     chr1 11874-12227      + |          1                 0.135977</span>
 <span class="co">#&gt;   [2]     chr1 12595-12721      + |          2                 0.547619</span>
-<span class="co">#&gt;   [3]     chr1 12613-12721      + |          2                0.4722222</span>
-<span class="co">#&gt;   [4]     chr1 12646-12697      + |          1                0.5294118</span>
-<span class="co">#&gt;                     RPKM</span>
-<span class="co">#&gt;                &lt;numeric&gt;</span>
-<span class="co">#&gt;   [1] 0.0228441576458164</span>
-<span class="co">#&gt;   [2]     0.127351681994</span>
-<span class="co">#&gt;   [3]  0.148382234983835</span>
-<span class="co">#&gt;   [4]  0.155515996281135</span>
+<span class="co">#&gt;   [3]     chr1 12613-12721      + |          2                 0.472222</span>
+<span class="co">#&gt;   [4]     chr1 12646-12697      + |          1                 0.529412</span>
+<span class="co">#&gt;            RPKM</span>
+<span class="co">#&gt;       &lt;numeric&gt;</span>
+<span class="co">#&gt;   [1] 0.0228442</span>
+<span class="co">#&gt;   [2] 0.1273517</span>
+<span class="co">#&gt;   [3] 0.1483822</span>
+<span class="co">#&gt;   [4] 0.1555160</span>
 <span class="co">#&gt;   -------</span>
 <span class="co">#&gt;   seqinfo: 1 sequence from an unspecified genome; no seqlengths</span>
 <span class="co">#&gt; </span>
@@ -366,16 +405,16 @@
 <span class="co">#&gt; GRanges object with 4 ranges and 3 metadata columns:</span>
 <span class="co">#&gt;       seqnames      ranges strand | raw_counts median_length_normalized</span>
 <span class="co">#&gt;          &lt;Rle&gt;   &lt;IRanges&gt;  &lt;Rle&gt; |  &lt;numeric&gt;                &lt;numeric&gt;</span>
-<span class="co">#&gt;   [1]     chr1 11874-12227      + |         35                0.7847025</span>
-<span class="co">#&gt;   [2]     chr1 12595-12721      + |          9                0.8730159</span>
-<span class="co">#&gt;   [3]     chr1 12613-12721      + |          9                0.8518519</span>
-<span class="co">#&gt;   [4]     chr1 12646-12697      + |          8                0.8431373</span>
-<span class="co">#&gt;                    RPKM</span>
-<span class="co">#&gt;               &lt;numeric&gt;</span>
-<span class="co">#&gt;   [1]  0.69124304141909</span>
-<span class="co">#&gt;   [2] 0.495455642285989</span>
-<span class="co">#&gt;   [3] 0.577274005232299</span>
-<span class="co">#&gt;   [4]  1.07560455675762</span>
+<span class="co">#&gt;   [1]     chr1 11874-12227      + |         35                 0.784702</span>
+<span class="co">#&gt;   [2]     chr1 12595-12721      + |          9                 0.873016</span>
+<span class="co">#&gt;   [3]     chr1 12613-12721      + |          9                 0.851852</span>
+<span class="co">#&gt;   [4]     chr1 12646-12697      + |          8                 0.843137</span>
+<span class="co">#&gt;            RPKM</span>
+<span class="co">#&gt;       &lt;numeric&gt;</span>
+<span class="co">#&gt;   [1]  0.691243</span>
+<span class="co">#&gt;   [2]  0.495456</span>
+<span class="co">#&gt;   [3]  0.577274</span>
+<span class="co">#&gt;   [4]  1.075605</span>
 <span class="co">#&gt;   -------</span>
 <span class="co">#&gt;   seqinfo: 1 sequence from an unspecified genome; no seqlengths</span>
 <span class="co">#&gt; </span>
@@ -383,16 +422,16 @@
 <span class="co">#&gt; GRanges object with 4 ranges and 3 metadata columns:</span>
 <span class="co">#&gt;       seqnames      ranges strand | raw_counts median_length_normalized</span>
 <span class="co">#&gt;          &lt;Rle&gt;   &lt;IRanges&gt;  &lt;Rle&gt; |  &lt;numeric&gt;                &lt;numeric&gt;</span>
-<span class="co">#&gt;   [1]     chr1 11874-12227      + |          4                0.4929178</span>
-<span class="co">#&gt;   [2]     chr1 12595-12721      + |          2                0.3412699</span>
-<span class="co">#&gt;   [3]     chr1 12613-12721      + |          2                0.3981481</span>
+<span class="co">#&gt;   [1]     chr1 11874-12227      + |          4                 0.492918</span>
+<span class="co">#&gt;   [2]     chr1 12595-12721      + |          2                 0.341270</span>
+<span class="co">#&gt;   [3]     chr1 12613-12721      + |          2                 0.398148</span>
 <span class="co">#&gt;   [4]     chr1 12646-12697      + |          2                 0.372549</span>
-<span class="co">#&gt;                    RPKM</span>
-<span class="co">#&gt;               &lt;numeric&gt;</span>
-<span class="co">#&gt;   [1] 0.322476823123937</span>
-<span class="co">#&gt;   [2] 0.449436202306589</span>
-<span class="co">#&gt;   [3] 0.523655024705842</span>
-<span class="co">#&gt;   [4]  1.09766149409494</span>
+<span class="co">#&gt;            RPKM</span>
+<span class="co">#&gt;       &lt;numeric&gt;</span>
+<span class="co">#&gt;   [1]  0.322477</span>
+<span class="co">#&gt;   [2]  0.449436</span>
+<span class="co">#&gt;   [3]  0.523655</span>
+<span class="co">#&gt;   [4]  1.097661</span>
 <span class="co">#&gt;   -------</span>
 <span class="co">#&gt;   seqinfo: 1 sequence from an unspecified genome; no seqlengths</span>
 <span class="co">#&gt; </span>
@@ -420,7 +459,7 @@
 <div id="correlated-principal-components-across-experimental-assays-in-adrenocortical-carcinoma-acc" class="section level3">
 <h3 class="hasAnchor">
 <a href="#correlated-principal-components-across-experimental-assays-in-adrenocortical-carcinoma-acc" class="anchor"></a>Correlated principal components across experimental assays in adrenocortical carcinoma (ACC)</h3>
-<p><img src="articles/Figures5-6-S4_files/figure-html/unnamed-chunk-23-1.png" alt="Figure S4"></p>
+<p><a href="https://github.com/waldronlab/schematics/"><img src="https://raw.githubusercontent.com/waldronlab/schematics/master/pngs/unnamed-chunk-23-1.png"></a></p>
 </div>
 </div>
 </div>
