@@ -41,7 +41,8 @@ Imports:
   TxDb.Hsapiens.UCSC.hg19.knownGene
 Suggests:
   knitr,
-  rmarkdown
+  rmarkdown,
+  BiocStyle
 VignetteBuilder:
   knitr
 Encoding: UTF-8
