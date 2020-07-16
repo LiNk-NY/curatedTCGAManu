@@ -36,7 +36,7 @@ jobs:
       - name: Install Dependencies
         run: |
           options(repos = c(CRAN = "https://cloud.r-project.org"))
-          remotes::install_local(dependencies = TRUE, repos = BiocManager::repositories(), build_vignettes = TRUE, upgrade = TRUE)
+          remotes::install_deps(dependencies = TRUE, repos = BiocManager::repositories(), build_vignettes = TRUE, upgrade = TRUE)
           BiocManager::install("rcmdcheck", update = TRUE, ask = FALSE)
         shell: Rscript {0}
 
