@@ -40,12 +40,6 @@ jobs:
           BiocManager::install("rcmdcheck", update = TRUE, ask = FALSE)
         shell: Rscript {0}
 
-      - name: Check
-        env:
-          _R_CHECK_CRAN_INCOMING_REMOTE_: false
-        run: rcmdcheck::rcmdcheck(args = c("--no-manual"), error_on = "warning", check_dir = "check")
-        shell: Rscript {0}
-
       - name: Publish to Registry
         if: github.event_name == 'push' && github.ref == 'refs/heads/master'
         uses: elgohr/Publish-Docker-Github-Action@master
