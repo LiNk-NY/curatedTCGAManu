@@ -2,7 +2,7 @@ FROM bioconductor/bioconductor_docker:RELEASE_3_11
 
 WORKDIR /home/rstudio
 
-COPY --chown=rstudio:rstudio . /home/rstudio
+COPY --chown=rstudio:rstudio . /home/rstudio/curatedTCGAManu
 
 ENV R_REMOTES_NO_ERRORS_FROM_WARNINGS=true
 
